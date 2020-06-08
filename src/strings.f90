@@ -7,7 +7,7 @@ module strings
     private
     public :: string
     public :: string_builder
-    public :: find_all
+    public :: index_of_all
     public :: split_string
 
 ! ******************************************************************************
@@ -70,12 +70,12 @@ module strings
 
 ! ------------------------------------------------------------------------------
     interface
-        pure module function find_all_chars(str, sub) result(rst)
+        pure module function index_of_all_chars(str, sub) result(rst)
             character(len = *), intent(in) :: str, sub
             integer(int32), allocatable, dimension(:) :: rst
         end function
 
-        pure module function find_all_str(str, sub) result(rst)
+        pure module function index_of_all_str(str, sub) result(rst)
             type(string), intent(in) :: str, sub
             integer(int32), allocatable, dimension(:) :: rst
         end function
@@ -92,9 +92,9 @@ module strings
     end interface
 ! ------------------------------------------------------------------------------
     !> @brief Finds all occurrences of a substring within a string.
-    interface find_all
-        module procedure :: find_all_chars
-        module procedure :: find_all_str
+    interface index_of_all
+        module procedure :: index_of_all_chars
+        module procedure :: index_of_all_str
     end interface
 
 ! ------------------------------------------------------------------------------

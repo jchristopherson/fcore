@@ -20,7 +20,7 @@ contains
         integer(int32) :: i, ndelim, nsubs, start, last
 
         ! Determine the indices of each delimiter in the string
-        indices = find_all(txt, delim)
+        indices = index_of_all(txt, delim)
         ndelim = size(indices)
         if (ndelim == 0) then
             allocate(rst(0))
@@ -38,12 +38,12 @@ contains
             if (i == 1) then
                 start = i
             else
-                start = last + nsubs
+                start = last + nsubs + 1
             end if
             if (i == size(rst)) then
                 last = len(txt)
             else
-                last = indices(i)
+                last = indices(i) - 1
             end if
             rst(i)%str = txt(start:last)
         end do
@@ -73,7 +73,7 @@ contains
     !! @param[in] sub The substring to search for.
     !!
     !! @return An array of indices where each substring starts.
-    pure module function find_all_chars(str, sub) result(rst)
+    pure module function index_of_all_chars(str, sub) result(rst)
         ! Arguments
         character(len = *), intent(in) :: str, sub
         integer(int32), allocatable, dimension(:) :: rst
@@ -122,13 +122,13 @@ contains
     !! @param[in] sub The substring to search for.
     !!
     !! @return An array of indices where each substring starts.
-    pure module function find_all_str(str, sub) result(rst)
+    pure module function index_of_all_str(str, sub) result(rst)
         ! Arguments
         type(string), intent(in) :: str, sub
         integer(int32), allocatable, dimension(:) :: rst
 
         ! Process
-        rst = find_all_chars(str%str, sub%str)
+        rst = index_of_all_chars(str%str, sub%str)
     end function
 
 ! ------------------------------------------------------------------------------
