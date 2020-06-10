@@ -109,4 +109,100 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_replace_string_1() result(rst)
+        ! Variables
+        logical :: rst
+        character(len = *), parameter :: test_string = &
+            "This is just a test string."
+        character(len = *), parameter :: answer1 = &
+            "This_is_just_a_test_string."
+        character(len = *), parameter :: answer2 = &
+            "Thiss iss jusst a tesst sstring."
+        character(len = *), parameter :: answer3 = &
+            "This is just a test string!"
+        character(len = *), parameter :: answer4 = &
+            "tis is just a test string."
+        
+        character(len = :), allocatable :: test1, test2, test3, test4
+
+        ! Initialization
+        rst = .true.
+
+        ! Replace all spaces with underscores
+        test1 = replace(test_string, " ", "_")
+        if (test1 /= answer1) then
+            rst = .false.
+            print '(A)', "TEST_REPLACE_STRING_1 (Test #1): Expected: " // &
+                answer1 // ", but found: " // test1 // "."
+        end if
+
+        ! Replace all 's' with 'ss'
+        test2 = replace(test_string, "s", "ss")
+        if (test2 /= answer2) then
+            rst = .false.
+            print '(A)', "TEST_REPLACE_STRING_1 (Test #2): Expected: " // &
+                answer2 // ", but found: " // test2 // "."
+        end if
+
+        ! Replace the '.' with a '!'
+        test3 = replace(test_string, ".", "!")
+        if (test3 /= answer3) then
+            rst = .false.
+            print '(A)', "TEST_REPLACE_STRING_1 (Test #3): Expected: " // &
+                answer3 // ", but found: " // test3 // "."
+        end if
+
+        ! Replace the 'Th' with a 'tH'
+        test4 = replace(test_string, "Th", "t")
+        if (test4 /= answer4) then
+            rst = .false.
+            print '(A)', "TEST_REPLACE_STRING_1 (Test #4): Expected: " // &
+                answer4 // ", but found: " // test4 // "."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_remove_string_1() result(rst)
+        ! Variables
+        logical :: rst
+        character(len = *), parameter :: test_string = &
+            "This is just a test string."
+        character(len = *), parameter :: answer1 = &
+            "Thi i jut a tet tring."
+        character(len = *), parameter :: answer2 = &
+            "his is just a test string."
+        character(len = *), parameter :: answer3 = &
+            "This is just a test string"
+        
+        character(len = :), allocatable :: test1, test2, test3
+
+        ! Initialization
+        rst = .true.
+
+        ! Remove all 's' characters
+        test1 = remove(test_string, "s")
+        if (test1 /= answer1) then
+            rst = .false.
+            print '(A)', "TEST_REMOVE_STRING_1 (Test #1): Expected: " // &
+                answer1 // ", but found: " // test1 // "."
+        end if
+
+        ! Remove the first character
+        test2 = remove(test_string, "T")
+        if (test2 /= answer2) then
+            rst = .false.
+            print '(A)', "TEST_REMOVE_STRING_1 (Test #2): Expected: " // &
+                answer2 // ", but found: " // test2 // "."
+        end if
+
+        ! Remove the last character
+        test3 = remove(test_string, ".")
+        if (test3 /= answer3) then
+            rst = .false.
+            print '(A)', "TEST_REMOVE_STRING_1 (Test #3): Expected: " // &
+                answer3 // ", but found: " // test3 // "."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

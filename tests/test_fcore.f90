@@ -18,6 +18,12 @@ program main
     local = test_split_string_1()
     if (.not.local) overall = .false.
 
+    local = test_replace_string_1()
+    if (.not.local) overall = .false.
+
+    local = test_remove_string_1()
+    if (.not.local) overall = .false.
+
 
     ! End
     if (overall) then

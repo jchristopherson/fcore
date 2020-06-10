@@ -9,6 +9,8 @@ module strings
     public :: string_builder
     public :: index_of_all
     public :: split_string
+    public :: replace
+    public :: remove
 
 ! ******************************************************************************
 ! TYPES
@@ -89,6 +91,26 @@ module strings
             type(string), intent(in) :: txt, delim
             type(string), allocatable, dimension(:) :: rst
         end function
+
+        pure module function replace_char(str, substr, newstr) result(rst)
+            character(len = *), intent(in) :: str, substr, newstr
+            character(len = :), allocatable :: rst
+        end function
+
+        pure module function replace_str(str, substr, newstr) result(rst)
+            type(string), intent(in) :: str, substr, newstr
+            type(string) :: rst
+        end function
+
+        pure module function remove_char(str, substr) result(rst)
+            character(len = *), intent(in) :: str, substr
+            character(len = :), allocatable :: rst
+        end function
+
+        pure module function remove_str(str, substr) result(rst)
+            type(string), intent(in) :: str, substr
+            type(string) :: rst
+        end function
     end interface
 ! ------------------------------------------------------------------------------
     !> @brief Finds all occurrences of a substring within a string.
@@ -104,6 +126,29 @@ module strings
         module procedure :: split_string_char
         module procedure :: split_string_str
     end interface
+
+! ------------------------------------------------------------------------------
+    !> @brief Replaces all occurrences of a substring within the original 
+    !! string.
+    interface replace
+        module procedure :: replace_char
+        module procedure :: replace_str
+    end interface
+
+! ------------------------------------------------------------------------------
+    !> @brief Removes all occurrences of a substring within the original string.
+    interface remove
+        module procedure :: remove_char
+        module procedure :: remove_str
+    end interface
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end module
