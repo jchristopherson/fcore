@@ -306,14 +306,71 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
-! REPLACE AT
+    !> @brief Removes the specified number of characters from the string at the
+    !! specified location.
+    !! 
+    !! @param[in] str The string on which to operate.
+    !! @param[in] ind The index at which to start character removal.
+    !! @param[in] nchar The number of characters to remove.
+    !!
+    !! @return The modified string.
+    pure module function remove_at_char(str, ind, nchar) result(rst)
+        ! Parameters
+        character(len = *), intent(in) :: str
+        integer(int32), intent(in) :: ind, nchar
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        integer(int32) :: nstr, nrst
+
+        ! Initialization
+        nstr = len(str)
+        nrst = nstr - nchar
+
+        ! Quick Return
+        if (nrst == 0) then
+            allocate(character(len = nrst) :: rst)
+            return
+        end if
+
+        ! Input Check
+        if (nrst < 0 .or. ind < 1 .or. ind > nstr) then
+            rst = str
+            return
+        end if
+
+        ! Process
+        if (ind == 1) then
+            ! The characters to remove are at the beginning of the string
+            rst = str(nchar + 1:nrst)
+        else if (ind + nchar - 1 == nstr) then
+            ! The characters to remove are at the end of the string
+            rst = str(1:ind - 1)
+        else
+            allocate(character(len = nrst) :: rst)
+            rst(1:ind - 1) = str(1:ind - 1)
+            rst(ind:nrst) = str(ind + nchar:nstr)
+        end if
+    end function
 
 ! --------------------
+    !> @brief Removes the specified number of characters from the string at the
+    !! specified location.
+    !! 
+    !! @param[in] str The string on which to operate.
+    !! @param[in] ind The index at which to start character removal.
+    !! @param[in] nchar The number of characters to remove.
+    !!
+    !! @return The modified string.
+    pure module function remove_at_str(str, ind, nchar) result(rst)
+        ! Arguments
+        type(string), intent(in) :: str
+        integer(int32), intent(in) :: ind, nchar
+        type(string) :: rst
 
-! ------------------------------------------------------------------------------
-! REMOVE AT
-
-! --------------------
+        ! Process
+        rst%str = remove_at_char(str%str, ind, nchar)
+    end function
 
 ! ------------------------------------------------------------------------------
 ! To upper case

@@ -11,6 +11,7 @@ module strings
     public :: split_string
     public :: replace
     public :: remove
+    public :: remove_at
 
 ! ******************************************************************************
 ! TYPES
@@ -111,6 +112,18 @@ module strings
             type(string), intent(in) :: str, substr
             type(string) :: rst
         end function
+
+        pure module function remove_at_char(str, ind, nchar) result(rst)
+            character(len = *), intent(in) :: str
+            integer(int32), intent(in) :: ind, nchar
+            character(len = :), allocatable :: rst
+        end function
+
+        pure module function remove_at_str(str, ind, nchar) result(rst)
+            type(string), intent(in) :: str
+            integer(int32), intent(in) :: ind, nchar
+            type(string) :: rst
+        end function
     end interface
 ! ------------------------------------------------------------------------------
     !> @brief Finds all occurrences of a substring within a string.
@@ -143,6 +156,12 @@ module strings
     end interface
 
 ! ------------------------------------------------------------------------------
+    !> @brief Removes the specified number of characters from the string at the
+    !! specified location.
+    interface remove_at
+        module procedure :: remove_at_char
+        module procedure :: remove_at_str
+    end interface
 
 ! ------------------------------------------------------------------------------
 
