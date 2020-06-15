@@ -205,4 +205,97 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_remove_at_string_1() result(rst)
+        ! Variables
+        logical :: rst
+        character(len = *), parameter :: test_string = &
+            "This is just a test string."
+        character(len = *), parameter :: answer1 = &
+            "This is just a test."
+        character(len = *), parameter :: answer2 = &
+            "is just a test string."
+        character(len = *), parameter :: answer3 = &
+            "This is just a test"
+
+        character(len = :), allocatable :: test1, test2, test3
+
+        ! Initialization
+        rst = .true.
+
+        ! Test 1
+        test1 = remove_at(test_string, 20, 7)
+        if (test1 /= answer1) then
+            rst = .false.
+            print '(A)', "TEST_REMOVE_AT_STRING_1 (Test #1): Expected: " // &
+                answer1 // ", but found: " // test1 // "."
+        end if
+
+        ! Test 2
+        test2 = remove_at(test_string, 1, 5)
+        if (test2 /= answer2) then
+            rst = .false.
+            print '(A)', "TEST_REMOVE_AT_STRING_1 (Test #2): Expected: " // &
+                answer2 // ", but found: " // test2 // "."
+        end if
+
+        ! Test 3
+        test3 = remove_at(test_string, 20, 8)
+        if (test3 /= answer3) then
+            rst = .false.
+            print '(A)', "TEST_REMOVE_AT_STRING_1 (Test #3): Expected: " // &
+                answer3 // ", but found: " // test3 // "."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_to_upper_1() result(rst)
+        ! Variables
+        logical :: rst
+        character(len = *), parameter :: test_string = &
+            "This is just a test string."
+        character(len = *), parameter :: answer1 = &
+            "THIS IS JUST A TEST STRING."
+        
+        character(len = :), allocatable :: test1
+
+        ! Initialization
+        rst = .true.
+
+        ! Test
+        test1 = to_upper(test_string)
+        if (test1 /= answer1) then
+            rst = .false.
+            print '(A)', "TEST_TO_UPPER_1 (Test #1): Expected: " // &
+                answer1 // ", but found: " // test1 // "."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_to_lower_1() result(rst)
+        ! Variables
+        logical :: rst
+        character(len = *), parameter :: test_string = &
+            "This is just a test string."
+        character(len = *), parameter :: answer1 = &
+            "this is just a test string."
+        
+        character(len = :), allocatable :: test1
+
+        ! Initialization
+        rst = .true.
+
+        ! Test
+        test1 = to_lower(test_string)
+        if (test1 /= answer1) then
+            rst = .false.
+            print '(A)', "TEST_TO_LOWER_1 (Test #1): Expected: " // &
+                answer1 // ", but found: " // test1 // "."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
 end module

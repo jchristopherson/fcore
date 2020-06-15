@@ -59,7 +59,7 @@ contains
     !! @return The resulting array of strings.
     pure module function split_string_str(txt, delim) result(rst)
         ! Arguments
-        type(string), intent(in) :: txt, delim
+        class(string), intent(in) :: txt, delim
         type(string), allocatable, dimension(:) :: rst
 
         ! Process
@@ -124,7 +124,7 @@ contains
     !! @return An array of indices where each substring starts.
     pure module function index_of_all_str(str, sub) result(rst)
         ! Arguments
-        type(string), intent(in) :: str, sub
+        class(string), intent(in) :: str, sub
         integer(int32), allocatable, dimension(:) :: rst
 
         ! Process
@@ -224,7 +224,7 @@ contains
     !! @return The modified string.
     pure module function replace_str(str, substr, newstr) result(rst)
         ! Arguments
-        type(string), intent(in) :: str, substr, newstr
+        class(string), intent(in) :: str, substr, newstr
         type(string) :: rst
 
         ! Process
@@ -245,7 +245,7 @@ contains
 
         ! Local Variables
         integer(int32), allocatable, dimension(:) :: indices
-        integer(int32) :: i, nind, nrmv, nrst, nstr, nsub, startOld, startNew, &
+        integer(int32) :: i, nind, nrst, nstr, nsub, startOld, startNew, &
             lastOld, lastNew
 
         ! Locate all indices of the substrings to remove
@@ -298,7 +298,7 @@ contains
     !! @return The modified string.
     pure module function remove_str(str, substr) result(rst)
         ! Arguments
-        type(string), intent(in) :: str, substr
+        class(string), intent(in) :: str, substr
         type(string) :: rst
 
         ! Process
@@ -342,7 +342,7 @@ contains
         ! Process
         if (ind == 1) then
             ! The characters to remove are at the beginning of the string
-            rst = str(nchar + 1:nrst)
+            rst = str(nchar + 1:nstr)
         else if (ind + nchar - 1 == nstr) then
             ! The characters to remove are at the end of the string
             rst = str(1:ind - 1)
@@ -364,7 +364,7 @@ contains
     !! @return The modified string.
     pure module function remove_at_str(str, ind, nchar) result(rst)
         ! Arguments
-        type(string), intent(in) :: str
+        class(string), intent(in) :: str
         integer(int32), intent(in) :: ind, nchar
         type(string) :: rst
 
@@ -373,29 +373,685 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
-! To upper case
+    !> @brief Converts an ASCII character string to all upper case.
+    !!
+    !! @param[in] str The string on which to operate.
+    !! @return The modified string.
+    pure module function to_upper_char(str) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        integer(int32) :: i, j, n
+
+        ! Process
+        n = len(str)
+        allocate(character(len = n) :: rst)
+        do i = 1, n
+            j = iachar(str(i:i))
+            if (j >= iachar("a") .and. j <= iachar("z")) then
+                rst(i:i) = achar(iachar(str(i:i)) - 32)
+            else
+                rst(i:i) = str(i:i)
+            end if
+        end do
+    end function
 
 ! --------------------
+    !> @brief Converts an ASCII character string to all upper case.
+    !!
+    !! @param[in] str The string on which to operate.
+    !! @return The modified string.
+    pure module function to_upper_str(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        type(string) :: rst
+
+        ! Process
+        rst%str = to_upper_char(str%str)
+    end function
 
 ! ------------------------------------------------------------------------------
-! To lower case
+    !> @brief Converts an ASCII character string to all lower case.
+    !!
+    !! @param[in] str The string on which to operate.
+    !! @return The modified string.
+    pure module function to_lower_char(str) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        integer(int32) :: i, j, n
+
+        ! Process
+        n = len(str)
+        allocate(character(len = n) :: rst)
+        do i = 1, n
+            j = iachar(str(i:i))
+            if (j >= iachar("A") .and. j <= iachar("Z")) then
+                rst(i:i) = achar(iachar(str(i:i)) + 32)
+            else
+                rst(i:i) = str(i:i)
+            end if
+        end do
+    end function
 
 ! --------------------
+    !> @brief Converts an ASCII character string to all lower case.
+    !!
+    !! @param[in] str The string on which to operate.
+    !! @return The modified string.
+    pure module function to_lower_str(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        type(string) :: rst
+
+        ! Process
+        rst%str = to_lower_char(str%str)
+    end function
 
 ! ------------------------------------------------------------------------------
-! Contains substring
+    !> @brief Tests to see if a substring exists within a parent string.
+    !!
+    !! @param[in] str The string on which to operate.
+    !! @param[in] substr The substring of interest.
+    !!
+    !! @return Returns true if @p substr exists within @p str; else, returns
+    !! false.
+    pure module function contains_char(str, substr) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str, substr
+        logical :: rst
+
+        ! Process
+        integer(int32) :: ind
+        ind = index(str, substr)
+        rst = ind /= 0
+    end function
 
 ! --------------------
+    !> @brief Tests to see if a substring exists within a parent string.
+    !!
+    !! @param[in] str The string on which to operate.
+    !! @param[in] substr The substring of interest.
+    !!
+    !! @return Returns true if @p substr exists within @p str; else, returns
+    !! false.
+    pure module function contains_str(str, substr) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str, substr
+        logical :: rst
+
+        ! Process
+        rst = contains_char(str%str, substr%str)
+    end function
 
 ! ------------------------------------------------------------------------------
-! Number to string routines
+    !> @brief Attempts to parse a string to a 64-bit floating-point value.
+    !!
+    !! @param[in] str The string to convert.
+    !! 
+    !! @return The resulting numeric value.
+    pure module function parse_real64_char(str) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        real(real64) :: rst
+
+        ! Process
+        read(str, *) rst
+    end function
+
+! ----------
+    !> @brief Attempts to parse a string to a 64-bit floating-point value.
+    !!
+    !! @param[in] str The string to convert.
+    !! 
+    !! @return The resulting numeric value.
+    pure module function parse_real64_str(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        real(real64) :: rst
+
+        ! Process
+        rst = parse_real64_char(str%str)
+    end function
 
 ! --------------------
+    !> @brief Attempts to parse a string to a 32-bit floating-point value.
+    !!
+    !! @param[in] str The string to convert.
+    !! 
+    !! @return The resulting numeric value.
+    pure module function parse_real32_char(str) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        real(real32) :: rst
+
+        ! Process
+        read(str, *) rst
+    end function
+
+! ----------
+    !> @brief Attempts to parse a string to a 32-bit floating-point value.
+    !!
+    !! @param[in] str The string to convert.
+    !! 
+    !! @return The resulting numeric value.
+    pure module function parse_real32_str(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        real(real32) :: rst
+
+        ! Process
+        rst = parse_real32_char(str%str)
+    end function
+
+! --------------------
+    !> @brief Attempts to parse a string to an 8-bit integer value.
+    !!
+    !! @param[in] str The string to convert.
+    !!
+    !! @return The resulting numeric value.
+    pure module function parse_int8_char(str) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        integer(int8) :: rst
+
+        ! Process
+        read(str, *) rst
+    end function
+
+! ----------
+    !> @brief Attempts to parse a string to an 8-bit integer value.
+    !!
+    !! @param[in] str The string to convert.
+    !!
+    !! @return The resulting numeric value.
+    pure module function parse_int8_str(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        integer(int8) :: rst
+
+        ! Process
+        rst = parse_int8_char(str%str)
+    end function
+
+! --------------------
+    !> @brief Attempts to parse a string to a 16-bit integer value.
+    !!
+    !! @param[in] str The string to convert.
+    !!
+    !! @return The resulting numeric value.
+    pure module function parse_int16_char(str) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        integer(int16) :: rst
+
+        ! Process
+        read(str, *) rst
+    end function
+
+! ----------
+    !> @brief Attempts to parse a string to a 16-bit integer value.
+    !!
+    !! @param[in] str The string to convert.
+    !!
+    !! @return The resulting numeric value.
+    pure module function parse_int16_str(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        integer(int16) :: rst
+
+        ! Process
+        rst = parse_int16_char(str%str)
+    end function
+
+! --------------------  
+    !> @brief Attempts to parse a string to a 32-bit integer value.
+    !!
+    !! @param[in] str The string to convert.
+    !!
+    !! @return The resulting numeric value.
+    pure module function parse_int32_char(str) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        integer(int32) :: rst
+
+        ! Process
+        read(str, *) rst
+    end function
+
+! ----------
+    !> @brief Attempts to parse a string to a 32-bit integer value.
+    !!
+    !! @param[in] str The string to convert.
+    !!
+    !! @return The resulting numeric value.
+    pure module function parse_int32_str(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        integer(int32) :: rst
+
+        ! Process
+        rst = parse_int32_char(str%str)
+    end function
+
+! --------------------
+    !> @brief Attempts to parse a string to a 64-bit integer value.
+    !!
+    !! @param[in] str The string to convert.
+    !!
+    !! @return The resulting numeric value.
+    pure module function parse_int64_char(str) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        integer(int64) :: rst
+
+        ! Process
+        read(str, *) rst
+    end function
+
+! ----------
+    !> @brief Attempts to parse a string to a 64-bit integer value.
+    !!
+    !! @param[in] str The string to convert.
+    !!
+    !! @return The resulting numeric value.
+    pure module function parse_int64_str(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        integer(int64) :: rst
+
+        ! Process
+        rst = parse_int64_char(str%str)
+    end function
 
 ! ------------------------------------------------------------------------------
-! Parse strings to numbers
+    !> @brief Converts a number to a string.
+    !!
+    !! @param[in] num The number to convert.
+    !! @param[in] fmt An optional formatting string.
+    !!
+    !! @return The resulting string.
+    pure module function to_string_r64(num, fmt) result(rst)
+        ! Arguments
+        real(real64), intent(in) :: num
+        character(len = *), intent(in), optional :: fmt
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        character(len = 128) :: buffer
+
+        ! Process
+        if (present(fmt)) then
+            write(buffer, fmt) num
+        else
+            write(buffer, *) num
+        end if
+        rst = trim(adjustl(buffer))
+    end function
 
 ! --------------------
+    !> @brief Converts a number to a string.
+    !!
+    !! @param[in] num The number to convert.
+    !! @param[in] fmt An optional formatting string.
+    !!
+    !! @return The resulting string.
+    pure module function to_string_r32(num, fmt) result(rst)
+        ! Arguments
+        real(real32), intent(in) :: num
+        character(len = *), intent(in), optional :: fmt
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        character(len = 128) :: buffer
+
+        ! Process
+        if (present(fmt)) then
+            write(buffer, fmt) num
+        else
+            write(buffer, *) num
+        end if
+        rst = trim(adjustl(buffer))
+    end function
+
+! --------------------
+    !> @brief Converts a number to a string.
+    !!
+    !! @param[in] num The number to convert.
+    !!
+    !! @return The resulting string.
+    pure module function to_string_i8(num) result(rst)
+        ! Arguments
+        integer(int8), intent(in) :: num
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        character(len = 128) :: buffer
+
+        ! Process
+        write(buffer, '(I0)') num
+        rst = trim(adjustl(buffer))
+    end function
+
+! --------------------
+    !> @brief Converts a number to a string.
+    !!
+    !! @param[in] num The number to convert.
+    !!
+    !! @return The resulting string.
+    pure module function to_string_i16(num) result(rst)
+        ! Arguments
+        integer(int16), intent(in) :: num
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        character(len = 128) :: buffer
+
+        ! Process
+        write(buffer, '(I0)') num
+        rst = trim(adjustl(buffer))
+    end function
+
+! --------------------
+    !> @brief Converts a number to a string.
+    !!
+    !! @param[in] num The number to convert.
+    !!
+    !! @return The resulting string.
+    pure module function to_string_i32(num) result(rst)
+        ! Arguments
+        integer(int32), intent(in) :: num
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        character(len = 128) :: buffer
+
+        ! Process
+        write(buffer, '(I0)') num
+        rst = trim(adjustl(buffer))
+    end function
+
+! --------------------
+    !> @brief Converts a number to a string.
+    !!
+    !! @param[in] num The number to convert.
+    !!
+    !! @return The resulting string.
+    pure module function to_string_i64(num) result(rst)
+        ! Arguments
+        integer(int64), intent(in) :: num
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        character(len = 128) :: buffer
+
+        ! Process
+        write(buffer, '(I0)') num
+        rst = trim(adjustl(buffer))
+    end function
+
+! --------------------
+    !> @brief Converts a number to a string.
+    !!
+    !! @param[in] num The number to convert.
+    !! @param[in] fmt An optional formatting string.
+    !!
+    !! @return The resulting string.
+    pure module function to_string_c64(num, fmt) result(rst)
+        ! Arguments
+        complex(real64), intent(in) :: num
+        character(len = *), intent(in), optional :: fmt
+        character(len = :), allocatable :: rst
+
+        ! Process
+        rst = "(" // to_string(real(num, real64), fmt) // "," // &
+            to_string(aimag(num), fmt) // ")"
+    end function
+
+! --------------------
+    !> @brief Converts a number to a string.
+    !!
+    !! @param[in] num The number to convert.
+    !! @param[in] fmt An optional formatting string.
+    !!
+    !! @return The resulting string.
+    pure module function to_string_c32(num, fmt) result(rst)
+        ! Arguments
+        complex(real32), intent(in) :: num
+        character(len = *), intent(in), optional :: fmt
+        character(len = :), allocatable :: rst
+
+        ! Process
+        rst = "(" // to_string(real(num, real32), fmt) // "," // &
+            to_string(aimag(num), fmt) // ")"
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Combines two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return The resulting string.
+    pure module function add_str(str1, str2) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str1, str2
+        type(string) :: rst
+        rst%str = str1%str // str2%str
+    end function
+
+! --------------------
+    !> @brief Combines two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return The resulting string.
+    pure module function add_char1(str1, str2) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str1
+        class(string), intent(in) :: str2
+        type(string) :: rst
+        rst%str = str1 // str2%str
+    end function
+
+! --------------------
+    !> @brief Combines two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return The resulting string.
+    pure module function add_char2(str1, str2) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str1
+        character(len = *), intent(in) :: str2
+        type(string) :: rst
+        rst%str = str1%str // str2
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Assigns the contents of one string to another.
+    !!
+    !! @param[in,out] x The assignee.
+    !! @param[in] y The string to copy.
+    module subroutine str_equals(x, y)
+        ! Arguments
+        class(string), intent(inout) :: x
+        class(string), intent(in) :: y
+
+        ! Process
+        if (allocated(x%str)) deallocate(x%str)
+        x%str = y%str
+    end subroutine
+
+! --------------------
+    !> @brief Assigns the contents of one string to another.
+    !!
+    !! @param[in,out] x The assignee.
+    !! @param[in] y The string to copy.
+    module subroutine str_equals_char(x, y)
+        ! Arguments
+        class(string), intent(inout) :: x
+        character(len = *), intent(in) :: y
+
+        ! Process
+        if (allocated(x%str)) deallocate(x%str)
+        x%str = y
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Tests for equality between two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return Returns true if @p str1 is equal to @p str2; else, returns false.
+    pure module function str_compare_char1(str1, str2) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str1
+        class(string), intent(in) :: str2
+        logical :: rst
+
+        ! Process
+        rst = str1 == str2%str
+    end function
+
+! --------------------
+    !> @brief Tests for equality between two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return Returns true if @p str1 is equal to @p str2; else, returns false.
+    pure module function str_compare_char2(str1, str2) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str1
+        character(len = *), intent(in) :: str2
+        logical :: rst
+
+        ! Process
+        rst = str1%str == str2
+    end function
+
+! --------------------
+    !> @brief Tests for equality between two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return Returns true if @p str1 is equal to @p str2; else, returns false.
+    pure module function str_compare_str(str1, str2) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str1, str2
+        logical :: rst
+
+        ! Process
+        rst = str1%str == str2%str
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Tests for inequality between two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return Returns true if @p str1 is not equal to @p str2; else, returns 
+    !! false.
+    pure module function str_ne_compare_char1(str1, str2) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: str1
+        class(string), intent(in) :: str2
+        logical :: rst
+
+        ! Process
+        rst = str1 /= str2%str
+    end function
+
+! --------------------
+    !> @brief Tests for inequality between two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return Returns true if @p str1 is not equal to @p str2; else, returns 
+    !! false.
+    pure module function str_ne_compare_char2(str1, str2) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str1
+        character(len = *), intent(in) :: str2
+        logical :: rst
+
+        ! Process
+        rst = str1%str /= str2
+    end function
+
+! --------------------
+    !> @brief Tests for inequality between two strings.
+    !!
+    !! @param[in] str1 The first string.
+    !! @param[in] str2 The second string.
+    !!
+    !! @return Returns true if @p str1 is not equal to @p str2; else, returns 
+    !! false.
+    pure module function str_ne_compare_str(str1, str2) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str1, str2
+        logical :: rst
+
+        ! Process
+        rst = str1%str /= str2%str
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Trims any trailing whitespace from the string.
+    !!
+    !! @param[in] str The string on which to operate.
+    !!
+    !! @return The resulting string.
+    pure module function str_trim(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        type(string) :: rst
+
+        ! Process
+        rst%str = trim(str%str)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Adjusts the contents of the string to the left by trimming leading
+    !! whitespaces.
+    !!
+    !! @param[in] str The string on which to operate.
+    !!
+    !! @return The resulting string.
+    pure module function str_trim_leading(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        type(string) :: rst
+
+        ! Process
+        rst%str = trim(adjustl(str%str))
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Returns the length of the string.
+    !!
+    !! @param[in] str The string to test.
+    !!
+    !! @return The length of the string.
+    pure module function str_length(str) result(rst)
+        ! Arguments
+        class(string), intent(in) :: str
+        integer(int32) :: rst
+
+        ! Process
+        rst = len(str%str)
+    end function
 
 ! ------------------------------------------------------------------------------
 end submodule

@@ -24,6 +24,15 @@ program main
     local = test_remove_string_1()
     if (.not.local) overall = .false.
 
+    local = test_remove_at_string_1()
+    if (.not.local) overall = .false.
+
+    local = test_to_upper_1()
+    if (.not.local) overall = .false.
+
+    local = test_to_lower_1()
+    if (.not.local) overall = .false.
+
 
     ! End
     if (overall) then
