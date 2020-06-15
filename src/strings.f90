@@ -3,6 +3,7 @@
 !> @brief Defines string handling routines.
 module strings
     use iso_fortran_env
+    use iso_c_binding
     implicit none
     private
     public :: string
@@ -22,6 +23,8 @@ module strings
     public :: parse_int32
     public :: parse_int64
     public :: to_string
+    public :: to_c_string
+    public :: to_fortran_string
     public :: operator(+)
     public :: assignment(=)
     public :: operator(==)
@@ -62,6 +65,8 @@ module strings
         procedure, public :: trim_leading => str_trim_leading
         !> @brief Returns the length of the string.
         procedure, public :: length => str_length
+        !> @brief Converts the string to a C-style string.
+        procedure, public :: to_c_string => to_c_string_str
     end type
 
 ! ------------------------------------------------------------------------------
@@ -407,6 +412,24 @@ module strings
             class(string), intent(in) :: str
             integer(int32) :: rst
         end function
+
+        module subroutine to_c_string_char(str, cstr, csize)
+            character(len = *), intent(in) :: str
+            character(kind = c_char), intent(out) :: cstr(*)
+            integer(int32), intent(inout) :: csize
+        end subroutine
+
+        module subroutine to_c_string_str(str, cstr, csize)
+            class(string), intent(in) :: str
+            character(kind = c_char), intent(out) :: cstr(*)
+            integer(int32), intent(inout) :: csize
+        end subroutine
+
+        pure module function to_fortran_string(str, nchar) result(rst)
+            character(kind = c_char), intent(in) :: str(*)
+            integer(int32), intent(in) :: nchar
+            character(len = :), allocatable :: rst
+        end function
     end interface
 
 ! ******************************************************************************
@@ -521,6 +544,13 @@ module strings
         module procedure :: to_string_i64
         module procedure :: to_string_c64
         module procedure :: to_string_c32
+    end interface
+
+! ------------------------------------------------------------------------------
+    !> @brief Converts a Fortran string to a C-style string.
+    interface to_c_string
+        module procedure :: to_c_string_char
+        module procedure :: to_c_string_str
     end interface
 
 ! ------------------------------------------------------------------------------

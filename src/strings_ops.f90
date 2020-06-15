@@ -1054,4 +1054,71 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Converts a Fortran string to a C-style string.
+    !!
+    !! @param[in] str The Fortran string to convert.
+    !! @param[out] cstr The null-terminated C-string.
+    !! @param[in,out] csize On input, the size of the character buffer @p cstr.
+    !!  On output, the actual number of characters (not including the null
+    !!  character) written to  @p cstr.
+    module subroutine to_c_string_char(str, cstr, csize)
+        ! Arguments
+        character(len = *), intent(in) :: str
+        character(kind = c_char), intent(out) :: cstr(*)
+        integer(int32), intent(inout) :: csize
+
+        ! Local Variables
+        integer(int32) :: i, n
+
+        ! Process
+        n = min(len(str), csize - 1)    ! -1 accounts for null character
+        do i = 1, n
+            cstr(i) = str(i:i)
+        end do
+        cstr(n + 1) = c_null_char
+        csize = n
+    end subroutine
+
+! --------------------
+    !> @brief Converts a Fortran string to a C-style string.
+    !!
+    !! @param[in] str The Fortran string to convert.
+    !! @param[out] cstr The null-terminated C-string.
+    !! @param[in,out] csize On input, the size of the character buffer @p cstr.
+    !!  On output, the actual number of characters (not including the null
+    !!  character) written to  @p cstr.
+    module subroutine to_c_string_str(str, cstr, csize)
+        ! Arguments
+        class(string), intent(in) :: str
+        character(kind = c_char), intent(out) :: cstr(*)
+        integer(int32), intent(inout) :: csize
+
+        ! Process
+        call to_c_string_char(str%str, cstr, csize)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Converts a C-style string to a Fortran string.
+    !!
+    !! @param[in] str The C-style string to convert.
+    !! @param[in] nchar The length of @p str, not including the null character.
+    !!
+    !! @return The resulting Fortran string.
+    pure module function to_fortran_string(str, nchar) result(rst)
+        ! Arguments
+        character(kind = c_char), intent(in) :: str(*)
+        integer(int32), intent(in) :: nchar
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        integer(int32) :: i
+
+        ! Process
+        allocate(character(len = nchar) :: rst)
+        do i = 1, nchar
+            rst(i:i) = str(i)
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
 end submodule
