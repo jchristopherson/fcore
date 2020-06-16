@@ -103,6 +103,9 @@ endif()
 #     set(nonlin_LIBRARIES nonlin)
 # endif()
 
+# Locate the include directory
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
 # Locate the source directory
 add_subdirectory(src)
 

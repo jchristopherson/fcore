@@ -3,6 +3,8 @@ set(fcore_sources
     strings.f90
     strings_string_builder.f90
     strings_ops.f90
+    regular_expressions.f90
+    regular_expressions.cpp
 )
 
 # Build the library
