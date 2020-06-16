@@ -53,4 +53,59 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_regex_search() result(rst)
+        ! Variables
+        logical :: rst
+        character(len = *), parameter :: test_string = &
+            "This is a string with some numbers 0.1234"
+        
+        type(string), allocatable, dimension(:) :: matches
+
+        ! Initialization
+        rst = .true.
+
+        ! Look for the numeric values
+        matches = regex_search(test_string, "\d.+")
+
+        if (size(matches) /= 1) then
+            rst = .false.
+            print '(AI0A)', &
+                "TEST_REGEX_SEARCH (Test 1a): Expected: 1, but found: ", &
+                size(matches), "."
+            return
+        end if
+        
+        if (matches(1) /= "0.1234") then
+            rst = .false.
+            print '(A)', &
+                "TEST_REGEX_SEARCH (Test 1b): Expected: 0.1234, but found: " &
+                // matches(1)%str // "."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    function test_regex_replace() result(rst)
+        ! Variables
+        logical :: rst
+        character(len = *), parameter :: test_string = &
+            "This is a string with some numbers 0.1234"
+        
+        character(len = :), allocatable :: test1
+
+        ! Initialization
+        rst = .true.
+
+        ! Replace the non-numeric characters with empty characters such that
+        ! only numbers are left
+        test1 = regex_replace(test_string, "[^0-9]+", "")
+        
+        if (test1 /= "01234") then
+            rst = .false.
+            print '(A)', &
+                "TEST_REGEX_REPLACE (Test 1): Expected: 01234, but found: " &
+                // test1 // "."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

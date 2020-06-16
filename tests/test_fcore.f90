@@ -37,6 +37,12 @@ program main
     local = test_regex_match()
     if (.not.local) overall = .false.
 
+    local = test_regex_search()
+    if (.not.local) overall = .false.
+
+    local = test_regex_replace()
+    if (.not.local) overall = .false.
+
     ! End
     if (overall) then
         print '(A)', "FCORE: ALL TESTS PASSED"
