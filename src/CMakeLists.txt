@@ -5,6 +5,9 @@ set(fcore_sources
     strings_ops.f90
     regular_expressions.f90
     regular_expressions.cpp
+    fcore_constants.f90
+    collections.f90
+    collections_list.f90
 )
 
 # Build the library

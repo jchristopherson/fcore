@@ -2,6 +2,7 @@ set(test_sources
     test_fcore.f90
     test_fcore_strings.f90
     test_fcore_regex.f90
+    test_fcore_list.f90
 )
 
 # Build the executable

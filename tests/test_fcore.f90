@@ -4,6 +4,7 @@ program main
     use iso_fortran_env
     use test_fcore_strings
     use test_fcore_regex
+    use test_fcore_list
     implicit none
 
     ! Local Variables
@@ -41,6 +42,9 @@ program main
     if (.not.local) overall = .false.
 
     local = test_regex_replace()
+    if (.not.local) overall = .false.
+
+    local = test_list_1()
     if (.not.local) overall = .false.
 
     ! End
