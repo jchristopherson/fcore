@@ -7,6 +7,8 @@ module collections
     implicit none
     private
     public :: list
+    public :: items_equal
+    public :: compare_items
 
 ! ******************************************************************************
 ! TYPES
@@ -49,6 +51,20 @@ module collections
         procedure, public :: insert => list_insert
         !> @brief Removes an item from the list.
         procedure, public :: remove => list_remove
+        !> @brief Reverses the contents of the list.
+        procedure, public :: reverse => list_reverse
+        !> @brief Tests to see if the list contains the specified item.
+        procedure, public :: contains => list_contains
+        !> @brief Finds the index of the first item in the list that matches
+        !! the specified object.
+        procedure, public :: index_of => list_index_of
+        !> @brief Finds the indices of all items in the list that match the 
+        !! specified object.
+        procedure, public :: indices_of_all => list_indices_of_all
+        ! Swaps two items in the list
+        procedure, public :: swap_items => list_swap
+        !> @brief Sorts an array into ascending order.
+        procedure, public :: sort => list_sort
 
         !> @brief Stores an item in the collection.  If the collection isn't 
         !! large enough to accomodate, it is automatically resized to 
@@ -56,6 +72,38 @@ module collections
         procedure, private :: store => list_store
     end type
 
+! ******************************************************************************
+! FUNCTION PROTOTYPES
+! ------------------------------------------------------------------------------
+    interface
+        !> @brief Compares two items, and returns a logical value signifying
+        !! the comparison results.
+        !!
+        !! @param[in] item1 The first item.
+        !! @param[in] item2 The second item.
+        !!
+        !! @return Returns true if the comparison is valid; else, false.
+        function items_equal(item1, item2) result(rst)
+            class(*), intent(in) :: item1, item2
+            logical :: rst
+        end function
+
+        !> @brief Compares two items, and returns 1 if @p item1 is greater than
+        !! @p item2, 0 if @p item1 is equal to @p item2, or -1 if @p item1 is
+        !! less than @p item2.
+        !!
+        !! @param[in] item1 The first item.
+        !! @param[in] item2 The second item.
+        !!
+        !! @return Returns 1 if @p item1 is greater than @p item2, 0 if
+        !! @p item1 is equal to @p item2, or -1 if @p item1 is less than 
+        !! @p item2.
+        function compare_items(item1, item2) result(rst)
+            use iso_fortran_env, only : int32
+            class(*), intent(in) :: item1, item2
+            integer(int32) :: rst
+        end function
+    end interface
 
 ! ******************************************************************************
 ! INTERFACES
@@ -132,6 +180,43 @@ module collections
 
         module subroutine list_destroy(this)
             type(list), intent(inout) :: this
+        end subroutine
+
+        module subroutine list_reverse(this)
+            class(list), intent(inout) :: this
+        end subroutine
+
+        module function list_contains(this, item, fcn) result(rst)
+            class(list), intent(in) :: this
+            class(*), intent(in) :: item
+            procedure(items_equal), pointer, intent(in) :: fcn
+            logical :: rst
+        end function
+
+        module function list_index_of(this, item, fcn) result(rst)
+            class(list), intent(in) :: this
+            class(*), intent(in) :: item
+            procedure(items_equal), pointer, intent(in) :: fcn
+            integer(int32) :: rst
+        end function
+
+        module function list_indices_of_all(this, item, fcn, err) result(rst)
+            class(list), intent(in) :: this
+            class(*), intent(in) :: item
+            procedure(items_equal), pointer, intent(in) :: fcn
+            class(errors), intent(inout), optional, target :: err
+            integer(int32), allocatable, dimension(:) :: rst
+        end function
+
+        module subroutine list_swap(this, i1, i2, err)
+            class(list), intent(inout) :: this
+            integer(int32), intent(in) :: i1, i2
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine list_sort(this, fcn)
+            class(list), intent(inout) :: this
+            procedure(compare_items), pointer, intent(in) :: fcn
         end subroutine
     end interface
 

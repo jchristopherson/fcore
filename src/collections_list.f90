@@ -470,4 +470,323 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Reverses the contents of the list.
+    !!
+    !! @param[in,out] this The list object.
+    module subroutine list_reverse(this)
+        ! Arguments
+        class(list), intent(inout) :: this
+
+        ! Reverse the contents of the array
+        integer(int32) :: n
+        n = this%get_count()
+        this%m_list(1:n) = this%m_list(n:1:-1)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Tests to see if the list contains the specified item.
+    !!
+    !! @param[in] this The list object.
+    !! @param[in] item The item to search for.
+    !! @param[in] fcn The function to use to compare the contents of the list
+    !!  against @p item.
+    !!
+    !! @return Returns true if @p item is found; else, returns false.
+    module function list_contains(this, item, fcn) result(rst)
+        ! Arguments
+        class(list), intent(in) :: this
+        class(*), intent(in) :: item
+        procedure(items_equal), pointer, intent(in) :: fcn
+        logical :: rst
+
+        ! Local Variables
+        integer(int32) :: i, n
+
+        ! Process
+        rst = .false.
+        n = this%get_count()
+        do i = 1, n
+            if (fcn(item, this%get(i))) then
+                rst = .true.
+                exit
+            end if
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Finds the index of the first item in the list that matches
+    !! the specified object.
+    !!
+    !! @param[in] this The list object.
+    !! @param[in] item The item to search for.
+    !! @param[in] fcn The function to use to compare the contents of the list
+    !!  against @p item.
+    !!
+    !! @return Returns the index of the first occurrence of @p item in the
+    !!  list.  If no matching item is found, a value of 0 is returned.
+    module function list_index_of(this, item, fcn) result(rst)
+        ! Arguments
+        class(list), intent(in) :: this
+        class(*), intent(in) :: item
+        procedure(items_equal), pointer, intent(in) :: fcn
+        integer(int32) :: rst
+
+        ! Local Variables
+        integer(int32) :: i, n
+
+        ! Process
+        rst = 0
+        n = this%get_count()
+        do i = 1, n
+            if (fcn(item, this%get(i))) then
+                rst = i
+                exit
+            end if
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Finds the indices of all items in the list that match the 
+    !! specified object.
+    !!
+    !! @param[in] this The list object.
+    !! @param[in] item The item to search for.
+    !! @param[in] fcn The function to use to compare the contents of the list
+    !!  against @p item.
+    !!
+    !! @return Returns an array of indices of all items in the list that match
+    !!  @p item.  If not matches are found, an empty array is returned.
+    module function list_indices_of_all(this, item, fcn, err) result(rst)
+        ! Arguments
+        class(list), intent(in) :: this
+        class(*), intent(in) :: item
+        procedure(items_equal), pointer, intent(in) :: fcn
+        class(errors), intent(inout), optional, target :: err
+        integer(int32), allocatable, dimension(:) :: rst
+
+        ! Local Variables
+        integer(int32) :: i, j, n, flag
+        integer(int32), allocatable, dimension(:) :: buffer
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        
+        ! Initialization
+        n = this%get_count()
+        j = 0
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+        allocate(buffer(n), stat = flag)
+        if (flag /= 0) then
+            call errmgr%report_error("list_indices_of_all", &
+                "Insufficient memory available.", FCORE_OUT_OF_MEMORY_ERROR)
+            return
+        end if
+
+        ! Process
+        do i = 1, n
+            if (fcn(item, this%get(i))) then
+                j = j + 1
+                buffer(j) = i
+            end if
+        end do
+
+        ! Output
+        if (j == 0) then
+            allocate(rst(0))
+        else
+            rst = buffer(1:j)
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
+    ! Swaps two items in the list
+    module subroutine list_swap(this, i1, i2, err)
+        ! Arguments
+        class(list), intent(inout) :: this
+        integer(int32), intent(in) :: i1, i2
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int32) :: n
+        type(container) :: temp
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Initialization
+        n = this%get_count()
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Quick Return
+        if (n == 0 .or. i1 == i2) return
+
+        ! Input Check
+        if (i1 < 0 .or. i1 > n) then
+            write(errmsg, '(AI0AI0A)') "The I1 index of ", i1, &
+                " is outside the bounds of the array: [0, ", n, "]."
+            call errmgr%report_error("list_swap", trim(errmsg), &
+                FCORE_ARRAY_SIZE_ERROR)
+            return
+        end if
+
+        if (i2 < 0 .or. i2 > n) then
+            write(errmsg, '(AI0AI0A)') "The I2 index of ", i2, &
+                " is outside the bounds of the array: [0, ", n, "]."
+            call errmgr%report_error("list_swap", trim(errmsg), &
+                FCORE_ARRAY_SIZE_ERROR)
+            return
+        end if
+
+        ! Process
+        temp = this%m_list(i1)
+        this%m_list(i1) = this%m_list(i2)
+        this%m_list(i2) = temp
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    ! http://www.personal.psu.edu/jhm/f90/examples/sort/sorthalf.f
+    !> @brief Sorts an array into ascending order.
+    !!
+    !! @param[in,out] this The list object.
+    !! @param[in] fcn The function to use to make the comparison.
+    module subroutine list_sort(this, fcn)
+        ! Arguments
+        class(list), intent(inout) :: this
+        procedure(compare_items), pointer, intent(in) :: fcn
+
+        ! Local Variables
+        integer(int32) :: n
+
+        ! Process
+        n = this%get_count()
+        if (n <= 1) return
+        call list_sort_core(this%m_list(1:n), fcn)
+    end subroutine
+
+! --------------------
+    subroutine list_sort_core(x, fcn)
+        ! Arguments
+        type(container), intent(inout), dimension(:) :: x
+        procedure(compare_items), pointer, intent(in) :: fcn
+
+        ! Local Variables
+        real(real64) :: r
+        type(container) :: t, tt
+        integer(int32) :: i, ij, j, k, l, m, n, il(21), iu(21)
+        
+        ! Initialization
+        n = size(x)
+
+        ! Quick Return
+        if (n <= 1) return
+
+        ! Process
+        m = 1
+        i = 1
+        j = n
+        r = 0.375d0
+    20  if (i == j) go to 60
+        if (r <= 0.5898437d0) then
+            r = r + 3.90625d-2
+        else
+            r = r - 0.21875d0
+        end if
+
+    30  k = i
+        ! Select a central element of the array, and save it in location T
+        ij = i + int((j - i) * r)
+        t = x(ij)
+
+        ! Compare: If the first element of the array is greater than T, 
+        ! interchange with T
+        if (fcn(x(i)%item, t%item) == 1) then
+            x(ij) = x(i)
+            x(i) = t
+            t = x(ij)
+        end if
+        l = j
+
+        ! If the last element of the array is less than T, interchange 
+        ! with T
+        if (fcn(x(j)%item, t%item) == -1) then
+            x(ij) = x(j)
+            x(j) = t
+            t = x(ij)
+
+            ! If the first element of the array is greater than T, 
+            ! interchange with T
+            if (fcn(x(i)%item, t%item) == 1) then
+                x(ij) = x(i)
+                x(i) = t
+                t = x(ij)
+            end if
+        end if
+
+        ! Find an element in the second half of the array which is smaller
+        ! than T
+    40  l = l - 1
+        if (fcn(x(l)%item, t%item) == 1) go to 40
+
+        ! Find an element in the first half of the array which is greater
+        ! than T
+    50  k = k + 1
+        if (fcn(x(k)%item, t%item) == -1) go to 50
+
+        ! Interchange these elements
+        if (k <= l) then
+            tt = x(l)
+            x(l) = x(k)
+            x(k) = tt
+            go to 40
+        end if
+
+        ! Save upper and lower subscripts of the array yet to be sorted
+        if (l - i > j - k) then
+            il(m) = i
+            iu(m) = l
+            i = k
+            m = m + 1
+        else
+            il(m) = k
+            iu(m) = j
+            j = l
+            m = m + 1
+        end if
+        go to 70
+
+        ! Begin again on another portion of the unsorted array
+    60  m = m - 1
+        if (m == 0) go to 100
+        i = il(m)
+        j = iu(m)
+    
+    70  if (j - i >= 1) go to 30
+        if (i == 1) go to 20
+        i = i - 1
+
+    80  i = i + 1
+        if (i == j) go to 60
+        t = x(i + 1)
+        if (fcn(x(i)%item, t%item) == -1) go to 80
+        k = i
+
+    90  x(k + 1) = x(k)
+        k = k - 1
+        if (fcn(t%item, x(k)%item) == -1) go to 90
+        x(k + 1) = t
+        go to 80
+
+    ! End
+    100 continue
+        return
+    end subroutine
+
+! ------------------------------------------------------------------------------
 end submodule

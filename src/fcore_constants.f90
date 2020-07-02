@@ -12,5 +12,7 @@ module fcore_constants
     integer(int32), parameter :: FCORE_INVALID_INPUT_ERROR = 10001
     !> @brief Occurs if the supplied index is out of range.
     integer(int32), parameter :: FCORE_INDEX_OUT_OF_RANGE_ERROR = 10002
+    !> @brief Occurs if the array is not appropriately sized.
+    integer(int32), parameter :: FCORE_ARRAY_SIZE_ERROR = 10003
 
 end module
