@@ -8,12 +8,15 @@ set(fcore_sources
     fcore_constants.f90
     collections.f90
     collections_list.f90
+    file_io.f90
+    file_io_fm.f90
 )
 
 # Build the library
 add_library(fcore ${fcore_sources})
 target_link_libraries(fcore 
     ${ferror_LIBRARIES}
+    # ${linalg_LIBRARIES}
 )
 
 # ------------------------------------------------------------------------------
