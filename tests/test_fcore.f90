@@ -5,6 +5,7 @@ program main
     use test_fcore_strings
     use test_fcore_regex
     use test_fcore_list
+    use test_fcore_text_io
     implicit none
 
     ! Local Variables
@@ -45,6 +46,9 @@ program main
     if (.not.local) overall = .false.
 
     local = test_list_1()
+    if (.not.local) overall = .false.
+
+    local = test_text_read_write()
     if (.not.local) overall = .false.
 
     ! End
