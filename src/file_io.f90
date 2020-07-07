@@ -12,6 +12,16 @@ module file_io
     public :: text_writer
     public :: file_reader
     public :: text_reader
+    public :: is_little_endian
+    public :: swap_bytes
+
+    ! TO DO:
+    ! - binary formatter
+    ! - binary read
+    ! - binary write
+    ! - seperate path into components
+    ! - find all files and folders within a directory
+    ! - find all files of a specific type within a directory & subdirectories
 
 ! ******************************************************************************
 ! TYPES
@@ -210,6 +220,57 @@ module file_io
     end interface
 
 ! ------------------------------------------------------------------------------
+    !> @brief Swaps the byte order.
+    interface swap_bytes
+        module procedure :: swap_bytes_r64
+        module procedure :: swap_bytes_r32
+        module procedure :: swap_bytes_c64
+        module procedure :: swap_bytes_c32
+        module procedure :: swap_bytes_i64
+        module procedure :: swap_bytes_i32
+        module procedure :: swap_bytes_i16
+    end interface
+
+    interface
+        pure module function is_little_endian() result(rst)
+            logical :: rst
+        end function
+
+        elemental module function swap_bytes_r64(x) result(rst)
+            real(real64), intent(in) :: x
+            real(real64) :: rst
+        end function
+
+        elemental module function swap_bytes_r32(x) result(rst)
+            real(real32), intent(in) :: x
+            real(real32) :: rst
+        end function
+
+        elemental module function swap_bytes_i16(x) result(rst)
+            integer(int16), intent(in) :: x
+            integer(int16) :: rst
+        end function
+
+        elemental module function swap_bytes_i32(x) result(rst)
+            integer(int32), intent(in) :: x
+            integer(int32) :: rst
+        end function
+
+        elemental module function swap_bytes_i64(x) result(rst)
+            integer(int64), intent(in) :: x
+            integer(int64) :: rst
+        end function
+
+        elemental module function swap_bytes_c64(x) result(rst)
+            complex(real64), intent(in) :: x
+            complex(real64) :: rst
+        end function
+
+        elemental module function swap_bytes_c32(x) result(rst)
+            complex(real32), intent(in) :: x
+            complex(real32) :: rst
+        end function
+    end interface
 
 ! ------------------------------------------------------------------------------
 end module
