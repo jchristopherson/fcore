@@ -15,31 +15,13 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
-    !> @brief Creates a new, unused unit value to identify the file.
-    !!
-    !! @param[in,out] this The file_manager object.
-    module subroutine fm_new_unit(this)
+
+    !> @brief Sets the Fortran unit value to associate with this file.
+    module subroutine fm_set_unit(this, x)
         ! Arguments
         class(file_manager), intent(inout) :: this
-
-        ! Parameters
-        integer(int32), parameter :: min_unit = 10
-        integer(int32), parameter :: max_unit = 1000
-
-        ! Local Variables
-        logical :: opened
-        integer(int32) :: i
-
-        ! Process
-        if (this%m_unit == -1) then
-            do i = min_unit, max_unit
-                inquire(unit = i, opened = opened)
-                if (.not.opened) then
-                    this%m_unit = i
-                    exit
-                end if
-            end do
-        end if
+        integer(int32), intent(in) :: x
+        this%m_unit = x
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -59,6 +41,7 @@ contains
         else
             inquire(unit = this%m_unit, opened = rst)
         end if
+        rst = .true.
     end function
 
 ! ------------------------------------------------------------------------------
@@ -93,10 +76,33 @@ contains
     !> @brief Forces closure of the file, if open, whenever the object goes out
     !! of scope.
     !!
-    !! @param[in,out] this THe file_manager object.
+    !! @param[in,out] this The file_manager object.
     module subroutine fm_clean_up(this)
         type(file_manager), intent(inout) :: this
         call this%close(.false.)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Gets the filename.
+    !!
+    !! @param[in] this The file_manager object.
+    !! 
+    !! @return The filename.
+    pure module function fm_get_fname(this) result(rst)
+        class(file_manager), intent(in) :: this
+        character(len = :), allocatable :: rst
+        rst = this%m_fname
+    end function
+
+! --------------------
+    !> @brief Sets the filename.
+    !!
+    !! @param[in,out] this The file_manager object.
+    !! @param[in] x The filename.
+    module subroutine fm_set_fname(this, x)
+        class(file_manager), intent(inout) :: this
+        character(len = *), intent(in) :: x
+        this%m_fname = x
     end subroutine
 
 ! ------------------------------------------------------------------------------

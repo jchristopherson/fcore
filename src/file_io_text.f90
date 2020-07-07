@@ -25,7 +25,7 @@ contains
         class(errors), intent(inout), optional, target :: err
 
         ! Local Variables
-        integer(int32) :: flag
+        integer(int32) :: flag, val
         logical :: append2File
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
@@ -44,12 +44,11 @@ contains
         call this%close()
 
         ! Open the file
-        call this%create_new_unit()
         if (append2File) then
-            open(unit = this%get_unit(), file = fname, position = "append", &
+            open(newunit = val, file = fname, position = "append", &
                 iostat = flag)
         else
-            open(unit = this%get_unit(), file = fname, iostat = flag)
+            open(newunit = val, file = fname, iostat = flag)
         end if
         if (flag > 0) then
             write(errmsg, "(AI0A)") &
@@ -59,6 +58,9 @@ contains
                 FCORE_FILE_IO_ERROR)
             return
         end if
+
+        call this%set_unit(val)
+        call this%set_filename(fname)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -157,7 +159,7 @@ contains
         class(errors), intent(inout), optional, target :: err
 
         ! Local Variables
-        integer(int32) :: flag
+        integer(int32) :: flag, val
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
         character(len = 256) :: errmsg
@@ -173,8 +175,7 @@ contains
         call this%close()
 
         ! Process
-        call this%create_new_unit()
-        open(unit = this%get_unit(), file = fname, form = "unformatted", &
+        open(newunit = val, file = fname, form = "unformatted", &
             access = "stream", iostat = flag)
         if (flag > 0) then
             write(errmsg, '(AI0A)') &
@@ -185,7 +186,8 @@ contains
             return
         end if
         call this%move_to_start()
-        this%m_fname = fname
+        call this%set_filename(fname)
+        call this%set_unit(val)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -235,7 +237,7 @@ contains
         end if
 
         ! Determine the file size, and allocate a buffer
-        inquire(file = this%m_fname, size = fsize)
+        inquire(file = this%get_filename(), size = fsize)
         if (fsize == 0) return
         allocate(character(len = fsize) :: rst, stat = flag)
         if (flag /= 0) then
@@ -375,7 +377,7 @@ contains
 
         ! Allocate space for a buffer that is sufficiently sized to hold an
         ! entire line.
-        inquire(file = this%m_fname, size = fsize)
+        inquire(file = this%get_filename(), size = fsize)
         if (fsize == 0) return
         allocate(character(len = fsize) :: buffer, stat = flag)
         if (flag /= 0) then
@@ -439,7 +441,7 @@ contains
     !! @par Remarks
     !! Notice, the position indicator is not referenced, or utilized, for this
     !! read operation.  Regardless of its status, the entire file is read.
-    function tr_read_lines(this, err) result(rst)
+    module function tr_read_lines(this, err) result(rst)
         ! Arguments
         class(text_reader), intent(inout) :: this
         class(errors), intent(inout), optional, target :: err
@@ -450,6 +452,7 @@ contains
         type(errors), target :: deferr
         character(len = :), allocatable :: contents
         character :: cr, eol
+        integer(int32) :: i, n, j
         
         ! Initialization
         if (present(err)) then
@@ -467,11 +470,22 @@ contains
         ! Split the contents by EOL character - remove any carriage return
         ! characters
         rst = split_string(remove(contents, cr), eol)
+
+        ! Trim empty lines from the end of the file
+        n = size(rst)
+        j = 0
+        do i = n, 1, -1
+            if (len(rst(i)%str) == 0) then
+                j = j + 1
+            else
+                exit
+            end if
+        end do
+        if (j /= 0) then
+            n = n - j
+            rst = rst(1:n)
+        end if
     end function
-
-! ------------------------------------------------------------------------------
-
-! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 end submodule

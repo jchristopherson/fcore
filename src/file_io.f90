@@ -21,18 +21,26 @@ module file_io
     private
         !> @brief The unit value.
         integer(int32) :: m_unit = -1
+        !> @brief The filename.
+        character(len = :), allocatable :: m_fname
     contains
         !> @brief Forces closure of the file, if open, whenever the object goes
         !! out of scope.
         final :: fm_clean_up
         !> @brief Returns the unit value for the file object.
         procedure, public :: get_unit => fm_get_unit
-        !> @brief Creates a new, unused unit value to identify the file.
-        procedure, public :: create_new_unit => fm_new_unit
+        !> @brief Sets the unit value for the file object.
+        procedure, private :: set_unit => fm_set_unit
+        ! !> @brief Creates a new, unused unit value to identify the file.
+        ! procedure, public :: create_new_unit => fm_new_unit
         !> @brief Determines if the file is already opened.
         procedure, public :: is_open => fm_get_is_opened
         !> @brief Closes the file.
         procedure, public :: close => fm_close
+        !> @brief Gets the filename.
+        procedure, public :: get_filename => fm_get_fname
+        !> @brief Sets the filename.
+        procedure, public :: set_filename => fm_set_fname
     end type
 
 ! ------------------------------------------------------------------------------
@@ -67,8 +75,6 @@ module file_io
 ! ------------------------------------------------------------------------------
     !> @brief Defines a mechanism for reading text files.
     type, extends(file_reader) :: text_reader
-        !> The filename.
-        character(len = :), allocatable :: m_fname
     contains
         !> @brief Opens a text file for reading.
         procedure, public :: open => tr_open
@@ -78,6 +84,9 @@ module file_io
         procedure, public :: read_char => tr_read_char
         !> @brief Reads a single line from an ASCII text file.
         procedure, public :: read_line => tr_read_line
+        !> @brief Reads the entire contents of an ASCII text file into a string,
+        !! and breaks the contents into lines.
+        procedure, public :: read_lines => tr_read_lines
     end type
 
 ! ******************************************************************************
@@ -88,6 +97,11 @@ module file_io
             class(file_manager), intent(in) :: this
             integer(int32) :: rst
         end function
+
+        module subroutine fm_set_unit(this, x)
+            class(file_manager), intent(inout) :: this
+            integer(int32), intent(in) :: x
+        end subroutine
 
         module subroutine fm_new_unit(this)
             class(file_manager), intent(inout) :: this
@@ -105,6 +119,16 @@ module file_io
 
         module subroutine fm_clean_up(this)
             type(file_manager), intent(inout) :: this
+        end subroutine
+
+        pure module function fm_get_fname(this) result(rst)
+            class(file_manager), intent(in) :: this
+            character(len = :), allocatable :: rst
+        end function
+
+        module subroutine fm_set_fname(this, x)
+            class(file_manager), intent(inout) :: this
+            character(len = *), intent(in) :: x
         end subroutine
     end interface
 
@@ -176,6 +200,12 @@ module file_io
             class(text_reader), intent(inout) :: this
             class(errors), intent(inout), optional, target :: err
             character(len = :), allocatable :: rst
+        end function
+
+        module function tr_read_lines(this, err) result(rst)
+            class(text_reader), intent(inout) :: this
+            class(errors), intent(inout), optional, target :: err
+            type(string), allocatable, dimension(:) :: rst
         end function
     end interface
 
