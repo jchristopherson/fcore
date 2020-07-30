@@ -13,6 +13,7 @@ set(fcore_sources
     file_io_text.f90
     file_io_reader.f90
     file_io_endian.f90
+    file_io_binary.f90
 )
 
 # Build the library

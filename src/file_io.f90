@@ -99,6 +99,37 @@ module file_io
         procedure, public :: read_lines => tr_read_lines
     end type
 
+! ------------------------------------------------------------------------------
+    !> @brief Defines a mechanism for writing binary files.
+    type, extends(file_reader) :: binary_writer
+    private
+        !> @brief A buffer used to store data until flushed.
+        integer(int8), allocatable, dimension(:) :: m_buffer
+        !> @brief The actual number of items in the buffer
+        integer(int32) :: m_count = 0
+    contains
+        !> @brief Gets the capacity of the buffer, in bytes.
+        procedure, public :: get_capacity => bw_get_capacity
+        !> @brief Sets the capacity of the buffer, in bytes.
+        procedure, public :: set_capacity => bw_set_capacity
+        !> @brief Gets the number of bytes stored within the buffer.
+        procedure, public :: get_count => bw_get_count
+        !> @brief Clears the buffer.
+        procedure, public :: clear_buffer => bw_clear_buffer
+        !> @brief Opens a binary file for writing.
+        procedure, public :: open => bw_open
+        !> @brief Closes the file.  This will also force writing of all buffer
+        !! contents.
+        procedure, public :: close => bw_close
+        !> @brief Flushes the buffer.
+        procedure, private :: flush_buffer => bw_flush_buffer
+        !> @brief Pushes an item onto the buffer for writing.
+        generic, public :: push => bw_append_byte, bw_append_byte_array
+
+        procedure :: bw_append_byte
+        procedure :: bw_append_byte_array
+    end type
+
 ! ******************************************************************************
 ! INTERFACES
 ! ------------------------------------------------------------------------------
@@ -217,6 +248,57 @@ module file_io
             class(errors), intent(inout), optional, target :: err
             type(string), allocatable, dimension(:) :: rst
         end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface
+        pure module function bw_get_capacity(this) result(rst)
+            class(binary_writer), intent(in) :: this
+            integer(int32) :: rst
+        end function
+
+        module subroutine bw_set_capacity(this, n, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int32), intent(in) :: n
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        pure module function bw_get_count(this) result(rst)
+            class(binary_writer), intent(in) :: this
+            integer(int32) :: rst
+        end function
+
+        module subroutine bw_clear_buffer(this)
+            class(binary_writer), intent(inout) :: this
+        end subroutine
+
+        module subroutine bw_open(this, fname, append, err)
+            class(binary_writer), intent(inout) :: this
+            character(len = *), intent(in) :: fname
+            logical, intent(in), optional :: append
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_close(this, del)
+            class(binary_writer), intent(inout) :: this
+            logical, intent(in), optional :: del
+        end subroutine
+
+        module subroutine bw_flush_buffer(this)
+            class(binary_writer), intent(inout) :: this
+        end subroutine
+
+        module subroutine bw_append_byte(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int8), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_byte_array(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int8), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
     end interface
 
 ! ------------------------------------------------------------------------------
