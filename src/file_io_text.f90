@@ -29,7 +29,7 @@ contains
         logical :: append2File
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
-        character(len = 356) :: errmsg
+        character(len = 256) :: errmsg
         
         ! Initialization
         if (present(err)) then
