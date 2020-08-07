@@ -106,4 +106,21 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Gets the size of the currently open file.
+    !!
+    !! @param[in] this The file_manager object.
+    !!
+    !! @return The file size, in bytes.
+    module function fm_get_size(this) result(rst)
+        ! Arguments
+        class(file_manager), intent(in) :: this
+        integer(int32) :: rst
+
+        ! Process
+        rst = 0
+        if (.not.this%is_open()) return
+        inquire(file = this%get_filename(), size = rst)
+    end function
+
+! ------------------------------------------------------------------------------
 end submodule

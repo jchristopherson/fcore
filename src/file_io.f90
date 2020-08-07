@@ -3,6 +3,7 @@
 !> @brief This module contains routines to support file I/O operations.
 module file_io
     use iso_fortran_env
+    use iso_c_binding
     use ferror
     use fcore_constants
     use strings
@@ -12,16 +13,15 @@ module file_io
     public :: text_writer
     public :: file_reader
     public :: text_reader
+    public :: binary_writer
+    public :: binary_reader
     public :: is_little_endian
     public :: swap_bytes
-
-    ! TO DO:
-    ! - binary formatter
-    ! - binary read
-    ! - binary write
-    ! - seperate path into components
-    ! - find all files and folders within a directory
-    ! - find all files of a specific type within a directory & subdirectories
+    public :: file_path
+    public :: split_path
+    public :: folder_contents
+    public :: get_folder_contents
+    public :: find_all_files
 
 ! ******************************************************************************
 ! TYPES
@@ -51,6 +51,8 @@ module file_io
         procedure, public :: get_filename => fm_get_fname
         !> @brief Sets the filename.
         procedure, public :: set_filename => fm_set_fname
+        !> @brief Gets the size of the currently open file.
+        procedure, public :: get_file_size => fm_get_size
     end type
 
 ! ------------------------------------------------------------------------------
@@ -69,6 +71,7 @@ module file_io
 ! ------------------------------------------------------------------------------
     !> @brief Defines a mechanism for reading files.
     type, extends(file_manager) :: file_reader
+    private
         !> @brief The current file position.
         integer(int32) :: m_position = 0
     contains
@@ -108,6 +111,9 @@ module file_io
         !> @brief The actual number of items in the buffer
         integer(int32) :: m_count = 0
     contains
+        !> @brief Forces a write operation on all buffer contents, closes the 
+        !! file, and performs any necessary clean-up operations.
+        final :: bw_clean_up
         !> @brief Gets the capacity of the buffer, in bytes.
         procedure, public :: get_capacity => bw_get_capacity
         !> @brief Sets the capacity of the buffer, in bytes.
@@ -121,14 +127,110 @@ module file_io
         !> @brief Closes the file.  This will also force writing of all buffer
         !! contents.
         procedure, public :: close => bw_close
-        !> @brief Flushes the buffer.
-        procedure, private :: flush_buffer => bw_flush_buffer
+        !> @brief Flushes the buffer by writing the contents to file.
+        procedure, public :: flush_buffer => bw_flush_buffer
         !> @brief Pushes an item onto the buffer for writing.
-        generic, public :: push => bw_append_byte, bw_append_byte_array
+        generic, public :: push => bw_append_byte, bw_append_byte_array, &
+            bw_append_r64, bw_append_r64_array, bw_append_r64_matrix, &
+            bw_append_r32, bw_append_r32_array, bw_append_r32_matrix, &
+            bw_append_i16, bw_append_i16_array, bw_append_i16_matrix, &
+            bw_append_i32, bw_append_i32_array, bw_append_i32_matrix, &
+            bw_append_i64, bw_append_i64_array, bw_append_i64_matrix, &
+            bw_append_c64, bw_append_c64_array, bw_append_c64_matrix, &
+            bw_append_c32, bw_append_c32_array, bw_append_c32_matrix, &
+            bw_append_string
 
         procedure :: bw_append_byte
         procedure :: bw_append_byte_array
+        procedure :: bw_append_r64
+        procedure :: bw_append_r64_array
+        procedure :: bw_append_r64_matrix
+        procedure :: bw_append_r32
+        procedure :: bw_append_r32_array
+        procedure :: bw_append_r32_matrix
+        procedure :: bw_append_i16
+        procedure :: bw_append_i16_array
+        procedure :: bw_append_i16_matrix
+        procedure :: bw_append_i32
+        procedure :: bw_append_i32_array
+        procedure :: bw_append_i32_matrix
+        procedure :: bw_append_i64
+        procedure :: bw_append_i64_array
+        procedure :: bw_append_i64_matrix
+        procedure :: bw_append_c64
+        procedure :: bw_append_c64_array
+        procedure :: bw_append_c64_matrix
+        procedure :: bw_append_c32
+        procedure :: bw_append_c32_array
+        procedure :: bw_append_c32_matrix
+        procedure :: bw_append_string
     end type
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a mechanism for reading binary files.
+    type, extends(file_reader) :: binary_reader
+    contains
+        !> @brief Opens a binary file for reading.
+        procedure, public :: open => br_open
+        !> @brief Reads a specified number of bytes from the file.
+        procedure, public :: read_bytes => br_read_byte_count
+        !> @brief Reads a single byte from the file.
+        procedure, public :: read_byte => br_read_byte
+        !> @brief Reads the entire contents of the file into a buffer.
+        procedure, public :: read_all => br_read_all
+    end type
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a container for parts of a file path.
+    type file_path
+        !> @brief The drive.
+        character(len = :), allocatable :: drive
+        !> @brief The directory.
+        character(len = :), allocatable :: directory
+        !> @brief The filename.
+        character(len = :), allocatable :: filename
+        !> @brief The file extension.  Notice, the '.' is included 
+        !! (e.g. ".txt").
+        character(len = :), allocatable :: extension
+    end type
+
+! ------------------------------------------------------------------------------
+    !> @brief Defins a container describing folder contents.
+    type folder_contents
+        !> @brief A list of files in the folder.
+        type(string), allocatable, dimension(:) :: files
+        !> @brief A list of folders with the folder.
+        type(string), allocatable, dimension(:) :: folders
+        !> @brief The folder
+        character(len = :), allocatable :: folder
+    end type
+
+! ******************************************************************************
+! C-INTEROP INTERFACES
+! ------------------------------------------------------------------------------
+    interface
+        !> @brief An interface to the C split_file_path routine.
+        subroutine split_file_path_c(path, drive, dir, fname, ext) &
+                bind(C, name = "split_file_path_c")
+            use iso_c_binding
+            character(kind = c_char), intent(in) :: path(*)
+            character(kind = c_char), intent(out) :: drive(*), dir(*), &
+                fname(*), ext(*)
+        end subroutine
+
+        !> @brief An interface to the C get_directory_contents_c routine.
+        function get_directory_contents_c(dir, nbuffers, bufferSize, fnames, &
+                nnames, nameLengths, dirnames, ndir, dirLengths) &
+                bind(C, name = "get_directory_contents_c") result(rst)
+            use iso_c_binding
+            character(kind = c_char), intent(in) :: dir(*)
+            integer(c_int), intent(in), value :: nbuffers, bufferSize
+            type(c_ptr), intent(out) :: fnames(nbuffers), dirNames(nbuffers)
+            integer(c_int), intent(out) :: nnames, nameLengths(nbuffers), &
+                ndir, dirLengths(nbuffers)
+            logical(c_bool) :: rst
+        end function
+    end interface
 
 ! ******************************************************************************
 ! INTERFACES
@@ -171,6 +273,11 @@ module file_io
             class(file_manager), intent(inout) :: this
             character(len = *), intent(in) :: x
         end subroutine
+
+        module function fm_get_size(this) result(rst)
+            class(file_manager), intent(in) :: this
+            integer(int32) :: rst
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------
@@ -299,6 +406,195 @@ module file_io
             integer(int8), intent(in), dimension(:) :: x
             class(errors), intent(inout), optional, target :: err
         end subroutine
+
+        module subroutine bw_append_r64(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            real(real64), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_r64_array(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            real(real64), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_r64_matrix(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            real(real64), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_r32(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            real(real32), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_r32_array(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            real(real32), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_r32_matrix(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            real(real32), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i16(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int16), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i16_array(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int16), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i16_matrix(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int16), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i32(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int32), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i32_array(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int32), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i32_matrix(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int32), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i64(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int64), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i64_array(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int64), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_i64_matrix(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            integer(int64), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_c64(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            complex(real64), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_c64_array(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            complex(real64), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_c64_matrix(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            complex(real64), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_c32(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            complex(real32), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_c32_array(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            complex(real32), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_c32_matrix(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            complex(real32), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_string(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            character(len = *), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_clean_up(this)
+            type(binary_writer), intent(inout) :: this
+        end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface
+        module subroutine br_open(this, fname, err)
+            class(binary_reader), intent(inout) :: this
+            character(len = *), intent(in) :: fname
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module function br_read_byte_count(this, n, err) result(rst)
+            class(binary_reader), intent(inout) :: this
+            integer(int32), intent(in) :: n
+            class(errors), intent(inout), optional, target :: err
+            integer(int8), allocatable, dimension(:) :: rst
+        end function
+
+        module function br_read_byte(this, err) result(rst)
+            class(binary_reader), intent(inout) :: this
+            class(errors), intent(inout), optional, target :: err
+            integer(int8) :: rst
+        end function
+
+        module function br_read_all(this, err) result(rst)
+            class(binary_reader), intent(inout) :: this
+            class(errors), intent(inout), optional, target :: err
+            integer(int8), allocatable, dimension(:) :: rst
+        end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface
+        !> @brief Splits the supplied path into components.
+        module function split_path(path) result(rst)
+            character(len = *), intent(in) :: path
+            type(file_path) :: rst
+        end function
+
+        !> @brief Gets a list of all contents of a folder.
+        module function get_folder_contents(folder) result(rst)
+            character(len = *), intent(in) :: folder
+            type(folder_contents) :: rst
+        end function
+
+        !> @brief Finds all files with the specified extension within a 
+        !! directory.
+        recursive module function find_all_files(folder, ext, subfolders, err) &
+                result(rst)
+            character(len = *), intent(in) :: folder, ext
+            logical, intent(in), optional :: subfolders
+            class(errors), intent(inout), optional, target :: err
+            type(string), allocatable, dimension(:) :: rst
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------

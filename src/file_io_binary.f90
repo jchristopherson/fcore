@@ -2,6 +2,8 @@
 
 submodule (file_io) file_io_binary
 contains
+! ******************************************************************************
+! BINARY_WRITER CLASS
 ! ------------------------------------------------------------------------------
     !> @brief Gets the capacity of the buffer, in bytes.
     !!
@@ -67,6 +69,7 @@ contains
         if (.not.allocated(this%m_buffer)) then
             allocate(this%m_buffer(n), stat = flag)
             if (flag /= 0) go to 100
+            return
         end if
 
         ! Create a copy of the existing buffer
@@ -230,6 +233,10 @@ contains
 
         ! Write the buffer
         write(this%get_unit()) this%m_buffer(1:n)
+
+        ! Zero the buffer and reset the counter
+        this%m_buffer = 0
+        this%m_count = 0
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -311,10 +318,812 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    !> @brief Pushes a 64-bit real value onto the buffer.  No correction is made
+    !! for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_r64(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        real(real64), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes an array of 64-bit real values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_r64_array(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        real(real64), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a matrix of 64-bit real values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_r64_matrix(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        real(real64), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a 32-bit real value onto the buffer.  No correction is made
+    !! for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_r32(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        real(real32), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes an array of 32-bit real values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_r32_array(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        real(real32), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a matrix of 32-bit real values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_r32_matrix(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        real(real32), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a 16-bit integer value onto the buffer.  No correction is 
+    !! made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i16(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int16), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes an array of 16-bit integer values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i16_array(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int16), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a matrix of 16-bit integer values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i16_matrix(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int16), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a 32-bit integer value onto the buffer.  No correction is 
+    !! made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i32(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int32), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes an array of 32-bit integer values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i32_array(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int32), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a matrix of 32-bit integer values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i32_matrix(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int32), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a 64-bit integer value onto the buffer.  No correction is 
+    !! made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i64(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int64), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes an array of 64-bit integer values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i64_array(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int64), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a matrix of 64-bit integer values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_i64_matrix(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        integer(int64), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a 64-bit complex value onto the buffer.  No correction is 
+    !! made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_c64(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        complex(real64), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes an array of 64-bit complex values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_c64_array(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        complex(real64), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a matrix of 64-bit complex values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_c64_matrix(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        complex(real64), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a 32-bit complex value onto the buffer.  No correction is 
+    !! made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_c32(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        complex(real32), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes an array of 32-bit complex values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_c32_array(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        complex(real32), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a matrix of 32-bit complex values onto the buffer.  No 
+    !! correction is made for endianess.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_c32_matrix(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        complex(real32), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a character string onto the buffer.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_string(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        character(len = *), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Forces a write operation on all buffer contents, closes the file,
+    !! and performs any necessary clean-up operations.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    module subroutine bw_clean_up(this)
+        ! Arguments
+        type(binary_writer), intent(inout) :: this
+
+        ! Flush the buffer & force any pending write actions
+        call this%flush_buffer()
+
+        ! The parent destructor should close the file.  Regardless, we'll to it
+        ! here to ensure it's done properly
+        call this%close()
+    end subroutine
 
 ! ------------------------------------------------------------------------------
 
+
+
+! ******************************************************************************
+! BINARY_READER CLASS
 ! ------------------------------------------------------------------------------
+    !> @brief Opens a binary file for reading.
+    !!
+    !! @param[in,out] this The binary_reader object.
+    !! @param[in] fname The name of the file to open.
+    !! @param[in] append An optional argument that, if specified, determines
+    !!  if the file should be appended.  If not supplied, and a file exists,
+    !!  the file will be overwritten.  If no file exists, it simply will be
+    !!  created.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be opened.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine br_open(this, fname, err)
+        ! Arguments
+        class(binary_reader), intent(inout) :: this
+        character(len = *), intent(in) :: fname
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int32) :: flag, val
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Initialization
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Close, if already open
+        call this%close()
+
+        ! Process
+        open(newunit = val, file = fname, form = "unformatted", &
+            access = "stream", iostat = flag)
+        if (flag > 0) then
+            write(errmsg, "(AI0A)") &
+                "The file could not be opened/created.  Error code ", flag, &
+                " was encountered."
+            call errmgr%report_error("br_open", trim(errmsg), &
+                FCORE_FILE_IO_ERROR)
+        end if
+        call this%set_unit(val)
+        call this%set_filename(fname)
+        call this%move_to_start()
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Reads a specified number of bytes from the file.
+    !!
+    !! @param[in,out] this The binary_reader object.
+    !! @param[in] n The number of bytes to read.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!  - FCORE_INVALID_INPUT_ERROR: Occurs if the requested read size is
+    !!      less than or equal to zero.
+    !!
+    !! @result An array containing the results.
+    module function br_read_byte_count(this, n, err) result(rst)
+        ! Arguments
+        class(binary_reader), intent(inout) :: this
+        integer(int32), intent(in) :: n
+        class(errors), intent(inout), optional, target :: err
+        integer(int8), allocatable, dimension(:) :: rst
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        integer(int32) :: fsize, flag, nbytes
+        
+        ! Initialization
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Ensure the file is opened for reading
+        if (.not.this%is_open()) then
+            call errmgr%report_error("br_read_byte_count", &
+                "The file is not opened for reading.", &
+                FCORE_UNOPENED_ERROR)
+            return
+        end if
+
+        ! Determine the number of bytes to read, and then ensure its a positive,
+        ! non-zero value
+        ! inquire(file = this%get_filename(), size = fsize)
+        fsize = this%get_file_size()
+        nbytes = min(n, fsize - this%get_position() + 1)
+        if (nbytes < 0) then
+            write(errmsg, '(AI0A)') "Expected a positive value for number" // & 
+                " of bytes to read, but found ", nbytes, "."
+            call errmgr%report_error("br_read_byte_count", trim(errmsg), &
+                FCORE_INVALID_INPUT_ERROR)
+            return
+        end if
+
+        allocate(rst(nbytes), stat = flag)
+        if (flag /= 0) then
+            call errmgr%report_error("br_read_byte_count", &
+                "Insufficient memory available.", FCORE_OUT_OF_MEMORY_ERROR)
+            return
+        end if
+
+        ! Perform the read operation
+        read(this%get_unit(), pos = this%get_position(), iostat = flag) rst
+        if (flag > 0) then
+            write(errmsg, '(AI0A)') & 
+                "The file could not be read.  Error code ", flag, &
+                " was encountered."
+            call errmgr%report_error("br_read_byte_count", trim(errmsg), &
+                FCORE_FILE_IO_ERROR)
+            return
+        end if
+
+        ! Adjust the position
+        call this%set_position(this%get_position() + nbytes)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Reads a single byte from the file.
+    !!
+    !! @param[in,out] this The binary_reader object.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!
+    !! @result The results.
+    module function br_read_byte(this, err) result(rst)
+        ! Arguments
+        class(binary_reader), intent(inout) :: this
+        class(errors), intent(inout), optional, target :: err
+        integer(int8) :: rst
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: x
+
+        ! Process
+        x = this%read_bytes(1, err)
+        rst = x(1)
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Reads the entire contents of the file into a buffer.
+    !!
+    !! @param[in,out] this The binary_reader object.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    !!
+    !! @result An array containing the results.
+    module function br_read_all(this, err) result(rst)
+        ! Arguments
+        class(binary_reader), intent(inout) :: this
+        class(errors), intent(inout), optional, target :: err
+        integer(int8), allocatable, dimension(:) :: rst
+
+        ! Local Variables
+        integer(int32) :: n
+
+        ! Process
+        call this%move_to_start()
+        ! inquire(file = this%get_filename(), size = n)
+        n = this%get_file_size()
+        rst = this%read_bytes(n, err)
+    end function
 
 ! ------------------------------------------------------------------------------
 end submodule

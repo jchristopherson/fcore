@@ -83,6 +83,12 @@ endif ()
 message(STATUS "CMAKE_Fortran_COMPILER full path: " ${CMAKE_Fortran_COMPILER})
 message(STATUS "Fortran compiler: " ${Fortran_COMPILER_NAME})
 
+# C/C++ Compiler Directions - Windows Specific
+# Necessary for COM support => REF: https://gist.github.com/armornick/106e1124995194af5c02
+set(CMAKE_CXX_FLAGS_DEBUG "-DUNICODE -D_UNICODE -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DNTDDI_VERSION=NTDDI_VISTA")
+set(CMAKE_CXX_FLAGS_RELEASE "-DUNICODE -D_UNICODE -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DNTDDI_VERSION=NTDDI_VISTA")
+
+
 # Locate Dependencies
 find_package(ferror 1.3.0)
 # find_package(linalg 1.6.0)
