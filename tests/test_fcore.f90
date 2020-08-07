@@ -6,6 +6,7 @@ program main
     use test_fcore_regex
     use test_fcore_list
     use test_fcore_text_io
+    use test_fcore_binary_io
     implicit none
 
     ! Local Variables
@@ -49,6 +50,9 @@ program main
     if (.not.local) overall = .false.
 
     local = test_text_read_write()
+    if (.not.local) overall = .false.
+
+    local = test_binary_read_write()
     if (.not.local) overall = .false.
 
     ! End
