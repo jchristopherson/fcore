@@ -25,6 +25,7 @@ module strings
     public :: to_string
     public :: to_c_string
     public :: to_fortran_string
+    public :: c_string_length
     public :: operator(+)
     public :: assignment(=)
     public :: operator(==)
@@ -429,6 +430,11 @@ module strings
             character(kind = c_char), intent(in) :: str(*)
             integer(int32), intent(in) :: nchar
             character(len = :), allocatable :: rst
+        end function
+
+        pure module function c_string_length(cstring) result(rst)
+            character(kind = c_char, len = *), intent(in) :: cstring
+            integer(int32) :: rst
         end function
     end interface
 

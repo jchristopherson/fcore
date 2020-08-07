@@ -1121,4 +1121,25 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    !> @brief Determines the length of a C-type null-terminated string.
+    !!
+    !! @param[in] str The C-style string.
+    !!
+    !! @return The length of @p str.
+    pure module function c_string_length(cstring) result(rst)
+        ! Arguments
+        character(kind = c_char, len = *), intent(in) :: cstring
+        integer(int32) :: rst
+
+        ! Process
+        rst = 0
+        do while (rst < len_trim(cstring))
+            if (cstring(rst:rst) == C_NULL_CHAR) then
+                exit
+            end if
+            rst = rst + 1
+        end do
+    end function
+
+! ------------------------------------------------------------------------------
 end submodule
