@@ -102,6 +102,27 @@ contains
         write(this%get_unit(), '(A)', advance = 'no') txt
     end subroutine
 
+! --------------------
+    !> @brief Writes text to the file, but does not advance to the next line.
+    !!
+    !! @param[in] this The text_writer object.
+    !! @param[in] txt The text to write.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_UNOPENED_ERROR: Occurs if the file has not yet been opened.
+    module subroutine tw_write_txt_str(this, txt, err)
+        ! Arguments
+        class(text_writer), intent(in) :: this
+        class(string), intent(in) :: txt
+        class(errors), intent(inout), optional, target :: err
+
+        ! Process
+        call this%write(txt%str, err)
+    end subroutine
+
 ! ------------------------------------------------------------------------------
     !> @brief Writes text to the file, but does advance to the next line.
     !!
@@ -139,6 +160,27 @@ contains
 
         ! Process
         write(this%get_unit(), '(A)') txt
+    end subroutine
+
+! --------------------
+    !> @brief Writes text to the file, but does advance to the next line.
+    !!
+    !! @param[in] this The text_writer object.
+    !! @param[in] txt The text to write.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_UNOPENED_ERROR: Occurs if the file has not yet been opened.
+    module subroutine tw_write_txt_line_str(this, txt, err)
+        ! Arguments
+        class(text_writer), intent(in) :: this
+        class(string), intent(in) :: txt
+        class(errors), intent(inout), optional, target :: err
+
+        ! Process
+        call this%write_line(txt%str, err)
     end subroutine
 
 ! ******************************************************************************

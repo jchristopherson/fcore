@@ -63,9 +63,15 @@ module file_io
         procedure, public :: open => tw_open
         !> @brief Writes text to the file, but does not advance to the next 
         !! line.
-        procedure, public :: write => tw_write_txt
+        generic, public :: write => tw_write_txt, tw_write_txt_str
         !> @brief Writes text to the file, but does advance to the next line.
-        procedure, public :: write_line => tw_write_txt_line
+        generic, public :: write_line => tw_write_txt_line, &
+            tw_write_txt_line_str
+
+        procedure :: tw_write_txt
+        procedure :: tw_write_txt_str
+        procedure :: tw_write_txt_line
+        procedure :: tw_write_txt_line_str
     end type
 
 ! ------------------------------------------------------------------------------
@@ -138,7 +144,7 @@ module file_io
             bw_append_i64, bw_append_i64_array, bw_append_i64_matrix, &
             bw_append_c64, bw_append_c64_array, bw_append_c64_matrix, &
             bw_append_c32, bw_append_c32_array, bw_append_c32_matrix, &
-            bw_append_string
+            bw_append_char, bw_append_str
 
         procedure :: bw_append_byte
         procedure :: bw_append_byte_array
@@ -163,7 +169,8 @@ module file_io
         procedure :: bw_append_c32
         procedure :: bw_append_c32_array
         procedure :: bw_append_c32_matrix
-        procedure :: bw_append_string
+        procedure :: bw_append_char
+        procedure :: bw_append_str
     end type
 
 ! ------------------------------------------------------------------------------
@@ -295,9 +302,21 @@ module file_io
             class(errors), intent(inout), optional, target :: err
         end subroutine
 
+        module subroutine tw_write_txt_str(this, txt, err)
+            class(text_writer), intent(in) :: this
+            class(string), intent(in) :: txt
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
         module subroutine tw_write_txt_line(this, txt, err)
             class(text_writer), intent(in) :: this
             character(len = *), intent(in) :: txt
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine tw_write_txt_line_str(this, txt, err)
+            class(text_writer), intent(in) :: this
+            class(string), intent(in) :: txt
             class(errors), intent(inout), optional, target :: err
         end subroutine
     end interface
@@ -533,9 +552,15 @@ module file_io
             class(errors), intent(inout), optional, target :: err
         end subroutine
 
-        module subroutine bw_append_string(this, x, err)
+        module subroutine bw_append_char(this, x, err)
             class(binary_writer), intent(inout) :: this
             character(len = *), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine bw_append_str(this, x, err)
+            class(binary_writer), intent(inout) :: this
+            class(string), intent(in) :: x
             class(errors), intent(inout), optional, target :: err
         end subroutine
 

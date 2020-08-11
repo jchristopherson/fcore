@@ -896,10 +896,36 @@ contains
     !!  errors and warning messages that may be encountered are as follows.
     !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
     !!      available.
-    module subroutine bw_append_string(this, x, err)
+    module subroutine bw_append_char(this, x, err)
         ! Arguments
         class(binary_writer), intent(inout) :: this
         character(len = *), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int8), allocatable, dimension(:) :: buffer
+
+        ! Process
+        buffer = transfer(x, buffer)
+        call this%push(buffer, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    !> @brief Pushes a character string onto the buffer.
+    !!
+    !! @param[in,out] this The binary_writer object.
+    !! @param[in] x The array to push onto the buffer.
+    !! @param[in,out] err An optional errors-based object that if provided can 
+    !!  be used to retrieve information relating to any errors encountered 
+    !!  during execution.  If not provided, a default implementation of the 
+    !!  errors class is used internally to provide error handling.  Possible 
+    !!  errors and warning messages that may be encountered are as follows.
+    !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+    !!      available.
+    module subroutine bw_append_str(this, x, err)
+        ! Arguments
+        class(binary_writer), intent(inout) :: this
+        class(string), intent(in) :: x
         class(errors), intent(inout), optional, target :: err
 
         ! Local Variables
