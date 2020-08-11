@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="collections::compare\l_items",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfacecollections_1_1compare__items.html",tooltip="Compares two items, and returns 1 if item1 is greater than item2, 0 if item1 is equal to item2,..."];
+}
