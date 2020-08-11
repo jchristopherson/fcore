@@ -1134,10 +1134,11 @@ contains
         ! Process
         rst = 0
         do while (rst < len_trim(cstring))
+            rst = rst + 1
             if (cstring(rst:rst) == C_NULL_CHAR) then
+                rst = rst - 1
                 exit
             end if
-            rst = rst + 1
         end do
     end function
 
