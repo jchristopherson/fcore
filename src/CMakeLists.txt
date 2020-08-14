@@ -16,6 +16,8 @@ set(fcore_sources
     file_io_binary.f90
     system_file_io.cpp
     file_io_path.f90
+    ui_dialogs.cpp
+    ui_dialogs.f90
 )
 
 # Build the library
