@@ -332,3 +332,126 @@ void show_browse_folder_dialog_c(char *buffer, int bufferSize, int *numChars)
     // End Window-Specific Code
 }
 
+
+int show_message_box_c(void *parent, const char *txt, const char *title, 
+    int buttons, int icon)
+{
+    // Windows-Specific Code
+    HWND hWnd = (HWND)parent;
+    UINT btn, icn, type;
+    int result;
+    size_t nchars;
+    wchar_t txtBuffer[4096], titleBuffer[4096];
+
+    switch (buttons) {
+        case MSGBX_BTN_OK:
+            btn = MB_OK;
+            break;
+
+        case MSGBX_BTN_OK_CANCEL:
+            btn = MB_OKCANCEL;
+            break;
+
+        case MSGBX_BTN_YES_NO:
+            btn = MB_YESNO;
+            break;
+
+        case MSGBX_BTN_YES_NO_CANCEL:
+            btn = MB_YESNOCANCEL;
+            break;
+
+        case MSGBX_BTN_RETRY_CANCEL:
+            btn = MB_RETRYCANCEL;
+            break;
+
+        case MSGBX_BTN_ABORT_RETRY_IGNORE:
+            btn = MB_ABORTRETRYIGNORE;
+            break;
+
+        case MSGBX_BTN_CANCEL_RETRY_CONTINUE:
+            btn = MB_CANCELTRYCONTINUE;
+            break;
+
+        default:
+            btn = MSGBX_NO_BUTTON;
+            break;
+    }
+
+    switch (icon) {
+        case MSGBX_ICON_ERROR:
+            icn = MB_ICONERROR;
+            break;
+
+        case MSGBX_ICON_WARNING:
+            icn = MB_ICONWARNING;
+            break;
+
+        case MSGBX_ICON_QUESTION:
+            icn = MB_ICONQUESTION;
+            break;
+
+        case MSGBX_ICON_INFORMATION:
+            icn = MB_ICONINFORMATION;
+            break;
+
+        default:
+            icn = MSGBX_NO_ICON;
+            break;
+    }
+
+    if (btn == MSGBX_NO_BUTTON && icn == MSGBX_NO_ICON) {
+        type = 0;
+    }
+    else if (btn == MSGBX_NO_BUTTON && icn != MSGBX_NO_ICON) {
+        type = icn;
+    }
+    else if (btn != MSGBX_NO_BUTTON && icn == MSGBX_NO_ICON) {
+        type = btn;
+    }
+    else {
+        type = btn | icn;
+    }
+
+    nchars = mbstowcs(txtBuffer, txt, MIN(4096, strlen(txt) + 1));
+    nchars = mbstowcs(titleBuffer, title, MIN(4096, strlen(title) + 1));
+    result = MessageBox(hWnd, txtBuffer, titleBuffer, type);
+
+    switch (result) {
+        case IDABORT:
+            result = DIALOG_RESULT_ABORT;
+            break;
+
+        case IDCANCEL:
+            result = DIALOG_RESULT_CANCEL;
+            break;
+
+        case IDCONTINUE:
+            result = DIALOG_RESULT_CONTINUE;
+            break;
+
+        case IDIGNORE:
+            result = DIALOG_RESULT_IGNORE;
+            break;
+
+        case IDNO:
+            result = DIALOG_RESULT_NO;
+            break;
+
+        case IDOK:
+            result = DIALOG_RESULT_OK;
+            break;
+
+        case IDRETRY:
+            result = DIALOG_RESULT_RETRY;
+            break;
+
+        case IDYES:
+            result = DIALOG_RESULT_YES;
+            break;
+    }
+
+    // End Window-Specific Code
+
+    // End
+    return result;
+}

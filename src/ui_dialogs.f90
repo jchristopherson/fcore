@@ -14,6 +14,20 @@ module ui_dialogs
     public :: DIALOG_RESULT_RETRY
     public :: DIALOG_RESULT_ABORT
     public :: DIALOG_RESULT_IGNORE
+    public :: DIALOG_RESULT_CONTINUE
+    public :: MSGBX_NO_ICON
+    public :: MSGBX_NO_BUTTON
+    public :: MSGBX_ICON_ERROR
+    public :: MSGBX_ICON_WARNING
+    public :: MSGBX_ICON_QUESTION
+    public :: MSGBX_ICON_INFORMATION
+    public :: MSGBX_BTN_OK
+    public :: MSGBX_BTN_OK_CANCEL
+    public :: MSGBX_BTN_YES_NO
+    public :: MSGBX_BTN_YES_NO_CANCEL
+    public :: MSGBX_BTN_RETRY_CANCEL
+    public :: MSGBX_BTN_ABORT_RETRY_IGNORE
+    public :: MSGBX_BTN_CANCEL_RETRY_CONTINUE
     public :: dialog_result
     public :: text_output_dialog_result
     public :: file_filter
@@ -23,6 +37,7 @@ module ui_dialogs
     public :: show_open_multifile_dialog
     public :: show_save_file_dialog
     public :: show_browse_folder_dialog
+    public :: show_message_box
 
     ! TO DO: Message-Box type dialog & associated icons, buttons, etc.
 
@@ -41,6 +56,34 @@ module ui_dialogs
     integer(int32), parameter :: DIALOG_RESULT_ABORT = 5
     !> @brief The dialog result is an ignore button press.
     integer(int32), parameter :: DIALOG_RESULT_IGNORE = 6
+    !> @brief The dialog result is a continue button press.
+    integer(int32), parameter :: DIALOG_RESULT_CONTINUE = 7
+    !> @brief Indicates that no icon should be used for the dialog.
+    integer(int32), parameter :: MSGBX_NO_ICON = 0
+    !> @brief Indicates that no button should be used for the dialog.
+    integer(int32), parameter :: MSGBX_NO_BUTTON = 0
+    !> @brief Indicates that an error icon should be used for the dialog.
+    integer(int32), parameter :: MSGBX_ICON_ERROR = 1000
+    !> @brief Indicates that a warning icon should be used for the dialog.
+    integer(int32), parameter :: MSGBX_ICON_WARNING = 1001
+    !> @brief Indicates that a question icon should be used for the dialog.
+    integer(int32), parameter :: MSGBX_ICON_QUESTION = 1002
+    !> @brief Indicates that an information icon should be used for the dialog.
+    integer(int32), parameter :: MSGBX_ICON_INFORMATION = 1003
+    !> @brief Indicates that an OK button should be used.
+    integer(int32), parameter :: MSGBX_BTN_OK = 1004
+    !> @brief Indicates that an OK-Cancel button pair should be used.
+    integer(int32), parameter :: MSGBX_BTN_OK_CANCEL = 1005
+    !> @brief Indicates that a Yes-No button pair should be used.
+    integer(int32), parameter :: MSGBX_BTN_YES_NO = 1006
+    !> @brief Indicates that a Yes-No-Cancel button set should be used.
+    integer(int32), parameter :: MSGBX_BTN_YES_NO_CANCEL = 1007
+    !> @brief Indicates that a Retry-Cancel button set should be used.
+    integer(int32), parameter :: MSGBX_BTN_RETRY_CANCEL = 1008
+    !> @brief Indicates that an Abory-Retry-Ignore button set should be used.
+    integer(int32), parameter :: MSGBX_BTN_ABORT_RETRY_IGNORE = 1009
+    !> @brief Indicates that a Cancel-Retry-Continue button set should be used.
+    integer(int32), parameter :: MSGBX_BTN_CANCEL_RETRY_CONTINUE = 1010
 
 ! ------------------------------------------------------------------------------
     !> @brief A type containing results from the dialog interaction.
@@ -172,6 +215,25 @@ module ui_dialogs
             integer(c_int), intent(in), value :: bufferSize
             integer(c_int), intent(out) :: numChars
         end subroutine
+
+        !> @brief Shows the user a message box.
+        !!
+        !! @param[in] parent A pointer to the parent window.  This can be null
+        !!  in the event there isn't a parent window.
+        !! @param[in] txt The message box text.
+        !! @param[in] title The title of the message box.
+        !! @param[in] buttons
+        !! @param[in] icon
+        !! 
+        !! @return The dialog result.
+        function show_message_box_c(parent, txt, title, buttons, icon) &
+                result(rst) bind(C, name = "show_message_box_c")
+            use iso_c_binding
+            type(c_ptr), intent(in), value :: parent
+            character(kind = c_char), intent(in) :: txt(*), title(*)
+            integer(c_int), intent(in), value :: buttons, icon
+            integer(c_int) :: rst
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------
@@ -394,6 +456,46 @@ contains
             rst%result = DIALOG_RESULT_CANCEL
             allocate(Rst%string_list(0))
         end if
+    end function
+
+! ------------------------------------------------------------------------------
+    !> @brief Shows the user a message box dialog.
+    !!
+    !! @param[in] txt The text to display in the message box.
+    !! @param[in] title The title to display in the header of the message box.
+    !! @param[in] buttons Defines what button group to display.  The following
+    !!  choices are acceptable: MSGBX_BTN_OK, MSGBX_BTN_OK_CANCEL, 
+    !!  MSGBX_BTN_YES_NO, MSGBX_BTN_YES_NO_CANCEL, MSGBX_BTN_RETRY_CANCEL, 
+    !!  MSGBX_BTN_ABORT_RETRY_IGNORE, MSGBX_BTN_CANCEL_RETRY_CONTINUE.
+    !! @param[in] icon Defines what icons to display.  The following choices
+    !!  are acceptable: MSGBX_NO_ICON, MSGBX_NO_BUTTON, MSGBX_ICON_ERROR, 
+    !!  MSGBX_ICON_WARNING, MSGBX_ICON_QUESTION, MSGBX_ICON_INFORMATION.
+    !! @param[in] parent An optional argument defining a pointer to the parent
+    !!  window.  If not supplied, no parent is assumed.
+    !!
+    !! @return The results from the dialog.
+    function show_message_box(txt, title, buttons, icon, parent) result(rst)
+        ! Arguments
+        character(len = *), intent(in) :: txt, title
+        integer(int32), intent(in) :: buttons, icon
+        type(c_ptr), optional :: parent
+        type(dialog_result) :: rst
+
+        ! Local Variables
+        character(kind = c_char, len = :), allocatable :: ctxt, ctitle
+        type(c_ptr) :: parentPtr
+
+        ! Initialization
+        ctxt = txt // C_NULL_CHAR
+        ctitle = title // C_NULL_CHAR
+        if (present(parent)) then
+            parentPtr = parent
+        else
+            parentPtr = c_null_ptr
+        end if
+
+        ! Process
+        rst%result = show_message_box_c(parentPtr, ctxt, ctitle, buttons, icon)
     end function
 
 ! ------------------------------------------------------------------------------
