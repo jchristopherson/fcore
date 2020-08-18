@@ -280,10 +280,10 @@ program main
 end program
 ```
 The dialogs shown appear as follows on a Windows machine.
-![](images/message_box.png?raw=true)
-![](images/open_file_dialog.png?raw=true)
-![](images/save_file_dialog.png?raw=true)
-![](images/folder_dialog.png?raw=true)
+![](images/message_box.PNG?raw=true)
+![](images/open_file_dialog.PNG?raw=true)
+![](images/save_file_dialog.PNG?raw=true)
+![](images/folder_dialog.PNG?raw=true)
 
 The command-line output of the program is as follows.
 ```text
