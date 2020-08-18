@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['str_253',['str',['../structstrings_1_1string.html#ae60ba1127c72e3705c5030d5a113bf3b',1,'strings::string']]]
+  ['name_333',['name',['../structui__dialogs_1_1file__filter.html#af552d88f3df13d00626efb99706e11ac',1,'ui_dialogs::file_filter']]]
 ];

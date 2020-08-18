@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['split_5ffile_5fpath_5fc_155',['split_file_path_c',['../interfacefile__io_1_1split__file__path__c.html',1,'file_io']]],
-  ['split_5fstring_156',['split_string',['../interfacestrings_1_1split__string.html',1,'strings']]],
-  ['string_157',['string',['../structstrings_1_1string.html',1,'strings']]],
-  ['string_5fbuilder_158',['string_builder',['../structstrings_1_1string__builder.html',1,'strings']]],
-  ['swap_5fbytes_159',['swap_bytes',['../interfacefile__io_1_1swap__bytes.html',1,'file_io']]]
+  ['regex_5fmatch_195',['regex_match',['../interfaceregular__expressions_1_1regex__match.html',1,'regular_expressions']]],
+  ['regex_5freplace_196',['regex_replace',['../interfaceregular__expressions_1_1regex__replace.html',1,'regular_expressions']]],
+  ['regex_5fsearch_197',['regex_search',['../interfaceregular__expressions_1_1regex__search.html',1,'regular_expressions']]],
+  ['remove_198',['remove',['../interfacestrings_1_1remove.html',1,'strings']]],
+  ['remove_5fat_199',['remove_at',['../interfacestrings_1_1remove__at.html',1,'strings']]],
+  ['replace_200',['replace',['../interfacestrings_1_1replace.html',1,'strings']]]
 ];

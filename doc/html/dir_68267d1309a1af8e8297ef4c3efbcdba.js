@@ -15,5 +15,7 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "strings.f90", "strings_8f90_source.html", null ],
     [ "strings_ops.f90", "strings__ops_8f90_source.html", null ],
     [ "strings_string_builder.f90", "strings__string__builder_8f90_source.html", null ],
-    [ "system_file_io.cpp", "system__file__io_8cpp_source.html", null ]
+    [ "system_file_io.cpp", "system__file__io_8cpp_source.html", null ],
+    [ "ui_dialogs.cpp", "ui__dialogs_8cpp_source.html", null ],
+    [ "ui_dialogs.f90", "ui__dialogs_8f90_source.html", null ]
 ];

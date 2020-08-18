@@ -1,5 +1,21 @@
 var NAVTREEINDEX1 =
 {
+"structfile__io_1_1text__reader.html#a927d5f2b2788145c688d2b9e1038af77":[1,0,1,9,4],
+"structfile__io_1_1text__reader.html#a9e0d6c4e44005157a6e10e4d9a7fc7a7":[1,0,1,9,0],
+"structfile__io_1_1text__writer.html":[1,0,1,10],
+"structfile__io_1_1text__writer.html#a006d9bb24a2ddf6a55531251aed6fb6b":[1,0,1,10,3],
+"structfile__io_1_1text__writer.html#a081918383ee9bd41bd9c630145401985":[1,0,1,10,5],
+"structfile__io_1_1text__writer.html#a7cf437be10765dfa538e301aa77fcda0":[1,0,1,10,4],
+"structfile__io_1_1text__writer.html#a9fdb6aba9c82f51618f20c9fbcbbe7e5":[1,0,1,10,6],
+"structfile__io_1_1text__writer.html#aa6dedc6a936e17760d842d671aaf59c9":[1,0,1,10,0],
+"structfile__io_1_1text__writer.html#ad2fd318e78737782ec711e47984c2b11":[1,0,1,10,1],
+"structfile__io_1_1text__writer.html#ad4a2bc69150a9c95cac8d23c36f20e04":[1,0,1,10,2],
+"structstrings_1_1string.html":[1,0,3,16],
+"structstrings_1_1string.html#a08368904e7b1123ae7d92e88358efb45":[1,0,3,16,6],
+"structstrings_1_1string.html#a46acefa7d84bc528f9446ae708bcb25f":[1,0,3,16,10],
+"structstrings_1_1string.html#a498f938367c90a9122d54cd6245afb70":[1,0,3,16,2],
+"structstrings_1_1string.html#a4bd6d8f2a3c33fc1abbbd7b8c39a69a3":[1,0,3,16,4],
+"structstrings_1_1string.html#a5ea6b67bda848fc68b1f12be0e5dccb2":[1,0,3,16,5],
 "structstrings_1_1string.html#a85d199e0d22df12d029c24b9d5fd69f8":[1,0,3,16,11],
 "structstrings_1_1string.html#a8be4dd60be77d8e713fce99997c77977":[1,0,3,16,7],
 "structstrings_1_1string.html#ab0ee3e5c42c68c6f069add9ca7029fe8":[1,0,3,16,1],
@@ -16,5 +32,14 @@ var NAVTREEINDEX1 =
 "structstrings_1_1string__builder.html#a8d4992a64af1cca3aea9a4665b5f9528":[1,0,3,17,3],
 "structstrings_1_1string__builder.html#aae37a629101a752ef3da95fce13cfca5":[1,0,3,17,0],
 "structstrings_1_1string__builder.html#afa24fdffbfe1ece66aadb31fbda62586":[1,0,3,17,4],
-"system__file__io_8cpp_source.html":[2,0,0,15]
+"structui__dialogs_1_1dialog__result.html":[1,0,4,1],
+"structui__dialogs_1_1dialog__result.html#aa2787d1d388bb6153bb1dfbdaeede05b":[1,0,4,1,0],
+"structui__dialogs_1_1file__filter.html":[1,0,4,2],
+"structui__dialogs_1_1file__filter.html#a90df2ed4a074e14a1dcd08569b33c262":[1,0,4,2,1],
+"structui__dialogs_1_1file__filter.html#af552d88f3df13d00626efb99706e11ac":[1,0,4,2,0],
+"structui__dialogs_1_1text__output__dialog__result.html":[1,0,4,9],
+"structui__dialogs_1_1text__output__dialog__result.html#a0df4960daa887fdddbbeb164bebd3814":[1,0,4,9,0],
+"system__file__io_8cpp_source.html":[2,0,0,15],
+"ui__dialogs_8cpp_source.html":[2,0,0,16],
+"ui__dialogs_8f90_source.html":[2,0,0,17]
 };

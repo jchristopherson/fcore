@@ -4,5 +4,6 @@ var namespaces_dup =
     [ "fcore_constants", "namespacefcore__constants.html", null ],
     [ "file_io", "namespacefile__io.html", null ],
     [ "regular_expressions", "namespaceregular__expressions.html", null ],
-    [ "strings", "namespacestrings.html", null ]
+    [ "strings", "namespacestrings.html", null ],
+    [ "ui_dialogs", "namespaceui__dialogs.html", null ]
 ];

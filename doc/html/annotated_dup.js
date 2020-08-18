@@ -3,5 +3,6 @@ var annotated_dup =
     [ "collections", "namespacecollections.html", "namespacecollections" ],
     [ "file_io", "namespacefile__io.html", "namespacefile__io" ],
     [ "regular_expressions", "namespaceregular__expressions.html", "namespaceregular__expressions" ],
-    [ "strings", "namespacestrings.html", "namespacestrings" ]
+    [ "strings", "namespacestrings.html", "namespacestrings" ],
+    [ "ui_dialogs", "namespaceui__dialogs.html", "namespaceui__dialogs" ]
 ];

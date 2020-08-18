@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="ui_dialogs::init_ui\l_env_c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfaceui__dialogs_1_1init__ui__env__c.html",tooltip="Initializes the UI environment thereby allowing utilization of the dialogs. This call must be made pr..."];
+}
