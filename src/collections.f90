@@ -9,6 +9,8 @@ module collections
     public :: list
     public :: items_equal
     public :: compare_items
+    public :: dictionary
+    public :: hash_code
 
 ! ******************************************************************************
 ! TYPES
