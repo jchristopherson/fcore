@@ -5,6 +5,7 @@ set(test_sources
     test_fcore_list.f90
     test_fcore_text_io.f90
     test_fcore_binary_io.f90
+    test_fcore_dictionary.f90
 )
 
 # Build the executable
