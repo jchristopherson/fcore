@@ -22,4 +22,9 @@ module fcore_constants
     !> @brief Occurs if a read operation occurs after the end-of-file is
     !! encountered.
     integer(int32), parameter :: FCORE_END_OF_FILE_ERROR = 10006
+    !> @brief Occurs if an attempt is made to write to a nonexistent key.
+    integer(int32), parameter :: FCORE_NONEXISTENT_KEY_ERROR = 10007
+    !> @brief Occurs if an attempt is made to overwrite an existing key 
+    !! inadvertently.
+    integer(int32), parameter :: FCORE_EXISTING_KEY_ERROR = 10008
 end module

@@ -18,6 +18,8 @@ set(fcore_sources
     file_io_path.f90
     ui_dialogs.cpp
     ui_dialogs.f90
+    collections_dictionary.f90
+    collections_hash.f90
 )
 
 # Build the library
