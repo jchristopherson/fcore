@@ -20,6 +20,7 @@ contains
         type(hash_code) :: hash
         type(dictionary) :: x
         class(*), pointer :: item
+        logical :: temp
 
         ! Initialization
         rst = .true.
@@ -83,6 +84,30 @@ contains
                         item // " instead."
                 end if
         end select
+
+        item => x%get(key3)
+        select type (item)
+            type is (character(len = *))
+                if (item /= str3) then
+                    rst = .false.
+                    print '(A)', "TEST_DICTIONARY_1 (Test 7): " // &
+                        "Expected to find " // str3 // ", but found " // &
+                        item // " instead."
+                end if
+        end select
+
+        ! Remove the second item (key2)
+        temp = x%remove(key2)
+        if (.not.temp) then
+            rst = .false.
+            print '(A)', "TEST_DICTIONARY_1 (Test 8): Failed to remove " // &
+                "an existing item."
+        end if
+        if (x%contains_key(key2)) then
+            rst = .false.
+            print '(A)', "TEST_DICTIONARY_1 (Test 9): Failed to remove " // &
+                "an existing item."
+        end if
     end function
 
 ! ------------------------------------------------------------------------------
