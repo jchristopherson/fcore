@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">fcore
-   &#160;<span id="projectnumber">1.0.0</span>
+   &#160;<span id="projectnumber">1.1.0</span>
    </div>
    <div id="projectbrief">A Fortran library containing string handling, i/o routines, etc.</div>
   </td>
@@ -90,6 +90,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <div class="textblock">Here is a list of all documented data types members with links to the data structure documentation for each member</div>
 
 <h3><a id="index_a"></a>- a -</h3><ul>
+<li>add()
+: <a class="el" href="structcollections_1_1dictionary.html#a7fb193426e58fad5b93e56b102130293">collections::dictionary</a>
+</li>
 <li>append()
 : <a class="el" href="structstrings_1_1string__builder.html#aae37a629101a752ef3da95fce13cfca5">strings::string_builder</a>
 </li>
@@ -105,7 +108,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>clear()
-: <a class="el" href="structcollections_1_1list.html#a8bc398d19b72c7e4257b949a2f617628">collections::list</a>
+: <a class="el" href="structcollections_1_1dictionary.html#ad25de0e1abaf2491e65deadd5cb6804d">collections::dictionary</a>
+, <a class="el" href="structcollections_1_1list.html#a8bc398d19b72c7e4257b949a2f617628">collections::list</a>
 , <a class="el" href="structstrings_1_1string__builder.html#a32175c600cc7fc4f40dead16a7e2b9a6">strings::string_builder</a>
 </li>
 <li>clear_buffer()
@@ -118,6 +122,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>contains()
 : <a class="el" href="structcollections_1_1list.html#ad266a207f04920464085c54c4c915801">collections::list</a>
 </li>
+<li>contains_key()
+: <a class="el" href="structcollections_1_1dictionary.html#ad090162f60b1609096d1dda05d3879c7">collections::dictionary</a>
+</li>
 <li>contains_string()
 : <a class="el" href="structstrings_1_1string.html#aeb8b1952464cb2663a53ab0c11c3382b">strings::string</a>
 </li>
@@ -128,6 +135,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a id="index_d"></a>- d -</h3><ul>
+<li>dict_final()
+: <a class="el" href="structcollections_1_1dictionary.html#ad9e8f5c7a51e89846ebfa04244f966c4">collections::dictionary</a>
+</li>
 <li>directory
 : <a class="el" href="structfile__io_1_1file__path.html#a86bc42dd88498ee53bbe696c22510d54">file_io::file_path</a>
 </li>
@@ -168,14 +178,17 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a id="index_g"></a>- g -</h3><ul>
 <li>get()
-: <a class="el" href="structcollections_1_1list.html#a31a5b7d1b6428c63eff34287e5320cb3">collections::list</a>
+: <a class="el" href="structcollections_1_1dictionary.html#a4645bd06616c80e46a29f1eac6ae94aa">collections::dictionary</a>
+, <a class="el" href="structcollections_1_1hash__code.html#a0023e9b5b01234a88374f4f4d44a4280">collections::hash_code</a>
+, <a class="el" href="structcollections_1_1list.html#a31a5b7d1b6428c63eff34287e5320cb3">collections::list</a>
 </li>
 <li>get_capacity()
 : <a class="el" href="structcollections_1_1list.html#a574e01c9638a6d1e6b81b0aa799103fe">collections::list</a>
 , <a class="el" href="structfile__io_1_1binary__writer.html#a8079160184e7eec20149c326fbace999">file_io::binary_writer</a>
 </li>
 <li>get_count()
-: <a class="el" href="structcollections_1_1list.html#a3aee1d63a09b38fc1fc18148013bdaaf">collections::list</a>
+: <a class="el" href="structcollections_1_1dictionary.html#a33c670ff2843e2f248f7a0793adff09e">collections::dictionary</a>
+, <a class="el" href="structcollections_1_1list.html#a3aee1d63a09b38fc1fc18148013bdaaf">collections::list</a>
 , <a class="el" href="structfile__io_1_1binary__writer.html#a086a46c0ee1fc5c837f9e71b52f6870b">file_io::binary_writer</a>
 </li>
 <li>get_file_size()
@@ -201,11 +214,15 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="structcollections_1_1list.html#a4a5d7a5817743be4e81e30e22698791f">collections::list</a>
 , <a class="el" href="structstrings_1_1string.html#ab0ee3e5c42c68c6f069add9ca7029fe8">strings::string</a>
 </li>
+<li>index_of_key()
+: <a class="el" href="structcollections_1_1dictionary.html#a7a65a055bee2fb2e5b295f761ffa7b7d">collections::dictionary</a>
+</li>
 <li>indices_of_all()
 : <a class="el" href="structcollections_1_1list.html#acad9308a0823400255f06540a51e43f9">collections::list</a>
 </li>
 <li>initialize()
-: <a class="el" href="structstrings_1_1string__builder.html#a8d4992a64af1cca3aea9a4665b5f9528">strings::string_builder</a>
+: <a class="el" href="structcollections_1_1hash__code.html#a9933e82a19d3898016fc86dd9e27cbc6">collections::hash_code</a>
+, <a class="el" href="structstrings_1_1string__builder.html#a8d4992a64af1cca3aea9a4665b5f9528">strings::string_builder</a>
 </li>
 <li>insert()
 : <a class="el" href="structcollections_1_1list.html#a57e836f6c14cbf112aa5632d4fadc118">collections::list</a>
@@ -218,6 +235,13 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </li>
 <li>item
 : <a class="el" href="structcollections_1_1container.html#a0f4b79867c125fd29e087ebf6fb227b7">collections::container</a>
+</li>
+</ul>
+
+
+<h3><a id="index_k"></a>- k -</h3><ul>
+<li>key
+: <a class="el" href="structcollections_1_1key__value__pair.html#a9daa151b100b91cbf84806795f3f1316">collections::key_value_pair</a>
 </li>
 </ul>
 
@@ -248,7 +272,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="structstrings_1_1string__builder.html#a134ef0efefd476a8be4ce6d95867ee55">strings::string_builder</a>
 </li>
 <li>m_list
-: <a class="el" href="structcollections_1_1list.html#a271e2cf228700643233b8ac4c1b189c3">collections::list</a>
+: <a class="el" href="structcollections_1_1dictionary.html#a2b6546744f3a6bfd9ead76c2d88462f2">collections::dictionary</a>
+, <a class="el" href="structcollections_1_1list.html#a271e2cf228700643233b8ac4c1b189c3">collections::list</a>
 </li>
 <li>m_position
 : <a class="el" href="structfile__io_1_1file__reader.html#a35a6818d6cce54aa832ec79fb71c92fb">file_io::file_reader</a>
@@ -326,7 +351,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="interfaceregular__expressions_1_1regex__search.html#a62f64565ef0aaf4d0cb724f3407b1b41">regular_expressions::regex_search</a>
 </li>
 <li>remove()
-: <a class="el" href="structcollections_1_1list.html#ac4247c385d8bb9427e2612773673f8a5">collections::list</a>
+: <a class="el" href="structcollections_1_1dictionary.html#a3d63f19ed88baf7781bcf9c4e9bf3be6">collections::dictionary</a>
+, <a class="el" href="structcollections_1_1list.html#ac4247c385d8bb9427e2612773673f8a5">collections::list</a>
 , <a class="el" href="structstrings_1_1string.html#ac7efa178cc96ba8227751d23b7e649b7">strings::string</a>
 </li>
 <li>remove_at()
@@ -346,7 +372,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a id="index_s"></a>- s -</h3><ul>
 <li>set()
-: <a class="el" href="structcollections_1_1list.html#aa1fb7f18b07822bfa896e7cd4025c7f4">collections::list</a>
+: <a class="el" href="structcollections_1_1dictionary.html#ad95c5937f237bb83cf0eeaf524410f42">collections::dictionary</a>
+, <a class="el" href="structcollections_1_1list.html#aa1fb7f18b07822bfa896e7cd4025c7f4">collections::list</a>
 </li>
 <li>set_capacity()
 : <a class="el" href="structcollections_1_1list.html#a81fb0c13dcc949e27112579685c572fa">collections::list</a>
@@ -376,6 +403,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>string_list
 : <a class="el" href="structui__dialogs_1_1text__output__dialog__result.html#a0df4960daa887fdddbbeb164bebd3814">ui_dialogs::text_output_dialog_result</a>
 </li>
+<li>swap_items()
+: <a class="el" href="structcollections_1_1list.html#acda2105f4f9d0da8ad5256bb06f0d426">collections::list</a>
+</li>
 </ul>
 
 
@@ -397,6 +427,13 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </li>
 <li>trim_leading()
 : <a class="el" href="structstrings_1_1string.html#a85d199e0d22df12d029c24b9d5fd69f8">strings::string</a>
+</li>
+</ul>
+
+
+<h3><a id="index_v"></a>- v -</h3><ul>
+<li>value
+: <a class="el" href="structcollections_1_1key__value__pair.html#a479a4e632826b853ebd27eac11117b35">collections::key_value_pair</a>
 </li>
 </ul>
 

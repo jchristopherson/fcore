@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="strings::string",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structstrings_1_1string.html",tooltip="Defines a string type."];
+  Node0 [label="strings::remove_at",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfacestrings_1_1remove__at.html",tooltip="Removes the specified number of characters from the string at the specified location."];
 }

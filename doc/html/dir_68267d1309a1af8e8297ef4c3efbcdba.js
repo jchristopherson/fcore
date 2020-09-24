@@ -1,6 +1,8 @@
 var dir_68267d1309a1af8e8297ef4c3efbcdba =
 [
     [ "collections.f90", "collections_8f90_source.html", null ],
+    [ "collections_dictionary.f90", "collections__dictionary_8f90_source.html", null ],
+    [ "collections_hash.f90", "collections__hash_8f90_source.html", null ],
     [ "collections_list.f90", "collections__list_8f90_source.html", null ],
     [ "fcore_constants.f90", "fcore__constants_8f90_source.html", null ],
     [ "file_io.f90", "file__io_8f90_source.html", null ],

@@ -1,12 +1,22 @@
 var searchData=
 [
-  ['text_5foutput_5fdialog_5fresult_153',['text_output_dialog_result',['../structui__dialogs_1_1text__output__dialog__result.html',1,'ui_dialogs']]],
-  ['text_5freader_154',['text_reader',['../structfile__io_1_1text__reader.html',1,'file_io']]],
-  ['text_5fwriter_155',['text_writer',['../structfile__io_1_1text__writer.html',1,'file_io']]],
-  ['to_5fc_5fstring_156',['to_c_string',['../interfacestrings_1_1to__c__string.html',1,'strings::to_c_string'],['../structstrings_1_1string.html#a8be4dd60be77d8e713fce99997c77977',1,'strings::string::to_c_string()']]],
-  ['to_5flower_157',['to_lower',['../interfacestrings_1_1to__lower.html',1,'strings::to_lower'],['../structstrings_1_1string.html#af5c5ec3ed11246eddd824d22d160b695',1,'strings::string::to_lower()']]],
-  ['to_5fstring_158',['to_string',['../interfacestrings_1_1to__string.html',1,'strings::to_string'],['../structstrings_1_1string__builder.html#afa24fdffbfe1ece66aadb31fbda62586',1,'strings::string_builder::to_string()']]],
-  ['to_5fupper_159',['to_upper',['../interfacestrings_1_1to__upper.html',1,'strings::to_upper'],['../structstrings_1_1string.html#ae403bd2a884810e738d3ac2039ce6875',1,'strings::string::to_upper()']]],
-  ['trim_160',['trim',['../structstrings_1_1string.html#a46acefa7d84bc528f9446ae708bcb25f',1,'strings::string']]],
-  ['trim_5fleading_161',['trim_leading',['../structstrings_1_1string.html#a85d199e0d22df12d029c24b9d5fd69f8',1,'strings::string']]]
+  ['read_5fall_118',['read_all',['../structfile__io_1_1text__reader.html#a15ca0422ca69c6573ae1ce729d3e4cba',1,'file_io::text_reader::read_all()'],['../structfile__io_1_1binary__reader.html#a3af86dd5e9dddd7db7c226a808af3c6c',1,'file_io::binary_reader::read_all()']]],
+  ['read_5fbyte_119',['read_byte',['../structfile__io_1_1binary__reader.html#a7242ee388d0d63e750064fbd96473993',1,'file_io::binary_reader']]],
+  ['read_5fbytes_120',['read_bytes',['../structfile__io_1_1binary__reader.html#a49b905b8210e1a5496b5723140a296c5',1,'file_io::binary_reader']]],
+  ['read_5fchar_121',['read_char',['../structfile__io_1_1text__reader.html#a72a5aa49d26a1042f6608ae9d16dfada',1,'file_io::text_reader']]],
+  ['read_5fline_122',['read_line',['../structfile__io_1_1text__reader.html#a1a87f49dce73598214d99d4665963f73',1,'file_io::text_reader']]],
+  ['read_5flines_123',['read_lines',['../structfile__io_1_1text__reader.html#a927d5f2b2788145c688d2b9e1038af77',1,'file_io::text_reader']]],
+  ['regex_5fmatch_124',['regex_match',['../interfaceregular__expressions_1_1regex__match.html',1,'regular_expressions']]],
+  ['regex_5fmatch_5fchar_125',['regex_match_char',['../interfaceregular__expressions_1_1regex__match.html#a957d889e73aed72548902d7b2cf02a6d',1,'regular_expressions::regex_match::regex_match_char()'],['../namespaceregular__expressions.html#a420b7584ec733aa726b41a7e07d13252',1,'regular_expressions::regex_match_char()']]],
+  ['regex_5fmatch_5fstr_126',['regex_match_str',['../interfaceregular__expressions_1_1regex__match.html#a56640c359c6fd503062924d2514a9b73',1,'regular_expressions::regex_match::regex_match_str()'],['../namespaceregular__expressions.html#ac6a6cc1cab24b5aa0f80bcc736818119',1,'regular_expressions::regex_match_str()']]],
+  ['regex_5freplace_127',['regex_replace',['../interfaceregular__expressions_1_1regex__replace.html',1,'regular_expressions']]],
+  ['regex_5fsearch_128',['regex_search',['../interfaceregular__expressions_1_1regex__search.html',1,'regular_expressions']]],
+  ['regex_5fsearch_5fchar_129',['regex_search_char',['../interfaceregular__expressions_1_1regex__search.html#a34a76b3ed2deaa9ab3c39324abd9b089',1,'regular_expressions::regex_search::regex_search_char()'],['../namespaceregular__expressions.html#a2351bbb0b01db4c87dcd052e167941f8',1,'regular_expressions::regex_search_char()']]],
+  ['regex_5fsearch_5fstr_130',['regex_search_str',['../interfaceregular__expressions_1_1regex__search.html#a62f64565ef0aaf4d0cb724f3407b1b41',1,'regular_expressions::regex_search::regex_search_str()'],['../namespaceregular__expressions.html#aa122087e2a43e41695848bd4c5b9d93b',1,'regular_expressions::regex_search_str()']]],
+  ['regular_5fexpressions_131',['regular_expressions',['../namespaceregular__expressions.html',1,'']]],
+  ['remove_132',['remove',['../interfacestrings_1_1remove.html',1,'strings::remove'],['../structcollections_1_1list.html#ac4247c385d8bb9427e2612773673f8a5',1,'collections::list::remove()'],['../structcollections_1_1dictionary.html#a3d63f19ed88baf7781bcf9c4e9bf3be6',1,'collections::dictionary::remove()'],['../structstrings_1_1string.html#ac7efa178cc96ba8227751d23b7e649b7',1,'strings::string::remove()']]],
+  ['remove_5fat_133',['remove_at',['../interfacestrings_1_1remove__at.html',1,'strings::remove_at'],['../structstrings_1_1string.html#a4bd6d8f2a3c33fc1abbbd7b8c39a69a3',1,'strings::string::remove_at()']]],
+  ['replace_134',['replace',['../interfacestrings_1_1replace.html',1,'strings::replace'],['../structstrings_1_1string.html#a5ea6b67bda848fc68b1f12be0e5dccb2',1,'strings::string::replace()']]],
+  ['result_135',['result',['../structui__dialogs_1_1dialog__result.html#aa2787d1d388bb6153bb1dfbdaeede05b',1,'ui_dialogs::dialog_result']]],
+  ['reverse_136',['reverse',['../structcollections_1_1list.html#a9ea9ed47ed30b67eda0b68b00d3453ad',1,'collections::list']]]
 ];

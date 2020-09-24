@@ -1,24 +1,5 @@
 var searchData=
 [
-  ['m_5fbuffer_73',['m_buffer',['../structfile__io_1_1binary__writer.html#a6c05055c704239adf36624771832e1c5',1,'file_io::binary_writer::m_buffer()'],['../structstrings_1_1string__builder.html#a03cfa737d07e29dd03e924472a71e96c',1,'strings::string_builder::m_buffer()']]],
-  ['m_5fcount_74',['m_count',['../structcollections_1_1list.html#a799e935d60a60c5a4f49608d93ca4314',1,'collections::list::m_count()'],['../structfile__io_1_1binary__writer.html#a0563fd4c6836bc703dedcbc983bcbbed',1,'file_io::binary_writer::m_count()']]],
-  ['m_5ffname_75',['m_fname',['../structfile__io_1_1file__manager.html#a019d0a1f1844e5499a4af22268df2a66',1,'file_io::file_manager']]],
-  ['m_5flength_76',['m_length',['../structstrings_1_1string__builder.html#a134ef0efefd476a8be4ce6d95867ee55',1,'strings::string_builder']]],
-  ['m_5flist_77',['m_list',['../structcollections_1_1list.html#a271e2cf228700643233b8ac4c1b189c3',1,'collections::list']]],
-  ['m_5fposition_78',['m_position',['../structfile__io_1_1file__reader.html#a35a6818d6cce54aa832ec79fb71c92fb',1,'file_io::file_reader']]],
-  ['m_5funit_79',['m_unit',['../structfile__io_1_1file__manager.html#a94e210aac9ad1180d13adadceb76876b',1,'file_io::file_manager']]],
-  ['move_5fto_5fstart_80',['move_to_start',['../structfile__io_1_1file__reader.html#aa85d197974bcd68940067968cc71fac0',1,'file_io::file_reader']]],
-  ['msgbx_5fbtn_5fabort_5fretry_5fignore_81',['msgbx_btn_abort_retry_ignore',['../namespaceui__dialogs.html#ade457f874e81357a4e41b7ab8934ef0b',1,'ui_dialogs']]],
-  ['msgbx_5fbtn_5fcancel_5fretry_5fcontinue_82',['msgbx_btn_cancel_retry_continue',['../namespaceui__dialogs.html#ab0b4e48f99f51021608b829503b2b44a',1,'ui_dialogs']]],
-  ['msgbx_5fbtn_5fok_83',['msgbx_btn_ok',['../namespaceui__dialogs.html#ae75869c8e3b3ba6e03c265da6621e25b',1,'ui_dialogs']]],
-  ['msgbx_5fbtn_5fok_5fcancel_84',['msgbx_btn_ok_cancel',['../namespaceui__dialogs.html#a19d30bc2988e808925360b0901a8aae8',1,'ui_dialogs']]],
-  ['msgbx_5fbtn_5fretry_5fcancel_85',['msgbx_btn_retry_cancel',['../namespaceui__dialogs.html#a0da3af3565f672662fcb6e8061d7065b',1,'ui_dialogs']]],
-  ['msgbx_5fbtn_5fyes_5fno_86',['msgbx_btn_yes_no',['../namespaceui__dialogs.html#ad72ffd72e935be819872db852acfa571',1,'ui_dialogs']]],
-  ['msgbx_5fbtn_5fyes_5fno_5fcancel_87',['msgbx_btn_yes_no_cancel',['../namespaceui__dialogs.html#a9bad9821ccd41fb471171b3f2d18c8a4',1,'ui_dialogs']]],
-  ['msgbx_5ficon_5ferror_88',['msgbx_icon_error',['../namespaceui__dialogs.html#a18d9d477e40fe5d89960aa4df4238279',1,'ui_dialogs']]],
-  ['msgbx_5ficon_5finformation_89',['msgbx_icon_information',['../namespaceui__dialogs.html#a2ce435769e9ae17fb572a5c9b6789973',1,'ui_dialogs']]],
-  ['msgbx_5ficon_5fquestion_90',['msgbx_icon_question',['../namespaceui__dialogs.html#a422a5b04d66a3422d4573bb73d8f8044',1,'ui_dialogs']]],
-  ['msgbx_5ficon_5fwarning_91',['msgbx_icon_warning',['../namespaceui__dialogs.html#ac71d21d1dc94c74d84074271e35f62e8',1,'ui_dialogs']]],
-  ['msgbx_5fno_5fbutton_92',['msgbx_no_button',['../namespaceui__dialogs.html#a25e7bd96092a842efabd7e0b131d39e9',1,'ui_dialogs']]],
-  ['msgbx_5fno_5ficon_93',['msgbx_no_icon',['../namespaceui__dialogs.html#a0848a181933bcabf11d91b6b0f2e8036',1,'ui_dialogs']]]
+  ['key_78',['key',['../structcollections_1_1key__value__pair.html#a9daa151b100b91cbf84806795f3f1316',1,'collections::key_value_pair']]],
+  ['key_5fvalue_5fpair_79',['key_value_pair',['../structcollections_1_1key__value__pair.html',1,'collections']]]
 ];

@@ -1,4 +1,30 @@
 var searchData=
 [
-  ['ui_5fdialogs_162',['ui_dialogs',['../namespaceui__dialogs.html',1,'']]]
+  ['set_137',['set',['../structcollections_1_1list.html#aa1fb7f18b07822bfa896e7cd4025c7f4',1,'collections::list::set()'],['../structcollections_1_1dictionary.html#ad95c5937f237bb83cf0eeaf524410f42',1,'collections::dictionary::set()']]],
+  ['set_5fcapacity_138',['set_capacity',['../structcollections_1_1list.html#a81fb0c13dcc949e27112579685c572fa',1,'collections::list::set_capacity()'],['../structfile__io_1_1binary__writer.html#a279f6ad6705ceb8cb316ad307f14f1de',1,'file_io::binary_writer::set_capacity()']]],
+  ['set_5ffilename_139',['set_filename',['../structfile__io_1_1file__manager.html#ad0dbb7c980410216d9f52f0400ab07d0',1,'file_io::file_manager']]],
+  ['set_5fposition_140',['set_position',['../structfile__io_1_1file__reader.html#a66d3b59ad423a253ee3bebe5b3278ea3',1,'file_io::file_reader']]],
+  ['set_5funit_141',['set_unit',['../structfile__io_1_1file__manager.html#a4dec817baae7e2223ada984a05184cf0',1,'file_io::file_manager']]],
+  ['show_5fbrowse_5ffolder_5fdialog_142',['show_browse_folder_dialog',['../namespaceui__dialogs.html#a2733411a2fb23c829f72d1fd0816a2da',1,'ui_dialogs']]],
+  ['show_5fbrowse_5ffolder_5fdialog_5fc_143',['show_browse_folder_dialog_c',['../interfaceui__dialogs_1_1show__browse__folder__dialog__c.html',1,'ui_dialogs']]],
+  ['show_5fmessage_5fbox_144',['show_message_box',['../namespaceui__dialogs.html#ae294fd56ea25717a377752ce4b6bd759',1,'ui_dialogs']]],
+  ['show_5fmessage_5fbox_5fc_145',['show_message_box_c',['../interfaceui__dialogs_1_1show__message__box__c.html',1,'ui_dialogs']]],
+  ['show_5fmulti_5ffile_5fopen_5ffile_5fdialog_5fc_146',['show_multi_file_open_file_dialog_c',['../interfaceui__dialogs_1_1show__multi__file__open__file__dialog__c.html',1,'ui_dialogs']]],
+  ['show_5fopen_5ffile_5fdialog_147',['show_open_file_dialog',['../namespaceui__dialogs.html#aa75149f630f449a2ff0b1081d0f6d08a',1,'ui_dialogs']]],
+  ['show_5fopen_5ffile_5fdialog_5fc_148',['show_open_file_dialog_c',['../interfaceui__dialogs_1_1show__open__file__dialog__c.html',1,'ui_dialogs']]],
+  ['show_5fopen_5fmultifile_5fdialog_149',['show_open_multifile_dialog',['../namespaceui__dialogs.html#a2588e9942664a1d5340e822dcbaf83e5',1,'ui_dialogs']]],
+  ['show_5fsave_5ffile_5fdialog_150',['show_save_file_dialog',['../namespaceui__dialogs.html#a23278e1bdad5e114340195f78c0e9bf4',1,'ui_dialogs']]],
+  ['show_5fsave_5ffile_5fdialog_5fc_151',['show_save_file_dialog_c',['../interfaceui__dialogs_1_1show__save__file__dialog__c.html',1,'ui_dialogs']]],
+  ['sort_152',['sort',['../structcollections_1_1list.html#a72c4cefc40525bc5a8b159c6ac80db8e',1,'collections::list']]],
+  ['split_153',['split',['../structstrings_1_1string.html#a08368904e7b1123ae7d92e88358efb45',1,'strings::string']]],
+  ['split_5ffile_5fpath_5fc_154',['split_file_path_c',['../interfacefile__io_1_1split__file__path__c.html',1,'file_io']]],
+  ['split_5fstring_155',['split_string',['../interfacestrings_1_1split__string.html',1,'strings']]],
+  ['store_156',['store',['../structcollections_1_1list.html#a63b951970a3e73c77f302e002359b872',1,'collections::list']]],
+  ['str_157',['str',['../structstrings_1_1string.html#ae60ba1127c72e3705c5030d5a113bf3b',1,'strings::string']]],
+  ['string_158',['string',['../structstrings_1_1string.html',1,'strings']]],
+  ['string_5fbuilder_159',['string_builder',['../structstrings_1_1string__builder.html',1,'strings']]],
+  ['string_5flist_160',['string_list',['../structui__dialogs_1_1text__output__dialog__result.html#a0df4960daa887fdddbbeb164bebd3814',1,'ui_dialogs::text_output_dialog_result']]],
+  ['strings_161',['strings',['../namespacestrings.html',1,'']]],
+  ['swap_5fbytes_162',['swap_bytes',['../interfacefile__io_1_1swap__bytes.html',1,'file_io']]],
+  ['swap_5fitems_163',['swap_items',['../structcollections_1_1list.html#acda2105f4f9d0da8ad5256bb06f0d426',1,'collections::list']]]
 ];

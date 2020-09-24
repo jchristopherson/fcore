@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="ui_dialogs::show_open\l_file_dialog_c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfaceui__dialogs_1_1show__open__file__dialog__c.html",tooltip="Shows the user an Open-File dialog. Notice, the UI environment must be initialized prior to calling t..."];
+  Node0 [label="ui_dialogs::show_browse\l_folder_dialog_c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfaceui__dialogs_1_1show__browse__folder__dialog__c.html",tooltip="Shows the user a Browse-Folder dialog. Notice, the UI environment must be initialized prior to callin..."];
 }

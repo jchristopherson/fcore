@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="collections::items\l_equal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfacecollections_1_1items__equal.html",tooltip="Compares two items, and returns a logical value signifying the comparison results."];
+  Node0 [label="collections::dictionary",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcollections_1_1dictionary.html",tooltip="Defines a generic dictionary."];
 }
