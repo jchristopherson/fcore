@@ -9,6 +9,8 @@ module collections
     public :: list
     public :: items_equal
     public :: compare_items
+    public :: dictionary
+    public :: hash_code
 
 ! ******************************************************************************
 ! TYPES
@@ -61,7 +63,7 @@ module collections
         !> @brief Finds the indices of all items in the list that match the 
         !! specified object.
         procedure, public :: indices_of_all => list_indices_of_all
-        ! Swaps two items in the list
+        !> @brief Swaps two items in the list
         procedure, public :: swap_items => list_swap
         !> @brief Sorts an array into ascending order.
         procedure, public :: sort => list_sort
@@ -70,6 +72,62 @@ module collections
         !! large enough to accomodate, it is automatically resized to 
         !! accomodate.
         procedure, private :: store => list_store
+    end type
+
+    !> @brief Defines a key-value pair.
+    type key_value_pair
+        !> @brief The key
+        integer(int64) :: key
+        !> A pointer to a polymorphic variable allowing storage of any type.
+        class(*), pointer :: value => null()
+    end type
+
+    !> @brief Defines a generic dictionary.
+    type dictionary
+    private
+        !> @brief A collection of key_value_pair objects.
+        type(list) :: m_list
+    contains
+        !> @brief Cleans up resources held by the dictionary.
+        final :: dict_final
+        !> @brief Gets the number of items in the dictionary.
+        procedure, public :: get_count => dict_get_count
+        !> @brief Determines if the dictionary contains the specified key.
+        procedure, public :: contains_key => dict_contains_key
+        !> @brief Gets the requested item from the dictionary.
+        procedure, public :: get => dict_get
+        !> @brief Sets an item into the dictionary.
+        procedure, public :: set => dict_set
+        !> @brief Adds a new key-value pair to the dictionary.
+        procedure, public :: add => dict_add
+        !> @brief Removes an item from the dictionary.
+        procedure, public :: remove => dict_remove
+        !> @brief Clears the contents of the entire dictionary.
+        procedure, public :: clear => dict_clear
+
+        !> @brief Returns the index in the underlying collection of the entry 
+        !! that contains the matching key.
+        procedure, private :: index_of_key => dict_index_of_key
+    end type
+
+    !> @brief A hash code generation object.
+    !!
+    !! @par Remarks
+    !! This object uses the CRC-32 code provided by zmiimz, and is available
+    !! at https://github.com/zmiimz/fortran_notes.
+    type hash_code
+    private
+        integer(int64), dimension(256) :: table
+        logical :: have_table = .false.
+        integer(int64) :: crcpoly = int(z'edb88320', int64)
+        integer(int64) :: crcinv = int(z'5b358fd3', int64)
+        integer(int64) :: initxor = int(z'ffffffff', int64)
+        integer(int64) :: finalxor = int(z'ffffffff', int64)
+    contains
+        !> @brief Initializes the hash code generator object.
+        procedure, public :: initialize => hc_init
+        !> @brief Gets a unique hash code for the supplied string.
+        procedure, public :: get => hc_get
     end type
 
 ! ******************************************************************************
@@ -108,7 +166,7 @@ module collections
 ! ******************************************************************************
 ! INTERFACES
 ! ------------------------------------------------------------------------------
-    interface
+    interface ! collections_list.f90
         pure module function list_get_capacity(this) result(rst)
             class(list), intent(in) :: this
             integer(int32) :: rst
@@ -218,6 +276,73 @@ module collections
             class(list), intent(inout) :: this
             procedure(compare_items), pointer, intent(in) :: fcn
         end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface ! collections_dictionary.f90
+        pure module function dict_get_count(this) result(rst)
+            class(dictionary), intent(in) :: this
+            integer(int32) :: rst
+        end function
+
+        module function dict_index_of_key(this, key) result(rst)
+            class(dictionary), intent(in) :: this
+            integer(int64), intent(in) :: key
+            integer(int32) :: rst
+        end function
+
+        module function dict_contains_key(this, key) result(rst)
+            class(dictionary), intent(in) :: this
+            integer(int64), intent(in) :: key
+            logical :: rst
+        end function
+
+        module function dict_get(this, key) result(rst)
+            class(dictionary), intent(in) :: this
+            integer(int64), intent(in) :: key
+            class(*), pointer :: rst
+        end function
+
+        module subroutine dict_set(this, key, item, err)
+            class(dictionary), intent(inout) :: this
+            integer(int64), intent(in) :: key
+            class(*), intent(in) :: item
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dict_add(this, key, item, err)
+            class(dictionary), intent(inout) :: this
+            integer(int64), intent(in) :: key
+            class(*), intent(in) :: item
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module function dict_remove(this, key) result(rst)
+            class(dictionary), intent(inout) :: this
+            integer(int64), intent(in) :: key
+            logical :: rst
+        end function
+
+        module subroutine dict_clear(this)
+            class(dictionary), intent(inout) :: this
+        end subroutine
+
+        module subroutine dict_final(this)
+            type(dictionary), intent(inout) :: this
+        end subroutine
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface ! collections_hash.f90
+        module subroutine hc_init(this)
+            class(hash_code), intent(inout) :: this
+        end subroutine
+
+        module function hc_get(this, str) result(rst)
+            class(hash_code), intent(inout) :: this
+            character(len = *), intent(in) :: str
+            integer(int64) :: rst
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------

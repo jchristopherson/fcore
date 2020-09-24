@@ -11,6 +11,7 @@ var hierarchy =
     [ "ui_dialogs::dialog_result", "structui__dialogs_1_1dialog__result.html", [
       [ "ui_dialogs::text_output_dialog_result", "structui__dialogs_1_1text__output__dialog__result.html", null ]
     ] ],
+    [ "collections::dictionary", "structcollections_1_1dictionary.html", null ],
     [ "ui_dialogs::file_filter", "structui__dialogs_1_1file__filter.html", null ],
     [ "file_io::file_manager", "structfile__io_1_1file__manager.html", [
       [ "file_io::file_reader", "structfile__io_1_1file__reader.html", [
@@ -23,9 +24,11 @@ var hierarchy =
     [ "file_io::file_path", "structfile__io_1_1file__path.html", null ],
     [ "file_io::folder_contents", "structfile__io_1_1folder__contents.html", null ],
     [ "file_io::get_directory_contents_c", "interfacefile__io_1_1get__directory__contents__c.html", null ],
+    [ "collections::hash_code", "structcollections_1_1hash__code.html", null ],
     [ "strings::index_of_all", "interfacestrings_1_1index__of__all.html", null ],
     [ "ui_dialogs::init_ui_env_c", "interfaceui__dialogs_1_1init__ui__env__c.html", null ],
     [ "collections::items_equal", "interfacecollections_1_1items__equal.html", null ],
+    [ "collections::key_value_pair", "structcollections_1_1key__value__pair.html", null ],
     [ "collections::list", "structcollections_1_1list.html", null ],
     [ "strings::operator(+)", "interfacestrings_1_1operator_07_09_08.html", null ],
     [ "strings::operator(/=)", "interfacestrings_1_1operator_07_2_0a_08.html", null ],

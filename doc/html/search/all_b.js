@@ -1,7 +1,24 @@
 var searchData=
 [
-  ['open_95',['open',['../structfile__io_1_1text__writer.html#aa6dedc6a936e17760d842d671aaf59c9',1,'file_io::text_writer::open()'],['../structfile__io_1_1text__reader.html#a9e0d6c4e44005157a6e10e4d9a7fc7a7',1,'file_io::text_reader::open()'],['../structfile__io_1_1binary__writer.html#a6dd48435491d69f2e0e290bbdd49677a',1,'file_io::binary_writer::open()'],['../structfile__io_1_1binary__reader.html#adb51c01dadd8c7c37cbeab0097228158',1,'file_io::binary_reader::open()']]],
-  ['operator_28_2b_29_96',['operator(+)',['../interfacestrings_1_1operator_07_09_08.html',1,'strings']]],
-  ['operator_28_2f_3d_29_97',['operator(/=)',['../interfacestrings_1_1operator_07_2_0a_08.html',1,'strings']]],
-  ['operator_28_3d_3d_29_98',['operator(==)',['../interfacestrings_1_1operator_07_0a_0a_08.html',1,'strings']]]
+  ['m_5fbuffer_83',['m_buffer',['../structfile__io_1_1binary__writer.html#a6c05055c704239adf36624771832e1c5',1,'file_io::binary_writer::m_buffer()'],['../structstrings_1_1string__builder.html#a03cfa737d07e29dd03e924472a71e96c',1,'strings::string_builder::m_buffer()']]],
+  ['m_5fcount_84',['m_count',['../structcollections_1_1list.html#a799e935d60a60c5a4f49608d93ca4314',1,'collections::list::m_count()'],['../structfile__io_1_1binary__writer.html#a0563fd4c6836bc703dedcbc983bcbbed',1,'file_io::binary_writer::m_count()']]],
+  ['m_5ffname_85',['m_fname',['../structfile__io_1_1file__manager.html#a019d0a1f1844e5499a4af22268df2a66',1,'file_io::file_manager']]],
+  ['m_5flength_86',['m_length',['../structstrings_1_1string__builder.html#a134ef0efefd476a8be4ce6d95867ee55',1,'strings::string_builder']]],
+  ['m_5flist_87',['m_list',['../structcollections_1_1list.html#a271e2cf228700643233b8ac4c1b189c3',1,'collections::list::m_list()'],['../structcollections_1_1dictionary.html#a2b6546744f3a6bfd9ead76c2d88462f2',1,'collections::dictionary::m_list()']]],
+  ['m_5fposition_88',['m_position',['../structfile__io_1_1file__reader.html#a35a6818d6cce54aa832ec79fb71c92fb',1,'file_io::file_reader']]],
+  ['m_5funit_89',['m_unit',['../structfile__io_1_1file__manager.html#a94e210aac9ad1180d13adadceb76876b',1,'file_io::file_manager']]],
+  ['move_5fto_5fstart_90',['move_to_start',['../structfile__io_1_1file__reader.html#aa85d197974bcd68940067968cc71fac0',1,'file_io::file_reader']]],
+  ['msgbx_5fbtn_5fabort_5fretry_5fignore_91',['msgbx_btn_abort_retry_ignore',['../namespaceui__dialogs.html#ade457f874e81357a4e41b7ab8934ef0b',1,'ui_dialogs']]],
+  ['msgbx_5fbtn_5fcancel_5fretry_5fcontinue_92',['msgbx_btn_cancel_retry_continue',['../namespaceui__dialogs.html#ab0b4e48f99f51021608b829503b2b44a',1,'ui_dialogs']]],
+  ['msgbx_5fbtn_5fok_93',['msgbx_btn_ok',['../namespaceui__dialogs.html#ae75869c8e3b3ba6e03c265da6621e25b',1,'ui_dialogs']]],
+  ['msgbx_5fbtn_5fok_5fcancel_94',['msgbx_btn_ok_cancel',['../namespaceui__dialogs.html#a19d30bc2988e808925360b0901a8aae8',1,'ui_dialogs']]],
+  ['msgbx_5fbtn_5fretry_5fcancel_95',['msgbx_btn_retry_cancel',['../namespaceui__dialogs.html#a0da3af3565f672662fcb6e8061d7065b',1,'ui_dialogs']]],
+  ['msgbx_5fbtn_5fyes_5fno_96',['msgbx_btn_yes_no',['../namespaceui__dialogs.html#ad72ffd72e935be819872db852acfa571',1,'ui_dialogs']]],
+  ['msgbx_5fbtn_5fyes_5fno_5fcancel_97',['msgbx_btn_yes_no_cancel',['../namespaceui__dialogs.html#a9bad9821ccd41fb471171b3f2d18c8a4',1,'ui_dialogs']]],
+  ['msgbx_5ficon_5ferror_98',['msgbx_icon_error',['../namespaceui__dialogs.html#a18d9d477e40fe5d89960aa4df4238279',1,'ui_dialogs']]],
+  ['msgbx_5ficon_5finformation_99',['msgbx_icon_information',['../namespaceui__dialogs.html#a2ce435769e9ae17fb572a5c9b6789973',1,'ui_dialogs']]],
+  ['msgbx_5ficon_5fquestion_100',['msgbx_icon_question',['../namespaceui__dialogs.html#a422a5b04d66a3422d4573bb73d8f8044',1,'ui_dialogs']]],
+  ['msgbx_5ficon_5fwarning_101',['msgbx_icon_warning',['../namespaceui__dialogs.html#ac71d21d1dc94c74d84074271e35f62e8',1,'ui_dialogs']]],
+  ['msgbx_5fno_5fbutton_102',['msgbx_no_button',['../namespaceui__dialogs.html#a25e7bd96092a842efabd7e0b131d39e9',1,'ui_dialogs']]],
+  ['msgbx_5fno_5ficon_103',['msgbx_no_icon',['../namespaceui__dialogs.html#a0848a181933bcabf11d91b6b0f2e8036',1,'ui_dialogs']]]
 ];

@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="ui_dialogs::show_multi\l_file_open_file_dialog_c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfaceui__dialogs_1_1show__multi__file__open__file__dialog__c.html",tooltip="Shows the user an Open-File dialog capable of returning multiple files. Notice, the UI environment mu..."];
+}

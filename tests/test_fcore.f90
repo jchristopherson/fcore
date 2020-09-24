@@ -7,6 +7,7 @@ program main
     use test_fcore_list
     use test_fcore_text_io
     use test_fcore_binary_io
+    use test_fcore_dictionary
     implicit none
 
     ! Local Variables
@@ -53,6 +54,9 @@ program main
     if (.not.local) overall = .false.
 
     local = test_binary_read_write()
+    if (.not.local) overall = .false.
+
+    local = test_dictionary_1()
     if (.not.local) overall = .false.
 
     ! End

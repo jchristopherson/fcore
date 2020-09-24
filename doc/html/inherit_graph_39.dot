@@ -4,7 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="ui_dialogs::dialog\l_result",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structui__dialogs_1_1dialog__result.html",tooltip="A type containing results from the dialog interaction."];
-  Node0 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1 [label="ui_dialogs::text_output\l_dialog_result",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structui__dialogs_1_1text__output__dialog__result.html",tooltip="A type containing results from a dialog that returns text such as an open-file dialog."];
+  Node0 [label="strings::to_string",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfacestrings_1_1to__string.html",tooltip="Converts a number to a string."];
 }

@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="strings::string_builder",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structstrings_1_1string__builder.html",tooltip="Provides a mechanism for building strings."];
+  Node0 [label="strings::replace",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfacestrings_1_1replace.html",tooltip="Replaces all occurrences of a substring within the original string."];
 }

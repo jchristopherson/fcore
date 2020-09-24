@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pop_253',['pop',['../structcollections_1_1list.html#a46097ed50d05e6a710b57bde606faab6',1,'collections::list']]],
-  ['push_254',['push',['../structcollections_1_1list.html#a1b63d578944e7829af8d0d412a7ef725',1,'collections::list::push()'],['../structfile__io_1_1binary__writer.html#aff800ad4fa20575b84696f840afe6970',1,'file_io::binary_writer::push()']]]
+  ['open_271',['open',['../structfile__io_1_1text__writer.html#aa6dedc6a936e17760d842d671aaf59c9',1,'file_io::text_writer::open()'],['../structfile__io_1_1text__reader.html#a9e0d6c4e44005157a6e10e4d9a7fc7a7',1,'file_io::text_reader::open()'],['../structfile__io_1_1binary__writer.html#a6dd48435491d69f2e0e290bbdd49677a',1,'file_io::binary_writer::open()'],['../structfile__io_1_1binary__reader.html#adb51c01dadd8c7c37cbeab0097228158',1,'file_io::binary_reader::open()']]]
 ];

@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="ui_dialogs::file_filter",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structui__dialogs_1_1file__filter.html",tooltip="Defines a file-type filter."];
+  Node0 [label="strings::to_upper",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfacestrings_1_1to__upper.html",tooltip="Converts an ASCII character string to all upper case."];
 }

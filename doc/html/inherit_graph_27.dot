@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="strings::parse_real64",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfacestrings_1_1parse__real64.html",tooltip="Attempts to parse a string to a 64-bit floating-point value."];
+  Node0 [label="strings::parse_int64",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interfacestrings_1_1parse__int64.html",tooltip="Attempts to parse a string to a 64-bit integer value."];
 }

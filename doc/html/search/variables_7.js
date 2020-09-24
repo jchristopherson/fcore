@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['result_335',['result',['../structui__dialogs_1_1dialog__result.html#aa2787d1d388bb6153bb1dfbdaeede05b',1,'ui_dialogs::dialog_result']]]
+  ['pattern_357',['pattern',['../structui__dialogs_1_1file__filter.html#a90df2ed4a074e14a1dcd08569b33c262',1,'ui_dialogs::file_filter']]]
 ];

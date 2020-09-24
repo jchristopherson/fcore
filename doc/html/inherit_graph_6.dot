@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="file_io::folder_contents",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfile__io_1_1folder__contents.html",tooltip="Defins a container describing folder contents."];
+  Node0 [label="collections::list",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcollections_1_1list.html",tooltip="Defines a generic list."];
 }
