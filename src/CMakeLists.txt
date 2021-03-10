@@ -20,6 +20,8 @@ set(fcore_sources
     ui_dialogs.f90
     collections_dictionary.f90
     collections_hash.f90
+    csv.f90
+    csv_column.f90
 )
 
 # Build the library
