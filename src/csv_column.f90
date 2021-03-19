@@ -476,7 +476,6 @@ contains
 
         ! Local Variables
         integer(int32) :: i, n
-        class(*), pointer :: ptr
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
         character(len = 256) :: errmsg
@@ -519,7 +518,6 @@ contains
 
         ! Local Variables
         integer(int32) :: i, n
-        class(*), pointer :: ptr
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
         character(len = 256) :: errmsg
@@ -562,7 +560,6 @@ contains
 
         ! Local Variables
         integer(int32) :: i, n
-        class(*), pointer :: ptr
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
         character(len = 256) :: errmsg
@@ -598,48 +595,257 @@ contains
 
 ! ------------------------------------------------------------------------------
     module subroutine cc_insert_string_item(this, index, x, err)
+        ! Arguments
         class(csv_column), intent(inout) :: this
         integer(int32), intent(in) :: index
         character(len = *), intent(in) :: x
         class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Input Checking
+        if (this%get_data_type() /= CSV_STRING_DATA) then
+            write (errmsg, '(A)') &
+                "This data holds string data, but a request for " // &
+                get_data_type_name(x) // " was made."
+            call errmgr%report_error("cc_insert_string_item", &
+                trim(errmsg), FCORE_DATA_TYPE_ERROR)
+            return
+        end if
+        if (index < 1 .or. index > this%get_count()) then
+            call errmgr%report_error("cc_insert_string_item", &
+                "The supplied array index is outside the bounds of this " // &
+                "collection.", FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+
+        ! Process
+        call this%m_data%insert(index, x, errmgr)
+        if (errmgr%has_error_occurred()) return
     end subroutine
 
+! ------------------------------------------------------------------------------
     module subroutine cc_insert_numeric_item(this, index, x, err)
+        ! Arguments
         class(csv_column), intent(inout) :: this
         integer(int32), intent(in) :: index
         real(real64), intent(in) :: x
         class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Input Checking
+        if (this%get_data_type() /= CSV_NUMERIC_DATA) then
+            write (errmsg, '(A)') &
+                "This data holds numeric data, but a request for " // &
+                get_data_type_name(x) // " was made."
+            call errmgr%report_error("cc_insert_numeric_item", &
+                trim(errmsg), FCORE_DATA_TYPE_ERROR)
+            return
+        end if
+        if (index < 1 .or. index > this%get_count()) then
+            call errmgr%report_error("cc_insert_numeric_item", &
+                "The supplied array index is outside the bounds of this " // &
+                "collection.", FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+
+        ! Process
+        call this%m_data%insert(index, x, errmgr)
+        if (errmgr%has_error_occurred()) return
     end subroutine
 
+! ------------------------------------------------------------------------------
     module subroutine cc_insert_logical_item(this, index, x, err)
+        ! Arguments
         class(csv_column), intent(inout) :: this
         integer(int32), intent(in) :: index
         logical, intent(in) :: x
         class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Input Checking
+        if (this%get_data_type() /= CSV_LOGICAL_DATA) then
+            write (errmsg, '(A)') &
+                "This data holds logical data, but a request for " // &
+                get_data_type_name(x) // " was made."
+            call errmgr%report_error("cc_insert_logical_item", &
+                trim(errmsg), FCORE_DATA_TYPE_ERROR)
+            return
+        end if
+        if (index < 1 .or. index > this%get_count()) then
+            call errmgr%report_error("cc_insert_logical_item", &
+                "The supplied array index is outside the bounds of this " // &
+                "collection.", FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+
+        ! Process
+        call this%m_data%insert(index, x, errmgr)
+        if (errmgr%has_error_occurred()) return
     end subroutine
 
+! ------------------------------------------------------------------------------
     module subroutine cc_append_string_item(this, x, err)
+        ! Arguments
         class(csv_column), intent(inout) :: this
         character(len = *), intent(in) :: x
         class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Input Checking
+        if (this%get_data_type() /= CSV_STRING_DATA) then
+            write (errmsg, '(A)') &
+                "This data holds string data, but a request for " // &
+                get_data_type_name(x) // " was made."
+            call errmgr%report_error("cc_append_string_item", &
+                trim(errmsg), FCORE_DATA_TYPE_ERROR)
+            return
+        end if
+
+        ! Process
+        call this%m_data%push(x, errmgr)
+        if (errmgr%has_error_occurred()) return
     end subroutine
 
+! ------------------------------------------------------------------------------
     module subroutine cc_append_numeric_item(this, x, err)
+        ! Arguments
         class(csv_column), intent(inout) :: this
         real(real64), intent(in) :: x
         class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Input Checking
+        if (this%get_data_type() /= CSV_NUMERIC_DATA) then
+            write (errmsg, '(A)') &
+                "This data holds numeric data, but a request for " // &
+                get_data_type_name(x) // " was made."
+            call errmgr%report_error("cc_append_numeric_item", &
+                trim(errmsg), FCORE_DATA_TYPE_ERROR)
+            return
+        end if
+
+        ! Process
+        call this%m_data%push(x, errmgr)
+        if (errmgr%has_error_occurred()) return
     end subroutine
 
+! ------------------------------------------------------------------------------
     module subroutine cc_append_logical_item(this, x, err)
+        ! Arguments
         class(csv_column), intent(inout) :: this
         logical, intent(in) :: x
         class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Input Checking
+        if (this%get_data_type() /= CSV_LOGICAL_DATA) then
+            write (errmsg, '(A)') &
+                "This data holds logical data, but a request for " // &
+                get_data_type_name(x) // " was made."
+            call errmgr%report_error("cc_append_logical_item", &
+                trim(errmsg), FCORE_DATA_TYPE_ERROR)
+            return
+        end if
+
+        ! Process
+        call this%m_data%push(x, errmgr)
+        if (errmgr%has_error_occurred()) return
     end subroutine
 
+! ------------------------------------------------------------------------------
     module subroutine cc_remove_item(this, index, err)
+        ! Arguments
         class(csv_column), intent(inout) :: this
         integer(int32), intent(in) :: index
         class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Input Checking
+        if (index < 1 .or. index > this%get_count()) then
+            call errmgr%report_error("cc_remove_item", &
+                "The supplied array index is outside the bounds of this " // &
+                "collection.", FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+
+        ! Process
+        call this%m_data%remove(index)
     end subroutine
 
 ! ******************************************************************************

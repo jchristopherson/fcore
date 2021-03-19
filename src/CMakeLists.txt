@@ -22,6 +22,7 @@ set(fcore_sources
     collections_hash.f90
     csv.f90
     csv_column.f90
+    collections_linked_list.f90
 )
 
 # Build the library

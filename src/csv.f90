@@ -200,27 +200,116 @@ module csv
         !!
         !! @par Syntax 1
         !! @code{.f90}
-        !! subroutine set_array(class(csv_column) this, class(string) x(:))
+        !! subroutine set_array(class(csv_column) this, class(string) x(:), optional class(errors) err)
         !! @endcode
         !!
         !! @par Syntax 2
         !! @code{.f90}
-        !! subroutine set_array(class(csv_column) this, real(real64) x(:))
+        !! subroutine set_array(class(csv_column) this, real(real64) x(:), optional class(errors) err)
         !! @endcode
         !!
         !! @par Syntax 3
         !! @code{.f90}
-        !! subroutine set_array(class(csv_column) this, logical x(:))
+        !! subroutine set_array(class(csv_column) this, logical x(:), optional class(errors) err)
         !! @endcode
         !!
         !! @param[in,out] this The csv_column object.
         !! @param[in] x The array.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_DATA_TYPE_ERROR: Occurs if @p id doesn't match the stored
+        !!      data type.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient 
+        !!      memory available.
         generic, public :: set_array => cc_set_string_array, &
             cc_set_numeric_array, cc_set_logical_array
+        !> @brief Inserts an item into the column.
+        !!
+        !! @par Syntax 1
+        !! @code{.f90}
+        !! subroutine insert(class(csv_column) this, integer(int32) index, character(len = *) x, optional class(errors) err)
+        !! @endcode
+        !!
+        !! @par Syntax 2
+        !! @code{.f90}
+        !! subroutine insert(class(csv_column) this, integer(int32) index, real(real64) x, optional class(errors) err)
+        !! @endcode
+        !!
+        !! @par Syntax 1
+        !! @code{.f90}
+        !! subroutine insert(class(csv_column) this, integer(int32) index, logical x, optional class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The csv_column object.
+        !! @param[in] index The index defining where the item should be 
+        !!  inserted.
+        !! @param[in] x The item to insert.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_DATA_TYPE_ERROR: Occurs if @p id doesn't match the stored
+        !!      data type.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p index is outside
+        !!      the bounds of the column.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient 
+        !!      memory available.
         generic, public :: insert => cc_insert_string_item, &
             cc_insert_numeric_item, cc_insert_logical_item
+        !> @brief Appends an item onto the column.
+        !!
+        !! @par Syntax 1
+        !! @code{.f90}
+        !! subroutine append(class(csv_column) this, character(len = *) x, optional class(errors) err)
+        !! @endcode
+        !!
+        !! @par Syntax 2
+        !! @code{.f90}
+        !! subroutine append(class(csv_column) this, real(real64) x, optional class(errors) err)
+        !! @endcode
+        !!
+        !! @par Syntax 1
+        !! @code{.f90}
+        !! subroutine append(class(csv_column) this, logical x, optional class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The csv_column object.
+        !! @param[in] x The item to append.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_DATA_TYPE_ERROR: Occurs if @p id doesn't match the stored
+        !!      data type.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient 
+        !!      memory available.
         generic, public :: append => cc_append_string_item, &
             cc_append_numeric_item, cc_append_logical_item
+        !> @brief Removes an item from the column.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine remove(class(csv_column), integer(int32) index, optional class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The csv_column object.
+        !! @param[in] index The index of the item to remove.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p index is outside
+        !!      the bounds of the column.
         procedure, public :: remove => cc_remove_item
 
         procedure :: cc_get_string_item
