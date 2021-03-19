@@ -21,6 +21,16 @@ module collections
         class(*), pointer :: item => null()
     end type
 
+    !> @brief A node in a linked list container.
+    type node
+        !> A pointer to a polymorphic variable allowing storage of any type.
+        class(*), pointer :: item => null()
+        !> A pointer to the next node in the collection.
+        type(node), pointer :: next => null()
+        !> A pointer to the previous node in the collection.
+        type(node), pointer :: previous => null()
+    end type
+
     !> @brief Defines a generic list.
     type list
     private
@@ -128,6 +138,20 @@ module collections
         procedure, public :: initialize => hc_init
         !> @brief Gets a unique hash code for the supplied string.
         procedure, public :: get => hc_get
+    end type
+
+    !> @brief Defines a generic linked-list container.
+    type linked_list
+    private
+        !> @brief The number of nodes in the container.
+        integer(int32) :: m_nodeCount = 0
+        !> @brief A pointer to the first node in the container.
+        type(node), pointer :: m_first => null()
+        !> @brief A pointer to the last node in the container.
+        type(node), pointer :: m_last => null()
+        !> @brief A pointer to the current node. - for iteration purposes
+        type(node), pointer :: m_current => null()
+    contains
     end type
 
 ! ******************************************************************************
@@ -343,6 +367,32 @@ module collections
             character(len = *), intent(in) :: str
             integer(int64) :: rst
         end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface ! collections_linked_list.f90
+        module subroutine lnk_clear(this)
+            class(linked_list), intent(inout) :: this
+        end subroutine
+
+        module subroutine lnk_push(this, x, err)
+            class(linked_list), intent(inout) :: this
+            class(*), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine lnk_pop(this)
+            class(linked_list), intent(inout) :: this
+        end subroutine
+
+        ! push
+        ! pop
+        ! move to first
+        ! move to last
+        ! next
+        ! previous
+        ! count
+        ! get a pointer to the current object
     end interface
 
 ! ------------------------------------------------------------------------------
