@@ -203,4 +203,81 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_linked_list_1() result(rst)
+        ! Arbuments
+        logical :: rst
+
+        ! Parameters
+        integer(int32), parameter :: list_size = 100
+
+        ! Local Variables
+        type(linked_list) :: x
+        integer(int32) :: i
+        logical :: check
+        class(*), pointer :: ptr
+        procedure(items_equal), pointer :: fcn
+
+        ! Initialization
+        rst = .true.
+        fcn => compare_ints
+
+        ! Store a series of integers
+        do i = 1, list_size
+            call x%push(i)
+        end do
+
+        ! Check the count
+        if (x%get_count() /= list_size) then
+            rst = .false.
+            print '(AI0AI0A)', "TEST_LINKED_LIST_1 (Test 1); Expected: ", &
+                list_size, ", but found: ", x%get_count(), "."
+        end if
+
+        ! Check the content - ascending
+        check = x%move_to_first()
+        i = 0
+        do while (check)
+            i = i + 1
+            ptr => x%get()
+            select type (ptr)
+            type is (integer(int32))
+                if (ptr /= i) then
+                    rst = .false.
+                    print '(AI0AI0A)', &
+                        "TEST_LINKED_LIST_1 (Test 2); Expected: ", i, &
+                        ", but found: ", ptr, "."
+                end if
+            end select
+
+            check = x%move_to_next()
+        end do
+
+        ! Check the content - descending
+        check = x%move_to_last()
+        i = list_size + 1
+        do while (check)
+            i = i - 1
+            ptr => x%get()
+            select type (ptr)
+            type is (integer(int32))
+                if (ptr /= i) then
+                    rst = .false.
+                    print '(AI0AI0A)', &
+                        "TEST_LINKED_LIST_1 (Test 3); Expected: ", i, &
+                        ", but found: ", ptr, "."
+                end if
+            end select
+
+            check = x%move_to_previous()
+        end do
+
+        ! Check the contains routine
+        if (.not.x%contains(list_size / 2, fcn)) then
+            rst = .false.
+            print '(A)', "TEST_LINKED_LIST_1 (Test 4): Could not find a " // &
+                "value known to exist in the collection."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module

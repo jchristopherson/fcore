@@ -59,6 +59,9 @@ program main
     local = test_dictionary_1()
     if (.not.local) overall = .false.
 
+    local = test_linked_list_1()
+    if (.not.local) overall = .false.
+
     ! End
     if (overall) then
         print '(A)', "FCORE: ALL TESTS PASSED"

@@ -11,6 +11,7 @@ module collections
     public :: compare_items
     public :: dictionary
     public :: hash_code
+    public :: linked_list
 
 ! ******************************************************************************
 ! TYPES
@@ -152,6 +153,136 @@ module collections
         !> @brief A pointer to the current node. - for iteration purposes
         type(node), pointer :: m_current => null()
     contains
+        !> @brief Cleans up resources held by the list.
+        final :: ll_final
+        !> @brief Gets the number of items in the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_count(class(linked_list) this)
+        !! @endcode
+        !!
+        !! @param[in] this The linked_list object.
+        !! @return The number of items in the list.
+        procedure, public :: get_count => ll_get_count
+        !> @brief Moves to the first item in the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical move_to_first(class(linked_list) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        !! @return Returns true if the move was successful (there was something
+        !!  defined to move to); else, false if the move was not completed.
+        procedure, public :: move_to_first => ll_move_to_first
+        !> @brief Moves to the last item in the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical move_to_last(class(linked_list) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        !! @return Returns true if the move was successful (there was something
+        !!  defined to move to); else, false if the move was not completed.
+        procedure, public :: move_to_last => ll_move_to_last
+        !> @brief Moves to the next item in the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical move_to_next(class(linked_list) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        !! @return Returns true if the move was successful (there was something
+        !!  defined to move to); else, false if the move was not completed.
+        procedure, public :: move_to_next => ll_move_to_next
+        !> @brief Moves to the previous item in the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical move_to_previous(class(linked_list) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        !! @return Returns true if the move was successful (there was something
+        !!  defined to move to); else, false if the move was not completed.
+        procedure, public :: move_to_previous => ll_move_to_previous
+        !> @brief Clears the entire contents of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine clear(class(linked_list) this)
+        !! @endcode
+        !!
+        !! @param[in] this The linked_list object.
+        procedure, public :: clear => ll_clear
+        !> @brief Pushes a new item onto the end of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine push(class(linked_list) this, class(*) x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        !! @param[in] x The object to store.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: push => ll_push
+        !> @brief Pops the last item off of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine pop(class(linked_list) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        procedure, public :: pop => ll_pop
+        !> @brief Gets a pointer to the current item.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! class(*), pointer get(class(linked_list) this)
+        !! @endcode
+        !!
+        !! @param[in] this The linked_list object.
+        !! @return The requested pointer.
+        procedure, public :: get => ll_get_item
+        !> @brief Sets an item into the list at the current location.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set(class(linked_list) this, class(*) x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        !! @param[in] x The item to place in the list.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: set => ll_set_item
+        !> @brief Tests to see if the specified item exists in the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical contains(class(linked_list) this, class(*) item, procedure(items_equal) fcn)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        !! @param[in] item The item to search for.
+        !! @param[in] fcn A pointer to the routine used to compare items.
+        !! @return Returns true if @p item is found; else, false.
+        procedure, public :: contains => ll_contains
     end type
 
 ! ******************************************************************************
@@ -371,28 +502,66 @@ module collections
 
 ! ------------------------------------------------------------------------------
     interface ! collections_linked_list.f90
-        module subroutine lnk_clear(this)
+        pure module function ll_get_count(this) result(rst)
+            class(linked_list), intent(in) :: this
+            integer(int32) :: rst
+        end function
+        
+        module function ll_move_to_first(this) result(rst)
+            class(linked_list), intent(inout) :: this
+            logical :: rst
+        end function
+
+        module function ll_move_to_last(this) result(rst)
+            class(linked_list), intent(inout) :: this
+            logical :: rst
+        end function
+
+        module function ll_move_to_next(this) result(rst)
+            class(linked_list), intent(inout) :: this
+            logical :: rst
+        end function
+
+        module function ll_move_to_previous(this) result(rst)
+            class(linked_list), intent(inout) :: this
+            logical :: rst
+        end function
+
+        module subroutine ll_clear(this)
             class(linked_list), intent(inout) :: this
         end subroutine
 
-        module subroutine lnk_push(this, x, err)
+        module subroutine ll_final(this)
+            type(linked_list), intent(inout) :: this
+        end subroutine
+
+        module subroutine ll_push(this, x, err)
             class(linked_list), intent(inout) :: this
             class(*), intent(in) :: x
             class(errors), intent(inout), optional, target :: err
         end subroutine
 
-        module subroutine lnk_pop(this)
+        module subroutine ll_pop(this)
             class(linked_list), intent(inout) :: this
         end subroutine
 
-        ! push
-        ! pop
-        ! move to first
-        ! move to last
-        ! next
-        ! previous
-        ! count
-        ! get a pointer to the current object
+        module function ll_get_item(this) result(rst)
+            class(linked_list), intent(in) :: this
+            class(*), pointer :: rst
+        end function
+
+        module subroutine ll_set_item(this, x, err)
+            class(linked_list), intent(inout) :: this
+            class(*), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module function ll_contains(this, item, fcn) result(rst)
+            class(linked_list), intent(inout) :: this
+            class(*), intent(in) :: item
+            procedure(items_equal), pointer, intent(in) :: fcn
+            logical :: rst
+        end function
     end interface
 
 ! ------------------------------------------------------------------------------
