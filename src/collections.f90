@@ -12,6 +12,7 @@ module collections
     public :: dictionary
     public :: hash_code
     public :: linked_list
+    public :: table
 
 ! ******************************************************************************
 ! TYPES
@@ -298,6 +299,21 @@ module collections
         !!  successful; else, false if the item wasn't found and the move did
         !!  not occur.
         procedure, public :: move_to => ll_move_to_matching
+    end type
+
+! ------------------------------------------------------------------------------
+    !> @brief Defines a table convenient for storing mixed-type data.
+    type table
+    private
+        !> @brief The data table.
+        type(container), allocatable, dimension(:,:) :: m_table
+
+        ! TO DO: 
+        ! - Figure out how to access entire columns of data without making 
+        !   copies.  It would also be nice to access rows in a similar manner,
+        !   but not a hard requirement.
+        ! - Figure out how to efficiently access subtables as well
+    contains
     end type
 
 ! ******************************************************************************
