@@ -83,7 +83,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_STRING_DATA) then
             write (errmsg, '(A)') &
-                "This data holds string data, but a request for " // &
+                "This column holds string data, but a request for " // &
                 get_data_type_name(id) // " was made."
             call errmgr%report_error("cc_get_string_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -131,7 +131,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_NUMERIC_DATA) then
             write (errmsg, '(A)') &
-                "This data holds numeric data, but a request for " // &
+                "This column holds numeric data, but a request for " // &
                 get_data_type_name(id) // " was made."
             call errmgr%report_error("cc_get_numeric_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -177,7 +177,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_LOGICAL_DATA) then
             write (errmsg, '(A)') &
-                "This data holds logical data, but a request for " // &
+                "This column holds logical data, but a request for " // &
                 get_data_type_name(id) // " was made."
             call errmgr%report_error("cc_get_logical_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -221,7 +221,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_STRING_DATA) then
             write (errmsg, '(A)') &
-                "This data holds string data, but " // &
+                "This column holds string data, but " // &
                 get_data_type_name(x) // " was supplied."
             call errmgr%report_error("cc_set_string_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -261,7 +261,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_NUMERIC_DATA) then
             write (errmsg, '(A)') &
-                "This data holds numeric data, but " // &
+                "This column holds numeric data, but " // &
                 get_data_type_name(x) // " was supplied."
             call errmgr%report_error("cc_set_numeric_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -301,7 +301,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_LOGICAL_DATA) then
             write (errmsg, '(A)') &
-                "This data holds logical data, but " // &
+                "This column holds logical data, but " // &
                 get_data_type_name(x) // " was supplied."
             call errmgr%report_error("cc_set_logical_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -343,7 +343,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_STRING_DATA) then
             write (errmsg, '(A)') &
-                "This data holds string data, but a request for " // &
+                "This column holds string data, but a request for " // &
                 get_data_type_name(id) // " was made."
             call errmgr%report_error("cc_get_string_array", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -394,7 +394,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_NUMERIC_DATA) then
             write (errmsg, '(A)') &
-                "This data holds numeric data, but a request for " // &
+                "This column holds numeric data, but a request for " // &
                 get_data_type_name(id) // " was made."
             call errmgr%report_error("cc_get_numeric_array", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -443,7 +443,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_LOGICAL_DATA) then
             write (errmsg, '(A)') &
-                "This data holds logical data, but a request for " // &
+                "This column holds logical data, but a request for " // &
                 get_data_type_name(id) // " was made."
             call errmgr%report_error("cc_get_logical_array", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -490,7 +490,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_STRING_DATA) then
             write (errmsg, '(A)') &
-                "This data holds string data, but a request for " // &
+                "This column holds string data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_set_string_array", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -532,7 +532,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_NUMERIC_DATA) then
             write (errmsg, '(A)') &
-                "This data holds numeric data, but a request for " // &
+                "This column holds numeric data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_set_numeric_array", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -574,7 +574,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_LOGICAL_DATA) then
             write (errmsg, '(A)') &
-                "This data holds logical data, but a request for " // &
+                "This column holds logical data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_set_logical_array", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -616,7 +616,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_STRING_DATA) then
             write (errmsg, '(A)') &
-                "This data holds string data, but a request for " // &
+                "This column holds string data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_insert_string_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -657,7 +657,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_NUMERIC_DATA) then
             write (errmsg, '(A)') &
-                "This data holds numeric data, but a request for " // &
+                "This column holds numeric data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_insert_numeric_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -698,7 +698,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_LOGICAL_DATA) then
             write (errmsg, '(A)') &
-                "This data holds logical data, but a request for " // &
+                "This column holds logical data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_insert_logical_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -738,7 +738,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_STRING_DATA) then
             write (errmsg, '(A)') &
-                "This data holds string data, but a request for " // &
+                "This column holds string data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_append_string_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -772,7 +772,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_NUMERIC_DATA) then
             write (errmsg, '(A)') &
-                "This data holds numeric data, but a request for " // &
+                "This column holds numeric data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_append_numeric_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
@@ -806,7 +806,7 @@ contains
         ! Input Checking
         if (this%get_data_type() /= CSV_LOGICAL_DATA) then
             write (errmsg, '(A)') &
-                "This data holds logical data, but a request for " // &
+                "This column holds logical data, but a request for " // &
                 get_data_type_name(x) // " was made."
             call errmgr%report_error("cc_append_logical_item", &
                 trim(errmsg), FCORE_DATA_TYPE_ERROR)
