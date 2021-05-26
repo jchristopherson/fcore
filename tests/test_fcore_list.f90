@@ -277,6 +277,19 @@ contains
             print '(A)', "TEST_LINKED_LIST_1 (Test 4): Could not find a " // &
                 "value known to exist in the collection."
         end if
+
+        ! Check the move-to routine
+        check = x%move_to(list_size / 4, fcn)
+        ptr => x%get()
+        select type (ptr)
+        type is (integer(int32))
+            if (ptr /= list_size / 4) then
+                rst = .false.
+                print '(AI0AI0A)', &
+                    "TEST_LINKED_LIST_1 (Test 5); Expected: ", list_size / 4, &
+                        ", but found: ", ptr, "."
+            end if
+        end select
     end function
 
 ! ------------------------------------------------------------------------------

@@ -283,6 +283,21 @@ module collections
         !! @param[in] fcn A pointer to the routine used to compare items.
         !! @return Returns true if @p item is found; else, false.
         procedure, public :: contains => ll_contains
+        !> @brief Moves to the first occurrence of the item that matches the
+        !!  specified criteria.  If no match is found the move does not happen.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical move_to(class(linked_list) this, class(*) item, procedure(items_equal) fcn)
+        !! @endcode
+        !!
+        !! @param[in,out] this The linked_list object.
+        !! @param[in] item The item to search for.
+        !! @param[in] fcn A pointer to the routine used to compare items.
+        !! @return Returns true if the item was found and the move was 
+        !!  successful; else, false if the item wasn't found and the move did
+        !!  not occur.
+        procedure, public :: move_to => ll_move_to_matching
     end type
 
 ! ******************************************************************************
@@ -557,6 +572,13 @@ module collections
         end subroutine
 
         module function ll_contains(this, item, fcn) result(rst)
+            class(linked_list), intent(inout) :: this
+            class(*), intent(in) :: item
+            procedure(items_equal), pointer, intent(in) :: fcn
+            logical :: rst
+        end function
+
+        module function ll_move_to_matching(this, item, fcn) result(rst)
             class(linked_list), intent(inout) :: this
             class(*), intent(in) :: item
             procedure(items_equal), pointer, intent(in) :: fcn

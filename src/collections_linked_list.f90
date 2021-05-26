@@ -239,7 +239,27 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
-    ! move to matching
+    module function ll_move_to_matching(this, item, fcn) result(rst)
+        ! Arguments
+        class(linked_list), intent(inout) :: this
+        class(*), intent(in) :: item
+        procedure(items_equal), pointer, intent(in) :: fcn
+        logical :: rst
+
+        ! Local Variables
+        logical :: check
+
+        ! Process
+        check = this%move_to_first()
+        rst = .false.
+        do while (check)
+            if (fcn(item, this%get())) then
+                rst = .true.
+                exit
+            end if
+            check = this%move_to_next()
+        end do
+    end function
 
 ! ------------------------------------------------------------------------------
 end submodule
