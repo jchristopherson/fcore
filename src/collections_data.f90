@@ -206,6 +206,110 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    module subroutine dt_insert_rows(this, rstart, x, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        integer(int32), intent(in) :: rstart
+        class(*), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int32) :: i, j, k, mnew, m, n, flag
+        type(container), allocatable, dimension(:,:) :: copy
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Initialization
+        m = this%get_row_count()
+        n = this%get_column_count()
+        mnew = m + size(x, 1)
+
+        ! Input Check
+        if (rstart < 1) then
+            call errmgr%report_error("dt_insert_rows", &
+                "The insertion index must be at least 1.", &
+                FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+        if (rstart > 1 + m) then
+            write(errmsg, '(AI0AI0A)') "The insertion index must not be " // &
+                "greater than ", m + 1, ", but was found to be ", rstart, "."
+            call errmgr%report_error("dt_insert_rows", trim(errmsg), &
+                FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+        if (associated(this%m_table) .and. size(x, 2) /= n) then
+            write(errmsg, '(AI0AI0A)') "The input data set was expected " // &
+                "to have ", n, " columns, but was found to have ", &
+                size(x, 2), "."
+            call errmgr%report_error("dt_insert_rows", trim(errmsg), &
+                FCORE_ARRAY_SIZE_ERROR)
+            return
+        end if
+
+        ! If the array is not allocated, allocate and store as the input array
+        ! will define the table structure
+        if (.not.associated(this%m_table)) then
+            call this%initialize(size(x, 1), size(x, 2), err = errmgr)
+            if (errmgr%has_error_occurred()) return
+            do j = 1, size(x, 2)
+                do i = 1, size(x, 1)
+                    call this%set(i, j, x(i,j), err = errmgr)
+                    if (errmgr%has_error_occurred()) return
+                end do
+            end do
+            return
+        end if
+
+        ! If we're here, there was already a properly allocated matrix, and the
+        ! size of X is OK.  Start by copying m_table, and then reallocate 
+        ! m_table to allow fitting of the new data
+        allocate(copy(m, n), stat = flag)
+        if (flag /= 0) go to 100
+        copy = this%m_table
+
+        deallocate(this%m_table)
+        allocate(this%m_table(mnew, n), stat = flag)
+        if (flag /= 0) then
+            ! Put copy back to m_table, and then handle the error
+            this%m_table = copy
+            go to 100
+        end if
+        
+        ! Copy back the contents into m_table
+        do j = 1, n
+            do i = 1, rstart - 1
+                this%m_table(i,j) = copy(i,j)
+            end do
+
+            k = rstart
+            do i = 1, size(x, 1)
+                call this%set(k, j, x(i,j), err = errmgr)
+                if (errmgr%has_error_occurred()) return
+                k = k + 1
+            end do
+
+            do i = rstart, m
+                this%m_table(k,j) = copy(i,j)
+                k = k + 1
+            end do
+        end do
+        
+        return
+    100 continue
+        ! Deal with memory errors
+        call errmgr%report_error("dt_insert_rows", &
+            "Insufficient memory available.", FCORE_OUT_OF_MEMORY_ERROR)
+        return
+    end subroutine
 
 ! ------------------------------------------------------------------------------
 

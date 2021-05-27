@@ -410,6 +410,31 @@ module collections
         !!      the bounds of the table.
         !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
         procedure, public :: set => dt_set
+        !> @brief Inserts a series of rows into the data table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine insert_rows(class(data_table) this, integer(int32) rstart, class(*) x(:,:), class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] rstart The index of the row at which the insertion begins.
+        !! @param[in] x An M-by-N matrix of items to insert into the table.  The
+        !!  number of columns (N) must be the same as the number of columns in
+        !!  this table.  A copy of each item is made, and the data_table takes
+        !!  care of management of the memory occupied by each copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p rstart is outside 
+        !!      the bounds of the table.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p x does not have the same
+        !!      number of columns as the data_table.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: insert_rows => dt_insert_rows
     end type
 
 ! ******************************************************************************
@@ -735,6 +760,13 @@ module collections
             class(data_table), intent(inout) :: this
             integer(int32), intent(in) :: i, j
             class(*), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dt_insert_rows(this, rstart, x, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: rstart
+            class(*), intent(in), dimension(:,:) :: x
             class(errors), intent(inout), optional, target :: err
         end subroutine
     end interface
