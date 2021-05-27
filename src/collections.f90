@@ -410,7 +410,7 @@ module collections
         !!      the bounds of the table.
         !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
         procedure, public :: set => dt_set
-        !> @brief Inserts a series of rows into the data table.
+        !> @brief Inserts a series of rows into the data_table.
         !!
         !! @par Syntax
         !! @code{.f90}
@@ -435,6 +435,31 @@ module collections
         !!      number of columns as the data_table.
         !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
         procedure, public :: insert_rows => dt_insert_rows
+        !> @brief Inserts a single row into the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine insert_row(class(data_table) this, integer(int32) i, class(*) x(:), class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] i The row index where @p x should be inserted into the table.
+        !! @param[in] x The N-element array where N is equal to the number of
+        !!  columns in this data_table.  A copy of each item is made, and the 
+        !!  data_table takes care of management of the memory occupied by each 
+        !!  copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i is outside 
+        !!      the bounds of the table.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p x does not have the same
+        !!      number of items as the data_table has columns.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: insert_row => dt_insert_row
     end type
 
 ! ******************************************************************************
@@ -767,6 +792,13 @@ module collections
             class(data_table), intent(inout) :: this
             integer(int32), intent(in) :: rstart
             class(*), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dt_insert_row(this, i, x, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: i
+            class(*), intent(in), dimension(:) :: x
             class(errors), intent(inout), optional, target :: err
         end subroutine
     end interface
