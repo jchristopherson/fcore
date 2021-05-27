@@ -12,7 +12,7 @@ module collections
     public :: dictionary
     public :: hash_code
     public :: linked_list
-    public :: table
+    public :: data_table
 
 ! ******************************************************************************
 ! TYPES
@@ -303,17 +303,113 @@ module collections
 
 ! ------------------------------------------------------------------------------
     !> @brief Defines a table convenient for storing mixed-type data.
-    type table
+    type data_table
     private
         !> @brief The data table.
-        type(container), allocatable, dimension(:,:) :: m_table
+        type(container), pointer, dimension(:,:) :: m_table => null()
 
         ! TO DO: 
         ! - Figure out how to access entire columns of data without making 
         !   copies.  It would also be nice to access rows in a similar manner,
-        !   but not a hard requirement.
-        ! - Figure out how to efficiently access subtables as well
+        !   but not a hard requirement. - Use pointers
+        ! - Figure out how to efficiently access subtables as well - Use pointers
     contains
+        final :: dt_final
+        !> @brief Clears the entire contents of the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine clear(class(data_table) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        procedure, public :: clear => dt_clear
+        !> @brief Gets the number of rows in the table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_row_count(class(data_table) this)
+        !! @endcode
+        !!
+        !! @param[in] this The data_table object.
+        !! @return The number of rows in the table.
+        procedure, public :: get_row_count => dt_get_row_count
+        !> @brief Gets the number of columns in the table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_column_count(class(data_table) this)
+        !! @endcode
+        !!
+        !! @param[in] this The data_table object.
+        !! @return The number of columns in the table.
+        procedure, public :: get_column_count => dt_get_column_count
+        !> @brief Initializes the data table.  Notice, if the data table was
+        !! already initialized, this routine will clear the existing table
+        !! and construct a new table as requested.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine initialize(class(data_table) this, integer(int32) m, integer(int32) n, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] m The number of rows (must be at least 1).
+        !! @param[in] n The number of columns (must be at least 1).
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_INVALID_INPUT_ERROR: Occurs if @p m or @p n is less than
+        !!      or equal to zero.
+        procedure, public :: initialize => dt_initialize
+        !> @brief Gets an item from the table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! class(*) pointer get(class(data_table) this, integer(int32) i, integer(int32) j, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in] this The data_table object.
+        !! @param[in] i The row index.
+        !! @param[in] j The column index.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i or @p j are outside
+        !!      the bounds of the table.
+        procedure, public :: get => dt_get
+        !> @brief Sets an item into the table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set(class(data_table) this, integer(int32) i, integer(int32) j, class(*) x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] i The row index.
+        !! @param[in] j The column index.
+        !! @param[in] x The item to set into the table.  Notice, a copy is made
+        !!  and the table takes care of management of the memory occupied by 
+        !!  the copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_NULL_REFERENCE_ERROR: Occurs if the table hasn't yet been
+        !!      initialized.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i or @p j are outside
+        !!      the bounds of the table.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: set => dt_set
     end type
 
 ! ******************************************************************************
@@ -600,6 +696,47 @@ module collections
             procedure(items_equal), pointer, intent(in) :: fcn
             logical :: rst
         end function
+    end interface
+
+! ------------------------------------------------------------------------------
+    interface ! collections_data.f90
+        module subroutine dt_clear(this)
+            class(data_table), intent(inout) :: this
+        end subroutine
+
+        module subroutine dt_final(this)
+            type(data_table), intent(inout) :: this
+        end subroutine
+
+        pure module function dt_get_row_count(this) result(rst)
+            class(data_table), intent(in) :: this
+            integer(int32) :: rst
+        end function
+
+        pure module function dt_get_column_count(this) result(rst)
+            class(data_table), intent(in) :: this
+            integer(int32) :: rst
+        end function
+
+        module subroutine dt_initialize(this, m, n, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: m, n
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module function dt_get(this, i, j, err) result(rst)
+            class(data_table), intent(in) :: this
+            integer(int32) :: i, j
+            class(errors), intent(inout), optional, target :: err
+            class(*), pointer :: rst
+        end function
+
+        module subroutine dt_set(this, i, j, x, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: i, j
+            class(*), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
     end interface
 
 ! ------------------------------------------------------------------------------
