@@ -12,7 +12,7 @@ contains
         integer(int32) :: i, j
 
         ! Quick Return
-        if (.not.associated(this%m_table)) return
+        if (.not.allocated(this%m_table)) return
 
         ! Process
         do j = 1, size(this%m_table, 2)
@@ -23,7 +23,6 @@ contains
             end do
         end do
         deallocate(this%m_table)
-        nullify(this%m_table)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -36,7 +35,7 @@ contains
     pure module function dt_get_row_count(this) result(rst)
         class(data_table), intent(in) :: this
         integer(int32) :: rst
-        if (associated(this%m_table)) then
+        if (allocated(this%m_table)) then
             rst = size(this%m_table, 1)
         else
             rst = 0
@@ -47,7 +46,7 @@ contains
     pure module function dt_get_column_count(this) result(rst)
         class(data_table), intent(in) :: this
         integer(int32) :: rst
-        if (associated(this%m_table)) then
+        if (allocated(this%m_table)) then
             rst = size(this%m_table, 2)
         else
             rst = 0
@@ -120,7 +119,7 @@ contains
         end if
 
         ! Quick Return
-        if (.not.associated(this%m_table)) then
+        if (.not.allocated(this%m_table)) then
             nullify(rst)
             return
         end if
@@ -157,6 +156,7 @@ contains
 
         ! Local Variables
         integer(int32) :: flag
+        class(*), pointer :: cpy
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
         character(len = 256) :: errmsg
@@ -169,7 +169,7 @@ contains
         end if
 
         ! Ensure we've got an array to work with
-        if (.not.associated(this%m_table)) then
+        if (.not.allocated(this%m_table)) then
             call errmgr%report_error("dt_set", "The data table has not " // &
                 "yet been initialized.", FCORE_NULL_REFERENCE_ERROR)
             return
@@ -197,12 +197,13 @@ contains
         if (associated(this%m_table(i,j)%item)) then
             deallocate(this%m_table(i,j)%item)
         end if
-        allocate(this%m_table(i,j)%item, source = x, stat = flag)
+        allocate(cpy, source = x, stat = flag)
         if (flag /= 0) then
             call errmgr%report_error("dt_set", &
                 "Insufficient memory available.", FCORE_OUT_OF_MEMORY_ERROR)
             return
         end if
+        this%m_table(i, j)%item => cpy
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -246,7 +247,7 @@ contains
                 FCORE_INDEX_OUT_OF_RANGE_ERROR)
             return
         end if
-        if (associated(this%m_table) .and. size(x, 2) /= n) then
+        if (allocated(this%m_table) .and. size(x, 2) /= n) then
             write(errmsg, '(AI0AI0A)') "The input data set was expected " // &
                 "to have ", n, " columns, but was found to have ", &
                 size(x, 2), "."
@@ -257,7 +258,7 @@ contains
 
         ! If the array is not allocated, allocate and store as the input array
         ! will define the table structure
-        if (.not.associated(this%m_table)) then
+        if (.not.allocated(this%m_table)) then
             call this%initialize(size(x, 1), size(x, 2), err = errmgr)
             if (errmgr%has_error_occurred()) return
             do j = 1, size(x, 2)
@@ -332,7 +333,7 @@ contains
         end if
 
         ! Check the length of x
-        if (associated(this%m_table) .and. &
+        if (allocated(this%m_table) .and. &
             size(x) /= this%get_column_count()) &
         then
             write(errmsg, '(AI0AI0A)') "The number of items in the array " // &
@@ -388,7 +389,7 @@ contains
                 FCORE_INDEX_OUT_OF_RANGE_ERROR)
             return
         end if
-        if (associated(this%m_table) .and. size(x, 1) /= m) then
+        if (allocated(this%m_table) .and. size(x, 1) /= m) then
             write(errmsg, '(AI0AI0A)') "The input data set was expected " // &
                 "to have ", m, " rows, but was found to have ", &
                 size(x, 1), "."
@@ -399,7 +400,7 @@ contains
 
         ! If the array is not allocated, allocate and store as the input array
         ! will define the table structure
-        if (.not.associated(this%m_table)) then
+        if (.not.allocated(this%m_table)) then
             call this%initialize(size(x, 1), size(x, 2), err = errmgr)
             if (errmgr%has_error_occurred()) return
             do j = 1, size(x, 2)
@@ -419,7 +420,7 @@ contains
         copy = this%m_table
 
         deallocate(this%m_table)
-        allocate(this%m_table(mnew, n), stat = flag)
+        allocate(this%m_table(m, nnew), stat = flag)
         if (flag /= 0) then
             ! Put copy back to m_table, and then handle the error
             this%m_table = copy
@@ -456,6 +457,90 @@ contains
             "Insufficient memory available.", FCORE_OUT_OF_MEMORY_ERROR)
         return
     end subroutine
+
+! ------------------------------------------------------------------------------
+    module subroutine dt_insert_column(this, i, x, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        integer(int32), intent(in) :: i
+        class(*), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Check the length of x
+        if (allocated(this%m_table) .and. &
+            size(x) /= this%get_row_count()) &
+        then
+            write(errmsg, '(AI0AI0A)') "The number of items in the array " // &
+                "to insert ,", size(x), ", must match the number of " // &
+                "rows in the table ", this%get_row_count(), "."
+            call errmgr%report_error("dt_insert_column", trim(errmsg), &
+                FCORE_ARRAY_SIZE_ERROR)
+            return
+        end if
+
+        ! Insert the array
+        call this%insert_columns(i, reshape(x, [size(x), 1]), err = errmgr)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    module subroutine dt_append_rows(this, x, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        class(*), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Process
+        call this%insert_rows(this%get_row_count() + 1, x, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    module subroutine dt_append_row(this, x, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        class(*), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Process
+        call this%insert_row(this%get_row_count() + 1, x, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    module subroutine dt_append_columns(this, x, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        class(*), intent(in), dimension(:,:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Process
+        call this%insert_columns(this%get_column_count() + 1, x, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    module subroutine dt_append_column(this, x, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        class(*), intent(in), dimension(:) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Process
+        call this%insert_column(this%get_column_count() + 1, x, err)
+    end subroutine
+
+! ------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
 
 ! ------------------------------------------------------------------------------
 

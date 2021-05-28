@@ -306,13 +306,7 @@ module collections
     type data_table
     private
         !> @brief The data table.
-        type(container), pointer, dimension(:,:) :: m_table => null()
-
-        ! TO DO: 
-        ! - Figure out how to access entire columns of data without making 
-        !   copies.  It would also be nice to access rows in a similar manner,
-        !   but not a hard requirement. - Use pointers
-        ! - Figure out how to efficiently access subtables as well - Use pointers
+        type(container), allocatable, dimension(:,:) :: m_table
     contains
         final :: dt_final
         !> @brief Clears the entire contents of the data_table.
@@ -460,6 +454,146 @@ module collections
         !!      number of items as the data_table has columns.
         !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
         procedure, public :: insert_row => dt_insert_row
+        !> @brief Inserts a series of columns into the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine insert_columns(class(data_table) this, integer(int32) cstart, class(*) x(:,:), class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] cstart The index of the column at which the insertion 
+        !!  begins.
+        !! @param[in] x An M-by-N matrix of items to insert into the table.  The
+        !!  number of rows (M) must be the same as the number of rows in
+        !!  this table.  A copy of each item is made, and the data_table takes
+        !!  care of management of the memory occupied by each copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p cstart is outside 
+        !!      the bounds of the table.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p x does not have the same
+        !!      number of rows as the data_table.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: insert_columns => dt_insert_columns
+        !> @brief Inserts a single column into the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine insert_column(class(data_table) this, integer(int32) i, class(*) x(:), class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] i The column index where @p x should be inserted into 
+        !!  the table.
+        !! @param[in] x The N-element array where N is equal to the number of
+        !!  rows in this data_table.  A copy of each item is made, and the 
+        !!  data_table takes care of management of the memory occupied by each 
+        !!  copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i is outside 
+        !!      the bounds of the table.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p x does not have the same
+        !!      number of items as the data_table has rows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: insert_column => dt_insert_column
+        !> @brief Appends a series of rows onto the end of the table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine append_rows(class(data_table) this, class(*) x(:,:), class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] x An M-by-N matrix of items to append onto the table.  The
+        !!  number of columns (N) must be the same as the number of columns in
+        !!  this table.  A copy of each item is made, and the data_table takes
+        !!  care of management of the memory occupied by each copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p x does not have the same
+        !!      number of columns as the data_table.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: append_rows => dt_append_rows
+        !> @brief Appends a single row onto the end of the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine append_row(class(data_table) this, class(*) x(:), class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] x The N-element array where N is equal to the number of
+        !!  columns in this data_table.  A copy of each item is made, and the 
+        !!  data_table takes care of management of the memory occupied by each 
+        !!  copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p x does not have the same
+        !!      number of items as the data_table has columns.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: append_row => dt_append_row
+        !> @brief Appends a series of columns onto the end of the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine append_columns(class(data_table) this, class(*) x(:,:), class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] x An M-by-N matrix of items to insert into the table.  The
+        !!  number of rows (M) must be the same as the number of rows in
+        !!  this table.  A copy of each item is made, and the data_table takes
+        !!  care of management of the memory occupied by each copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p x does not have the same
+        !!      number of rows as the data_table.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: append_columns => dt_append_columns
+        !> @brief Appends a single column onto the end of the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine append_column(class(data_table) this, class(*) x(:), class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] x The N-element array where N is equal to the number of
+        !!  rows in this data_table.  A copy of each item is made, and the 
+        !!  data_table takes care of management of the memory occupied by each 
+        !!  copy.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p x does not have the same
+        !!      number of items as the data_table has rows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        procedure, public :: append_column => dt_append_column
     end type
 
 ! ******************************************************************************
@@ -801,6 +935,57 @@ module collections
             class(*), intent(in), dimension(:) :: x
             class(errors), intent(inout), optional, target :: err
         end subroutine
+
+        module subroutine dt_insert_columns(this, cstart, x, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: cstart
+            class(*), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dt_insert_column(this, i, x, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: i
+            class(*), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dt_append_rows(this, x, err)
+            class(data_table), intent(inout) :: this
+            class(*), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dt_append_row(this, x, err)
+            class(data_table), intent(inout) :: this
+            class(*), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dt_append_columns(this, x, err)
+            class(data_table), intent(inout) :: this
+            class(*), intent(in), dimension(:,:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dt_append_column(this, x, err)
+            class(data_table), intent(inout) :: this
+            class(*), intent(in), dimension(:) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+        
+
+        ! TO DO:
+        ! - append row(s), column(s)
+        ! - remove row(s), column(s)
+        ! - get row
+        ! - get column
+        ! - get sub-table
+        ! - get/set column headers
+        ! - contains
+        ! - find
+        ! - index of
+        ! - sort by column
     end interface
 
 ! ------------------------------------------------------------------------------

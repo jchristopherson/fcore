@@ -293,4 +293,92 @@ contains
     end function
 
 ! ------------------------------------------------------------------------------
+    function test_data_table_1() result(rst)
+        ! Arguments
+        logical :: rst
+
+        ! Parameters
+        integer(int32), parameter :: nrows = 4
+        integer(int32), parameter :: ncols = 8
+        
+        ! Local Variables
+        type(data_table) :: tbl
+        integer(int32) :: i, j, k
+        integer(int32), allocatable :: newrows(:,:), newcols(:,:)
+        class(*), pointer :: ptr
+
+        ! Initialization
+        rst = .true.
+        call tbl%initialize(nrows, ncols)
+
+        ! Check the table size
+        if (tbl%get_row_count() /= nrows) then
+            rst = .false.
+            print '(AI0AI0A)', "TEST_DATA_TABLE_1 (Test 1); Expected:", nrows, &
+                ", but found: ", tbl%get_row_count(), "."
+        end if
+        if (tbl%get_column_count() /= ncols) then
+            rst = .false.
+            print '(AI0AI0A)', "TEST_DATA_TABLE_1 (Test 2); Expected: ", &
+                ncols, ", but found: ", tbl%get_column_count(), "."
+        end if
+
+        ! Fill the table and check each value
+        k = 1
+        do j = 1, tbl%get_column_count()
+            do i = 1, tbl%get_row_count()
+                call tbl%set(i, j, k)
+                k = k + 1
+            end do
+        end do
+
+        k = 1
+        do j = 1, tbl%get_column_count()
+            do i = 1, tbl%get_row_count()
+                ptr => tbl%get(i, j)
+                select type (ptr)
+                type is (integer(int32))
+                    if (ptr /= k) then
+                        rst = .false.
+                        print '(AI0AI0AI0AI0A)', &
+                            "TEST_DATA_TABLE_1 (Test 3); Expected: ", k, &
+                            " at (", i, ", ", j, "), but found: ", ptr, "."
+                    end if
+                    k = k + 1
+                end select
+            end do
+        end do
+
+        ! Add a series of rows
+        allocate(newrows(5, tbl%get_column_count()))
+        do j = 1, size(newrows, 2)
+            do i = 1, size(newrows, 1)
+                newrows(i,j) = i * j
+            end do
+        end do
+        call tbl%append_rows(newrows)
+        if (tbl%get_row_count() /= nrows + size(newrows, 1)) then
+            rst = .false.
+            print '(AI0AI0A)', "TEST_DATA_TABLE_1 (Test 4); Expected:", &
+                nrows + size(newrows, 1), &
+                ", but found: ", tbl%get_row_count(), "."
+        end if
+
+        ! Add a series of columns
+        allocate(newcols(tbl%get_row_count(), 5))
+        do j = 1, size(newcols, 2)
+            do i = 1, size(newcols, 1)
+                newcols(i,j) = i * j
+            end do
+        end do
+        call tbl%insert_columns(ncols / 2, newcols)
+        if (tbl%get_column_count() /= ncols + size(newcols, 2)) then
+            rst = .false.
+            print '(AI0AI0A)', "TEST_DATA_TABLE_1 (Test 5); Expected: ", &
+                ncols + size(newcols, 2), ", but found: ", &
+                tbl%get_column_count(), "."
+        end if
+    end function
+
+! ------------------------------------------------------------------------------
 end module
