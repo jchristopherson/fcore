@@ -4,6 +4,7 @@
 module collections
     use iso_fortran_env
     use ferror
+    use strings
     implicit none
     private
     public :: list
@@ -307,6 +308,8 @@ module collections
     private
         !> @brief The data table.
         type(container), allocatable, dimension(:,:) :: m_table
+        !> @brief The headers.
+        type(string), allocatable, dimension(:) :: m_headers
     contains
         final :: dt_final
         !> @brief Clears the entire contents of the data_table.
@@ -378,6 +381,8 @@ module collections
         !!  encountered are as follows.
         !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i or @p j are outside
         !!      the bounds of the table.
+        !!
+        !! @return The requested item.
         procedure, public :: get => dt_get
         !> @brief Sets an item into the table.
         !!
@@ -647,6 +652,88 @@ module collections
         !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p cstart is outside
         !!      the bounds of the table.
         procedure, public :: remove_columns => dt_remove_columns
+        !> @brief Tests to see if the data_table contains the specified item.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical contains(class(data_table) this, class(*) item, procedure(items_equal) pointer fcn)
+        !! @endcode
+        !!
+        !! @param[in] this The data_table object.
+        !! @param[in] item The item to search for.
+        !! @param[in] fcn The function to use to compare the contents of the 
+        !!  data_table against @p item.
+        !! @return Returns true if @p item is found; else, returns false.
+        procedure, public :: contains => dt_contains
+        !> @brief Finds the index of the first occurrence of the specified
+        !! item in the data_table object.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine index_of(class(data_table) this, class(*) item, procedure(items_equal) pointer fcn, integer(int32) row, integer(int32) col)
+        !! @endcode
+        !! @param[in] this The data_table object.
+        !! @param[in] item The item to search for.
+        !! @param[in] fcn The function to use to compare the contents of the 
+        !!  data_table against @p item.
+        !! @param[out] row If found the row index of the item.  If not found a
+        !!  value of 0 is returned.
+        !! @param[out] col If found the column index of the item.  If not found
+        !!  a value of 0 is returned.
+        procedure, public :: index_of => dt_index_of
+        !> @brief Gets the requested column header.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! character(len = :) get_header(class(data_table) this, integer(int32) i, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in] this The data_table object.
+        !! @param[in] i The index of the item to retrieve.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i is outside
+        !!      the bounds of the table.
+        !! 
+        !! @return The requested column header.
+        procedure, public :: get_header => dt_get_header
+        !> @brief Sets a column header.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_header(class(data_table) this, integer(int32) i, character(len = *) x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] i The index of the item to retrieve.
+        !! @param[in] x The new header string.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_NULL_REFERENCE_ERROR: Occurs if the table has not yet been
+        !!      initialized.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i is outside
+        !!      the bounds of the table.
+        procedure, public :: set_header => dt_set_header
+        !> @brief Retrieves the index of a column given the column header.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_column_index(class(data_table) this, character(len = *) hdr)
+        !! @endcode
+        !!
+        !! @param[in] this The data_table object.
+        !! @param[in] hdr The header text to find.
+        !! @return If found, the index of the column; else, if not found, a
+        !!  value of 0 is returned.
+        procedure, public :: get_column_index => dt_get_column_index
     end type
 
 ! ******************************************************************************
@@ -1038,17 +1125,48 @@ module collections
             integer(int32), intent(in) :: cstart, ncols
             class(errors), intent(inout), optional, target :: err
         end subroutine
+
+        module function dt_contains(this, item, fcn) result(rst)
+            class(data_table), intent(in) :: this
+            class(*), intent(in) :: item
+            procedure(items_equal), pointer, intent(in) :: fcn
+            logical :: rst
+        end function
+
+        module subroutine dt_index_of(this, item, fcn, row, col)
+            class(data_table), intent(in) :: this
+            class(*), intent(in) :: item
+            procedure(items_equal), pointer, intent(in) :: fcn
+            integer(int32), intent(out) :: row, col
+        end subroutine
+
+        module function dt_get_header(this, i, err) result(rst)
+            class(data_table), intent(in) :: this
+            integer(int32), intent(in) :: i
+            class(errors), intent(inout), optional, target :: err
+            character(len = :), allocatable :: rst
+        end function
         
+        module subroutine dt_set_header(this, i, x, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: i
+            character(len = *), intent(in) :: x
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        pure module function dt_get_column_index(this, hdr) result(rst)
+            class(data_table), intent(in) :: this
+            character(len = *), intent(in) :: hdr
+            integer(int32) :: rst
+        end function
 
         ! TO DO:
         ! - get row
         ! - get column
         ! - get sub-table
         ! - get/set column headers
-        ! - contains
-        ! - find
-        ! - index of
         ! - sort by column
+        ! - get column index by header string
     end interface
 
 ! ------------------------------------------------------------------------------

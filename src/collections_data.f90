@@ -23,6 +23,8 @@ contains
             end do
         end do
         deallocate(this%m_table)
+
+        if (allocated(this%m_headers)) deallocate(this%m_headers)
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -88,14 +90,20 @@ contains
         ! Clear the contents
         call this%clear()
 
-        ! Process
+        ! Allocate space for the table
         allocate(this%m_table(m, n), stat = flag)
-        if (flag /= 0) then
-            call errmgr%report_error("dt_initialize", "There is " // &
-                "insufficient memory available for this operation.", &
-                FCORE_OUT_OF_MEMORY_ERROR)
-            return
-        end if
+        if (flag /= 0) go to 100
+
+        ! Allocate space for the headers
+        allocate(this%m_headers(n), stat = flag)
+        if (flag /= 0) go to 100
+
+        return
+    100 continue
+        call errmgr%report_error("dt_initialize", "There is " // &
+            "insufficient memory available for this operation.", &
+            FCORE_OUT_OF_MEMORY_ERROR)
+        return
     end subroutine
 
 ! ------------------------------------------------------------------------------
@@ -359,6 +367,7 @@ contains
         ! Local Variables
         integer(int32) :: i, j, k, m, n, nnew, flag
         type(container), allocatable, dimension(:,:) :: copy
+        type(string), allocatable, dimension(:) :: hcopy
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
         character(len = 256) :: errmsg
@@ -419,6 +428,10 @@ contains
         if (flag /= 0) go to 100
         copy = this%m_table
 
+        allocate(hcopy(n), stat = flag)
+        if (flag /= 0) go to 100
+        hcopy = this%m_headers
+
         deallocate(this%m_table)
         allocate(this%m_table(m, nnew), stat = flag)
         if (flag /= 0) then
@@ -427,11 +440,19 @@ contains
             go to 100
         end if
         
+        deallocate(this%m_headers)
+        allocate(this%m_headers(nnew), stat = flag)
+        if (flag /= 0) then
+            this%m_headers = hcopy
+            go to 100
+        end if
+        
         ! Copy back the contents into m_table
         do j = 1, cstart - 1
             do i = 1, m
                 this%m_table(i, j) = copy(i, j)
             end do
+            this%m_headers(j)%str = hcopy(j)%str
         end do
 
         k = cstart
@@ -440,6 +461,7 @@ contains
                 call this%set(i, k, x(i, j), err = errmgr)
                 if (errmgr%has_error_occurred()) return
             end do
+            this%m_headers(k)%str = ""  ! Fill in new items with empty strings
             k = k + 1
         end do
 
@@ -447,6 +469,7 @@ contains
             do i = 1, m
                 this%m_table(i, k) = copy(i, j)
             end do
+            this%m_headers(k)%str = hcopy(j)%str
             k = k + 1
         end do
 
@@ -661,6 +684,7 @@ contains
         ! Local Variables
         integer(int32) :: i, j, k, m, n, nnew, flag
         type(container), allocatable, dimension(:,:) :: copy
+        type(string), allocatable, dimension(:) :: hcopy
         class(errors), pointer :: errmgr
         type(errors), target :: deferr
         character(len = 256) :: errmsg
@@ -727,6 +751,10 @@ contains
         if (flag /= 0) go to 100
         copy = this%m_table
 
+        allocate(hcopy(n), stat = flag)
+        if (flag /= 0) go to 100
+        hcopy = this%m_headers
+
         ! Resize the table
         deallocate(this%m_table)
         allocate(this%m_table(m, nnew), stat = flag)
@@ -736,12 +764,20 @@ contains
             go to 100
         end if
 
+        deallocate(this%m_headers)
+        allocate(this%m_headers(nnew), stat = flag)
+        if (flag /= 0) then
+            this%m_headers = hcopy
+            go to 100
+        end if
+
         ! Copy back the contents into m_table - also be sure to deallocate
         ! memory associated with the removed items
         do j = 1, cstart - 1
             do i = 1, m
                 this%m_table(i, j) = copy(i, j)
             end do
+            this%m_headers(j)%str = hcopy(j)%str
         end do
 
         k = cstart
@@ -758,6 +794,7 @@ contains
             do i = 1, m
                 this%m_table(i, j) = copy(i, k)
             end do
+            this%m_headers(j)%str = hcopy(k)%str
             k = k + 1
         end do
 
@@ -770,10 +807,154 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    module function dt_contains(this, item, fcn) result(rst)
+        ! Arguments
+        class(data_table), intent(in) :: this
+        class(*), intent(in) :: item
+        procedure(items_equal), pointer, intent(in) :: fcn
+        logical :: rst
+
+        ! Local Variables
+        integer(int32) :: i, j
+
+        ! Process
+        rst = .false.
+        do j = 1, this%get_column_count()
+            do i = 1, this%get_row_count()
+                if (fcn(item, this%get(i, j))) then
+                    rst = .true.
+                    return
+                end if
+            end do
+        end do
+    end function
 
 ! ------------------------------------------------------------------------------
+    module subroutine dt_index_of(this, item, fcn, row, col)
+        ! Arguments
+        class(data_table), intent(in) :: this
+        class(*), intent(in) :: item
+        procedure(items_equal), pointer, intent(in) :: fcn
+        integer(int32), intent(out) :: row, col
+
+        ! Local Variables
+        integer(int32) :: i, j
+
+        ! Process
+        row = 0
+        col = 0
+        do j = 1, this%get_column_count()
+            do i = 1, this%get_row_count()
+                if (fcn(item, this%get(i, j))) then
+                    row = i
+                    col = j
+                    return
+                end if
+            end do
+        end do
+    end subroutine
 
 ! ------------------------------------------------------------------------------
+    module function dt_get_header(this, i, err) result(rst)
+        ! Arguments
+        class(data_table), intent(in) :: this
+        integer(int32), intent(in) :: i
+        class(errors), intent(inout), optional, target :: err
+        character(len = :), allocatable :: rst
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Quick Return
+        if (.not.allocated(this%m_headers)) then
+            rst = ""
+            return
+        end if
+
+        ! Bounds Checking
+        if (i <= 0 .or. i > size(this%m_headers)) then
+            write(errmsg, '(AI0AI0A)') "Header index outside the bounds " // &
+                "of the array.  Found: ", i, ", but must lie between 1 and ", &
+                size(this%m_headers), "."
+            call errmgr%report_error("dt_get_header", trim(errmsg), &
+                FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+
+        ! Process
+        rst = this%m_headers(i)%str
+    end function
+
+! --------------------
+    module subroutine dt_set_header(this, i, x, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        integer(int32), intent(in) :: i
+        character(len = *), intent(in) :: x
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Ensure we've got an array to work with
+        if (.not.allocated(this%m_headers)) then
+            call errmgr%report_error("dt_set_header", &
+                "The data table has not yet been initialized.", &
+                FCORE_NULL_REFERENCE_ERROR)
+            return
+        end if
+
+        ! Bounds Checking
+        if (i <= 0 .or. i > size(this%m_headers)) then
+            write(errmsg, '(AI0AI0A)') "Header index outside the bounds " // &
+                "of the array.  Found: ", i, ", but must lie between 1 and ", &
+                size(this%m_headers), "."
+            call errmgr%report_error("dt_set_header", trim(errmsg), &
+                FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+
+        ! Process
+        this%m_headers(i)%str = x
+    end subroutine
+
+! ------------------------------------------------------------------------------
+    pure module function dt_get_column_index(this, hdr) result(rst)
+        ! Arguments
+        class(data_table), intent(in) :: this
+        character(len = *), intent(in) :: hdr
+        integer(int32) :: rst
+
+        ! Local Variables
+        integer(int32) :: i
+
+        ! Process
+        rst = 0
+        do i = 1, this%get_column_count()
+            if (this%m_headers(i)%str == hdr) then
+                rst = i
+                exit
+            end if
+        end do
+    end function
 
 ! ------------------------------------------------------------------------------
 end submodule

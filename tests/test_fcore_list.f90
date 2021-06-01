@@ -3,6 +3,7 @@
 module test_fcore_list
     use iso_fortran_env
     use collections
+    use strings
     implicit none
 
 contains
@@ -303,9 +304,10 @@ contains
         
         ! Local Variables
         type(data_table) :: tbl
-        integer(int32) :: i, j, k
+        integer(int32) :: i, j, k, index
         integer(int32), allocatable :: newrows(:,:), newcols(:,:)
         class(*), pointer :: ptr
+        character(len = :), allocatable :: check, temp
 
         ! Initialization
         rst = .true.
@@ -393,6 +395,30 @@ contains
             rst = .false.
             print '(AI0AI0A)', "TEST_DATA_TABLE_1 (Test 7); Expected: ", &
                 ncols, ", but found: ", tbl%get_column_count()
+        end if
+
+        ! Get/set headers tests
+        do j = 1, tbl%get_column_count()
+            temp = "Column " // to_string(j)
+            call tbl%set_header(j, temp)
+        end do
+        do j = 1, tbl%get_column_count()
+            check = tbl%get_header(j)
+            temp = "Column " // to_string(j)
+            if (check /= temp) then
+                rst = .false.
+                print '(A)', "TEST_DATA_TABLE_1 (Test 8); Expected: " // &
+                    temp // ", but found: " // check // "."
+            end if
+        end do
+
+        ! Test finding a column by it's header
+        temp = "Column 2" ! should be index #2
+        index = tbl%get_column_index(temp)
+        if (index /= 2) then
+            rst = .false.
+            print '(AI0A)', "TEST_DATA_TABLE_1 (Test 9); Expected: 2, " // &
+                "but found: ", index, "."
         end if
     end function
 
