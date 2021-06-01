@@ -378,6 +378,22 @@ contains
                 ncols + size(newcols, 2), ", but found: ", &
                 tbl%get_column_count(), "."
         end if
+
+        ! Remove a series of rows
+        call tbl%remove_rows(1, size(newrows, 1))
+        if (tbl%get_row_count() /= nrows) then
+            rst = .false.
+            print '(AI0AI0A)', "TEST_DATA_TABLE_1 (Test 6); Expected: ", &
+                nrows, ", but found: ", tbl%get_row_count()
+        end if
+
+        ! Remove a series of columns
+        call tbl%remove_columns(1, size(newcols, 2))
+        if (tbl%get_column_count() /= ncols) then
+            rst = .false.
+            print '(AI0AI0A)', "TEST_DATA_TABLE_1 (Test 7); Expected: ", &
+                ncols, ", but found: ", tbl%get_column_count()
+        end if
     end function
 
 ! ------------------------------------------------------------------------------

@@ -594,6 +594,59 @@ module collections
         !!      number of items as the data_table has rows.
         !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
         procedure, public :: append_column => dt_append_column
+        !> @brief Removes a series of rows from the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine remove_rows(class(data_table) this, integer(int32) rstart, integer(int32) nrows, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] rstart The row index at which to start removing rows.
+        !! @param[in] nrows The number of rows to remove (must be greater than
+        !!  0).
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_UNINITIALIZED_OBJECT_ERROR: Occurs if the table has not
+        !!      been initialized.
+        !!  - FCORE_INVALID_INPUT_ERROR: Occurs if @p nrows is less than 1, or
+        !!      if the @p nrows is too large resulting in removing more rows 
+        !!      than are available in the table.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p rstart is outside
+        !!      the bounds of the table.
+        procedure, public :: remove_rows => dt_remove_rows
+        !> @brief Removes a series of columns from the data_table.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine remove_columns(class(data_table) this, integer(int32) cstart, integer(int32) ncols, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The data_table object.
+        !! @param[in] cstart The column index at which to start removing 
+        !!  columns.
+        !! @param[in] ncols The number of columns to remove (must be greater 
+        !!  than 0).
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_UNINITIALIZED_OBJECT_ERROR: Occurs if the table has not
+        !!      been initialized.
+        !!  - FCORE_INVALID_INPUT_ERROR: Occurs if @p ncols is less than 1, or
+        !!      if the @p ncols is too large resulting in removing more columns 
+        !!      than are available in the table.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p cstart is outside
+        !!      the bounds of the table.
+        procedure, public :: remove_columns => dt_remove_columns
     end type
 
 ! ******************************************************************************
@@ -973,11 +1026,21 @@ module collections
             class(*), intent(in), dimension(:) :: x
             class(errors), intent(inout), optional, target :: err
         end subroutine
+
+        module subroutine dt_remove_rows(this, rstart, nrows, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: rstart, nrows
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
+
+        module subroutine dt_remove_columns(this, cstart, ncols, err)
+            class(data_table), intent(inout) :: this
+            integer(int32), intent(in) :: cstart, ncols
+            class(errors), intent(inout), optional, target :: err
+        end subroutine
         
 
         ! TO DO:
-        ! - append row(s), column(s)
-        ! - remove row(s), column(s)
         ! - get row
         ! - get column
         ! - get sub-table

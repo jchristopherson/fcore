@@ -539,8 +539,235 @@ contains
     end subroutine
 
 ! ------------------------------------------------------------------------------
+    module subroutine dt_remove_rows(this, rstart, nrows, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        integer(int32), intent(in) :: rstart, nrows
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int32) :: i, j, k, m, n, mnew, flag
+        type(container), allocatable, dimension(:,:) :: copy
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Initialization
+        m = this%get_row_count()
+        n = this%get_column_count()
+        mnew = m - nrows
+
+        ! Input Check
+        if (.not.allocated(this%m_table)) then
+            call errmgr%report_error("dt_remove_rows", &
+                "The table has not been initialized.", &
+                FCORE_UNINITIALIZED_OBJECT_ERROR)
+            return
+        end if
+        if (nrows < 1) then
+            call errmgr%report_error("dt_remove_rows", &
+                "It is expected that at least 1 row be removed when " // &
+                "calling this routine.", FCORE_INVALID_INPUT_ERROR)
+            return
+        end if
+        if (rstart < 1) then
+            call errmgr%report_error("dt_remove_rows", &
+                "The index of the row(s) to remove must be at least 1.", &
+                FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+        if (mnew < 0) then
+            write(errmsg, '(AI0AI0A)') "The request to remove ", nrows, &
+                " exceeds the size of the table (", this%get_row_count(), ")."
+            call errmgr%report_error("dt_remove_rows", trim(errmsg), &
+                FCORE_INVALID_INPUT_ERROR)
+            return
+        end if
+        if (rstart > mnew) then
+            write(errmsg, '(AI0AI0AI0A)') &
+                "The combination of starting index (", rstart, &
+                ") and the number of rows to remove (", nrows, &
+                ") exceeds the number of rows in the current table (", &
+                this%get_row_count(), ")."
+            call errmgr%report_error("dt_remove_rows", trim(errmsg), &
+                FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+
+        ! Quick Return
+        if (mnew == 0) then
+            ! Wipe out the whole table
+            call this%clear()
+            return
+        end if
+
+        ! Create a copy of the table
+        allocate(copy(m, n), stat = flag)
+        if (flag /= 0) go to 100
+        copy = this%m_table
+
+        deallocate(this%m_table)
+        allocate(this%m_table(mnew, n), stat = flag)
+        if (flag /= 0) then
+            ! Put copy back to m_table, and then handle the error
+            this%m_table = copy
+            go to 100
+        end if
+
+        ! Copy back the contents into m_table - also be sure to deallocate
+        ! memory associated with the removed items
+        do j = 1, n
+            do i = 1, rstart - 1
+                this%m_table(i, j) = copy(i, j)
+            end do
+
+            k = rstart
+            do i = 1, nrows
+                if (associated(this%m_table(k, j)%item)) then
+                    deallocate(this%m_table(k, j)%item)
+                end if
+                k = k + 1
+            end do
+
+            k = rstart + nrows
+            do i = rstart, mnew
+                this%m_table(i, j) = copy(k, j)
+                k = k + 1
+            end do
+        end do
+
+        return
+    100 continue
+        ! Handle any memory errors
+        call errmgr%report_error("dt_remove_rows", &
+            "Insufficient memory available.", FCORE_OUT_OF_MEMORY_ERROR)
+        return
+    end subroutine
 
 ! ------------------------------------------------------------------------------
+    module subroutine dt_remove_columns(this, cstart, ncols, err)
+        ! Arguments
+        class(data_table), intent(inout) :: this
+        integer(int32), intent(in) :: cstart, ncols
+        class(errors), intent(inout), optional, target :: err
+
+        ! Local Variables
+        integer(int32) :: i, j, k, m, n, nnew, flag
+        type(container), allocatable, dimension(:,:) :: copy
+        class(errors), pointer :: errmgr
+        type(errors), target :: deferr
+        character(len = 256) :: errmsg
+        
+        ! Set up error handling
+        if (present(err)) then
+            errmgr => err
+        else
+            errmgr => deferr
+        end if
+
+        ! Initialization
+        m = this%get_row_count()
+        n = this%get_column_count()
+        nnew = n - ncols
+
+        ! Input Check
+        if (.not.allocated(this%m_table)) then
+            call errmgr%report_error("dt_remove_columns", &
+                "The table has not been initialized.", &
+                FCORE_UNINITIALIZED_OBJECT_ERROR)
+            return
+        end if
+        if (ncols < 1) then
+            call errmgr%report_error("dt_remove_columns", &
+                "It is expected that at least 1 column be removed " // &
+                "when calling this routine.", FCORE_INVALID_INPUT_ERROR)
+            return
+        end if
+        if (cstart < 1) then
+            call errmgr%report_error("dt_remove_columns", &
+                "The index of the column(s) to remove must be at least 1.", &
+                FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+        if (nnew < 0) then
+            write(errmsg, '(AI0AI0A)') "The request to remove ", ncols, &
+                " exceeds the size of the table (", this%get_column_count(), &
+                ")."
+            call errmgr%report_error("dt_remove_columns", trim(errmsg), &
+                FCORE_INVALID_INPUT_ERROR)
+            return
+        end if
+        if (cstart > nnew) then
+            write(errmsg, '(AI0AI0AI0A)') &
+                "The combination of starting index (", cstart, &
+                ") and the number of columns to remove (", ncols, &
+                ") exceeds the number of columns in the current table (", &
+                this%get_column_count(), ")."
+            call errmgr%report_error("dt_remove_columns", trim(errmsg), &
+                FCORE_INDEX_OUT_OF_RANGE_ERROR)
+            return
+        end if
+
+        ! Quick Return
+        if (nnew == 0) then
+            ! Wipe out the whole table
+            call this%clear()
+            return
+        end if
+
+        ! Create a copy of the table
+        allocate(copy(m, n), stat = flag)
+        if (flag /= 0) go to 100
+        copy = this%m_table
+
+        ! Resize the table
+        deallocate(this%m_table)
+        allocate(this%m_table(m, nnew), stat = flag)
+        if (flag /= 0) then
+            ! Put copy back to m_table, and then handle the error
+            this%m_table = copy
+            go to 100
+        end if
+
+        ! Copy back the contents into m_table - also be sure to deallocate
+        ! memory associated with the removed items
+        do j = 1, cstart - 1
+            do i = 1, m
+                this%m_table(i, j) = copy(i, j)
+            end do
+        end do
+
+        k = cstart
+        do j = 1, ncols
+            do i = 1, m
+                if (associated(this%m_table(i, k)%item)) then
+                    deallocate(this%m_table(i, k)%item)
+                end if
+            end do
+            k = k + 1
+        end do
+
+        do j = cstart, nnew
+            do i = 1, m
+                this%m_table(i, j) = copy(i, k)
+            end do
+            k = k + 1
+        end do
+
+        return
+    100 continue
+        ! Handle any memory errors
+        call errmgr%report_error("dt_remove_rows", &
+            "Insufficient memory available.", FCORE_OUT_OF_MEMORY_ERROR)
+        return
+    end subroutine
 
 ! ------------------------------------------------------------------------------
 
