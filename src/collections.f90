@@ -45,45 +45,277 @@ module collections
         !> @brief Cleans up resources held by the list.
         final :: list_destroy
         !> @brief Gets the capacity of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_capacity(class(list) this)
+        !! @endcode
+        !!
+        !! @param[in] this The list object.
+        !! @return The capacity of the list.
         procedure, public :: get_capacity => list_get_capacity
         !> @brief Sets the capacity of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_capacity(class(list) this, integer(int32) n, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
+        !! @param[in] n The desired capacity of the list.  This value must not
+        !!  be less than the number of items already stored in the list.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_INVALID_INPUT_ERROR: Occurs if the user asks to reduce 
+        !!      capacity via this routine.
         procedure, public :: set_capacity => list_set_capacity
         !> @brief Gets the number of items in the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_count(class(list) this)
+        !! @endcode
+        !!
+        !! @param[in] this The list object.
+        !! @return The number of items stored in the list.
         procedure, public :: get_count => list_get_count
         !> @brief Gets an item from the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! class(*) pointer get(class(list) this, integer(int32) i)
+        !! @endcode
+        !!
+        !! @param[in] this The list object.
+        !! @param[in] i The index of the item.
+        !! @return A pointer to the requested item.
         procedure, public :: get => list_get
         !> @brief Sets an item into the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set(class(list) this, integer(int32) i, class(*) x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
+        !! @param[in] i The index of the item.
+        !! @param[in] x The item to place into the list.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i is out of range.
         procedure, public :: set => list_set
         !> @brief Pushes an item onto the end of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine push(class(list) this, class(*) x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
+        !! @param[in] x The object to add to the list.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
         procedure, public :: push => list_push
         !> @brief Pops the last item from the end of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine pop(class(list) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
         procedure, public :: pop => list_pop
         !> @brief Clears the contents of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine clear(class(list) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
         procedure, public :: clear => list_clear
         !> @brief Creates a deep copy of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! type(list) copy(class(list) this)
+        !! @endcode
+        !!
+        !! @param[in] this The list object.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
         procedure, public :: copy => list_copy
         !> @brief Inserts an item into the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine insert(class(list) this, integer(int32) i, class(*) x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
+        !! @param[in] i The index at which to insert the item.  Items at, and 
+        !!  beyond this index are shifted back in the list.
+        !! @param[in] x The item to insert.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i is out of range.
         procedure, public :: insert => list_insert
         !> @brief Removes an item from the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine remove(class(list) this, integer(int32) i, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
+        !! @param[in] i The index at which to remove the item.  Any objects 
+        !!  behind this object in the list are shifted forward by one.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_INDEX_OUT_OF_RANGE_ERROR: Occurs if @p i is out of range.
         procedure, public :: remove => list_remove
         !> @brief Reverses the contents of the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine reverse(class(list) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
         procedure, public :: reverse => list_reverse
         !> @brief Tests to see if the list contains the specified item.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical contains(class(list) this, class(*) item, procedure(items_equal) fcn)
+        !! @endcode
+        !!
+        !! @param[in] this The list object.
+        !! @param[in] item The item to search for.
+        !! @param[in] fcn The function to use to compare the contents of the 
+        !!  list against @p item.
+        !!
+        !! @return Returns true if @p item is found; else, returns false.
         procedure, public :: contains => list_contains
         !> @brief Finds the index of the first item in the list that matches
         !! the specified object.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) index_of(class(list), class(*) item, procedure(items_equal) fcn)
+        !! @endcode
+        !!
+        !! @param[in] this The list object.
+        !! @param[in] item The item to search for.
+        !! @param[in] fcn The function to use to compare the contents of the 
+        !!  list against @p item.
+        !!
+        !! @return Returns the index of the first occurrence of @p item in the
+        !!  list.  If no matching item is found, a value of 0 is returned.
         procedure, public :: index_of => list_index_of
         !> @brief Finds the indices of all items in the list that match the 
         !! specified object.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32)(:) indices_of_all(class(list) this, class(*) item, procedure(items_equal) fcn, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in] this The list object.
+        !! @param[in] item The item to search for.
+        !! @param[in] fcn The function to use to compare the contents of the 
+        !!  list against @p item.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!
+        !! @return Returns an array of indices of all items in the list that 
+        !!  match @p item.  If not matches are found, an empty array is 
+        !!  returned.
         procedure, public :: indices_of_all => list_indices_of_all
-        !> @brief Swaps two items in the list
+        !> @brief Swaps two items in the list.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine swap_items(class(list) this, integer(int32) i1, integer(int32) i2, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
+        !! @param[in] i1 The index of the first item.
+        !! @param[in] i2 The index of the item with which to swap.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_ARRAY_SIZE_ERROR: Occurs if @p i1 or @p i2 lie outside the
+        !!      bounds of the array.
         procedure, public :: swap_items => list_swap
         !> @brief Sorts an array into ascending order.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine sort(class(list) this, procedure(compare_items) fcn)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
+        !! @param[in] fcn The function to use to make the comparison.
         procedure, public :: sort => list_sort
 
         !> @brief Stores an item in the collection.  If the collection isn't 
         !! large enough to accomodate, it is automatically resized to 
         !! accomodate.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine store(class(list) this, integer(int32) i, class(*) x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The list object.
+        !! @param[in] i The index of the item.
+        !! @param[in] x The object to store.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
         procedure, private :: store => list_store
     end type
 
@@ -104,22 +336,117 @@ module collections
         !> @brief Cleans up resources held by the dictionary.
         final :: dict_final
         !> @brief Gets the number of items in the dictionary.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_count(class(dictionary) this)
+        !! @endcode
+        !!
+        !! @param[in] this The dictionary object.
+        !! @return The number of items in the dictionary.
         procedure, public :: get_count => dict_get_count
         !> @brief Determines if the dictionary contains the specified key.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical contains_key(class(dictionary) this, integer(int64) key)
+        !! @endcode
+        !!
+        !! @param[in] this The dictionary object.
+        !! @param[in] key The desired key.
+        !!
+        !! @return Returns true if the dictionary contains @p key; else, returns
+        !!  false.
         procedure, public :: contains_key => dict_contains_key
         !> @brief Gets the requested item from the dictionary.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! class(*) pointer get(class(dictionary) this, integer(int64) key)
+        !! @endcode
+        !!
+        !! @param[in] this The dictionary object.
+        !! @param[in] key The key of the desired object.
+        !!
+        !! @return A pointer to the requested item.  A null pointer is returned
+        !!  if the key doesn't exist in the collection.
         procedure, public :: get => dict_get
         !> @brief Sets an item into the dictionary.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set(class(dictionary) this, integer(int64) key, class(*) item, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The dictionary object.
+        !! @param[in] key The key.
+        !! @param[in] item The item to place into the dictionary.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_NONEXISTENT_KEY_ERROR: Occurs if @p key could not be found.
         procedure, public :: set => dict_set
         !> @brief Adds a new key-value pair to the dictionary.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine add(class(dictionary) this, integer(int64) key, class(*) item, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The dictionary object.
+        !! @param[in] key The key.
+        !! @param[in] item The item to add.
+        !! @param[in,out] err An optional errors-based object that if provided 
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory.
+        !!  - FCORE_EXISTING_KEY_ERROR: Occurs if the key already exists within the
+        !!      collection.
         procedure, public :: add => dict_add
         !> @brief Removes an item from the dictionary.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical remove(class(dictionary) this, integer(int64) key)
+        !! @endcode
+        !!
+        !! @param[in,out] this The dictionary object.
+        !! @param[in] key The key.
+        !! @return Returns true if the item was found within the dictionary and
+        !!  removed; else, returns false if the key was not found in the 
+        !!  dictionary.
         procedure, public :: remove => dict_remove
         !> @brief Clears the contents of the entire dictionary.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine clear(class(dictionary) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The dictionary object.
         procedure, public :: clear => dict_clear
 
         !> @brief Returns the index in the underlying collection of the entry 
         !! that contains the matching key.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) index_of_key(class(dictionary) this, integer(int64) key)
+        !! @endcode
+        !!
+        !!
+        !! @param[in] this The dictionary object.
+        !! @param[in] key The desired key.
+        !!
+        !! @return If found, the index of the matching entry in the underlying
+        !!  collection.  If not found, a value of 0 is returned.
         procedure, private :: index_of_key => dict_index_of_key
     end type
 
@@ -138,8 +465,25 @@ module collections
         integer(int64) :: finalxor = int(z'ffffffff', int64)
     contains
         !> @brief Initializes the hash code generator object.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine initialize(class(hash_code) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The hash_code object.
         procedure, public :: initialize => hc_init
         !> @brief Gets a unique hash code for the supplied string.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int64) get(class(hash_code) this, character(len = *) str)
+        !! @endcode
+        !!
+        !! @param[in,out] this The hash_code object.
+        !! @param[in] str The string to hash.
+        !!
+        !! @return The hash code for @p str.
         procedure, public :: get => hc_get
     end type
 
