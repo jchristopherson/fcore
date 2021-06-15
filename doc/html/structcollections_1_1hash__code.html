@@ -101,13 +101,11 @@ $(document).ready(function(){initNavTree('structcollections_1_1hash__code.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9933e82a19d3898016fc86dd9e27cbc6"><td class="memItemLeft" align="right" valign="top"><a id="a9933e82a19d3898016fc86dd9e27cbc6"></a>
-procedure, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcollections_1_1hash__code.html#a9933e82a19d3898016fc86dd9e27cbc6">initialize</a> =&gt; hc_init</td></tr>
-<tr class="memdesc:a9933e82a19d3898016fc86dd9e27cbc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the hash code generator object. <br /></td></tr>
+<tr class="memitem:a9933e82a19d3898016fc86dd9e27cbc6"><td class="memItemLeft" align="right" valign="top">procedure, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcollections_1_1hash__code.html#a9933e82a19d3898016fc86dd9e27cbc6">initialize</a> =&gt; hc_init</td></tr>
+<tr class="memdesc:a9933e82a19d3898016fc86dd9e27cbc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the hash code generator object.  <a href="structcollections_1_1hash__code.html#a9933e82a19d3898016fc86dd9e27cbc6">More...</a><br /></td></tr>
 <tr class="separator:a9933e82a19d3898016fc86dd9e27cbc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0023e9b5b01234a88374f4f4d44a4280"><td class="memItemLeft" align="right" valign="top"><a id="a0023e9b5b01234a88374f4f4d44a4280"></a>
-procedure, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcollections_1_1hash__code.html#a0023e9b5b01234a88374f4f4d44a4280">get</a> =&gt; hc_get</td></tr>
-<tr class="memdesc:a0023e9b5b01234a88374f4f4d44a4280"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a unique hash code for the supplied string. <br /></td></tr>
+<tr class="memitem:a0023e9b5b01234a88374f4f4d44a4280"><td class="memItemLeft" align="right" valign="top">procedure, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcollections_1_1hash__code.html#a0023e9b5b01234a88374f4f4d44a4280">get</a> =&gt; hc_get</td></tr>
+<tr class="memdesc:a0023e9b5b01234a88374f4f4d44a4280"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a unique hash code for the supplied string.  <a href="structcollections_1_1hash__code.html#a0023e9b5b01234a88374f4f4d44a4280">More...</a><br /></td></tr>
 <tr class="separator:a0023e9b5b01234a88374f4f4d44a4280"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -135,8 +133,69 @@ integer(int64)&#160;</td><td class="memItemRight" valign="bottom"><b>finalxor</b
 <div class="textblock"><p>A hash code generation object. </p>
 <dl class="section user"><dt>Remarks</dt><dd>This object uses the CRC-32 code provided by zmiimz, and is available at <a href="https://github.com/zmiimz/fortran_notes">https://github.com/zmiimz/fortran_notes</a>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="collections_8f90_source.html#l00131">131</a> of file <a class="el" href="collections_8f90_source.html">collections.f90</a>.</p>
-</div><hr/>The documentation for this type was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="collections_8f90_source.html#l00458">458</a> of file <a class="el" href="collections_8f90_source.html">collections.f90</a>.</p>
+</div><h2 class="groupheader">Member Function/Subroutine Documentation</h2>
+<a id="a0023e9b5b01234a88374f4f4d44a4280"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0023e9b5b01234a88374f4f4d44a4280">&#9670;&nbsp;</a></span>get()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">procedure, public collections::hash_code::get </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets a unique hash code for the supplied string. </p>
+<dl class="section user"><dt>Syntax</dt><dd><div class="fragment"><div class="line"><span class="keywordtype">integer(int64)</span> get(<span class="keywordtype">class</span>(hash_code) this, <span class="keywordtype">character(len = *)</span> str)</div>
+</div><!-- fragment --></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">this</td><td>The <a class="el" href="structcollections_1_1hash__code.html" title="A hash code generation object.">hash_code</a> object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">str</td><td>The string to hash.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The hash code for <code>str</code>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="collections_8f90_source.html#l00487">487</a> of file <a class="el" href="collections_8f90_source.html">collections.f90</a>.</p>
+
+</div>
+</div>
+<a id="a9933e82a19d3898016fc86dd9e27cbc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9933e82a19d3898016fc86dd9e27cbc6">&#9670;&nbsp;</a></span>initialize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">procedure, public collections::hash_code::initialize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the hash code generator object. </p>
+<dl class="section user"><dt>Syntax</dt><dd><div class="fragment"><div class="line"><span class="keyword">subroutine </span>initialize(class(hash_code) this)</div>
+</div><!-- fragment --></dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">this</td><td>The <a class="el" href="structcollections_1_1hash__code.html" title="A hash code generation object.">hash_code</a> object. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="collections_8f90_source.html#l00475">475</a> of file <a class="el" href="collections_8f90_source.html">collections.f90</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this type was generated from the following file:<ul>
 <li>C:/Users/jchri/Documents/github/fcore/src/<a class="el" href="collections_8f90_source.html">collections.f90</a></li>
 </ul>
 </div><!-- contents -->
