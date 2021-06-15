@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['regex_5fmatch_210',['regex_match',['../interfaceregular__expressions_1_1regex__match.html',1,'regular_expressions']]],
-  ['regex_5freplace_211',['regex_replace',['../interfaceregular__expressions_1_1regex__replace.html',1,'regular_expressions']]],
-  ['regex_5fsearch_212',['regex_search',['../interfaceregular__expressions_1_1regex__search.html',1,'regular_expressions']]],
-  ['remove_213',['remove',['../interfacestrings_1_1remove.html',1,'strings']]],
-  ['remove_5fat_214',['remove_at',['../interfacestrings_1_1remove__at.html',1,'strings']]],
-  ['replace_215',['replace',['../interfacestrings_1_1replace.html',1,'strings']]]
+  ['parse_5fint16_242',['parse_int16',['../interfacestrings_1_1parse__int16.html',1,'strings']]],
+  ['parse_5fint32_243',['parse_int32',['../interfacestrings_1_1parse__int32.html',1,'strings']]],
+  ['parse_5fint64_244',['parse_int64',['../interfacestrings_1_1parse__int64.html',1,'strings']]],
+  ['parse_5fint8_245',['parse_int8',['../interfacestrings_1_1parse__int8.html',1,'strings']]],
+  ['parse_5freal32_246',['parse_real32',['../interfacestrings_1_1parse__real32.html',1,'strings']]],
+  ['parse_5freal64_247',['parse_real64',['../interfacestrings_1_1parse__real64.html',1,'strings']]]
 ];
