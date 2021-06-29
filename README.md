@@ -293,5 +293,15 @@ The user wishes to save file: C:\~\Documents\github\fcore\test.txt
 Selected Folder: C:\~\Documents\github\fcore\include
 ```
 
+## Building FCORE
+This library can be built using CMake.  For instructions see [Running CMake](https://cmake.org/runningcmake/).
+
+## Documentation
+Documentation can be found [here](http://htmlpreview.github.io/?https://github.com/jchristopherson/fcore/blob/master/doc/html/index.html)
+
+## External Libraries
+The FCORE library depends upon the following libraries.
+- [FERROR](https://github.com/jchristopherson/ferror)
+
 ## TO DO
 - The UI specific code is only for Windows at this time.  Add support for other OS's.
