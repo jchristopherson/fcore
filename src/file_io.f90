@@ -38,20 +38,82 @@ module file_io
         !! out of scope.
         final :: fm_clean_up
         !> @brief Returns the unit value for the file object.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_unit(class(file_manager) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The file_manager object.
+        !!
+        !! @return The Fortran unit value for this stream.
         procedure, public :: get_unit => fm_get_unit
         !> @brief Sets the unit value for the file object.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_unit(class(file_manager) this, integer(int32) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The file_manager object.
+        !! @param[in] x The Fortran unit value.
         procedure, private :: set_unit => fm_set_unit
         ! !> @brief Creates a new, unused unit value to identify the file.
         ! procedure, public :: create_new_unit => fm_new_unit
         !> @brief Determines if the file is already opened.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical is_open(class(file_manager) this)
+        !! @endcode
+        !!
+        !! @param[in] this The file_manager object.
+        !!
+        !! @return Returns true if the file is opened; else, false.
         procedure, public :: is_open => fm_get_is_opened
         !> @brief Closes the file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine close(class(file_manager) this, logical del)
+        !! @endcode
+        !!
+        !! @param[in,out] this The file_manager object.
+        !! @param[in] del An optional input, that if set, determines if the file
+        !!  should be deleted once closed.  The default is false such that the
+        !!  file remains.
         procedure, public :: close => fm_close
         !> @brief Gets the filename.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! character(len = :) get_filename(class(file_manager) this)
+        !! @endcode
+        !!
+        !! @param[in] this The file_manager object.
+        !! 
+        !! @return The filename.
         procedure, public :: get_filename => fm_get_fname
         !> @brief Sets the filename.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_filename(class(file_manager) this, character(len = *) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The file_manager object.
+        !! @param[in] x The filename.
         procedure, public :: set_filename => fm_set_fname
         !> @brief Gets the size of the currently open file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_file_size(class(file_manager) this)
+        !! @endcode
+        !!
+        !! @param[in] this The file_manager object.
+        !!
+        !! @return The file size, in bytes.
         procedure, public :: get_file_size => fm_get_size
     end type
 
@@ -60,11 +122,65 @@ module file_io
     type, extends(file_manager) :: text_writer
     contains
         !> @brief Opens a text file for writing.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine open(class(text_writer) this, character(len = *) fname, logical append, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The text_writer object.
+        !! @param[in] fname The name of the file to open.
+        !! @param[in] append An optional argument that, if specified, determines
+        !!  if the file should be appended.  If not supplied, and a file exists,
+        !!  the file will be overwritten.  If no file exists, it simply will be
+        !!  created.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be opened.
         procedure, public :: open => tw_open
         !> @brief Writes text to the file, but does not advance to the next 
         !! line.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine write(class(text_writer) this, character(len = *) txt, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in] this The text_writer object.
+        !! @param[in] txt The text to write.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_UNOPENED_ERROR: Occurs if the file has not yet been opened.
         generic, public :: write => tw_write_txt, tw_write_txt_str
         !> @brief Writes text to the file, but does advance to the next line.
+        !!
+        !! @par Syntax #1
+        !! @code{.f90}
+        !! subroutine write_line(class(text_writer) this, class(string) txt, class(errors) err)
+        !! @endcode
+        !!
+        !! @par Syntax #2
+        !! @code{.f90}
+        !! subroutine write_line(class(text_writer) this, character(len = *) txt, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in] this The text_writer object.
+        !! @param[in] txt The text to write.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_UNOPENED_ERROR: Occurs if the file has not yet been opened.
         generic, public :: write_line => tw_write_txt_line, &
             tw_write_txt_line_str
 
@@ -82,12 +198,45 @@ module file_io
         integer(int32) :: m_position = 0
     contains
         !> @brief Gets the current position within the file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_position(class(file_reader) this)
+        !! @endcode
+        !!
+        !! @param[in] this The file_reader object.
+        !! @return The current position.
         procedure, public :: get_position => fr_get_position
         !> @brief Sets the position within the file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_position(class(file_reader) this, integer(int32) x)
+        !! @endcode
+        !!
+        !! @param[in,out] this The file_reader object.
+        !! @param[in] x The file position.
         procedure, public :: set_position => fr_set_position
         !> @brief Moves the current position to the start of the file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine move_to_start(class(file_reader) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The file_reader object.
         procedure, public :: move_to_start => fr_move_to_start
         !> @brief Tests to see if the current position denotes the end-of-file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! logical is_end_of_file(class(file_reader) this)
+        !! @endcode
+        !!
+        !! @param[in] this The file_reader object.
+        !!
+        !! @return Returns true if the current position is the end-of-file; 
+        !!  else, false.
         procedure, public :: is_end_of_file => fr_eof
     end type
 
@@ -96,15 +245,123 @@ module file_io
     type, extends(file_reader) :: text_reader
     contains
         !> @brief Opens a text file for reading.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine text_reader(class(text_reader) this, character(len = *) fname, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The text_reader object.
+        !! @param[in] fname The name of the file to open.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be opened.
         procedure, public :: open => tr_open
         !> @brief Reads the entire contents of an ASCII text file into a string.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! character(len = :) read_all(class(text_reader) this, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in] this The text_reader object.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_UNOPENED_ERROR: Occurs if the file hasn't been opened.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there isn't sufficient memory
+        !!      available.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+        !!
+        !! @return The string containing the file contents.  Notice, the line
+        !!  termination characters have not been stripped out of the string.
+        !!
+        !! @par Remarks
+        !! Notice, the position indicator is not referenced, or utilized, for 
+        !! this read operation.  Regardless of its status, the entire file is 
+        !! read.
         procedure, public :: read_all => tr_read_full_file
         !> @brief Reads a single character from an ASCII text file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! character read_char(class(text_reader) this, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The text_reader object.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_UNOPENED_ERROR: Occurs if the file hasn't been opened.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there isn't sufficient memory
+        !!      available.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+        !!
+        !! @return The character.
+        !!
+        !! @par Remarks
+        !! On output, the position indicator is incremented by one character.
         procedure, public :: read_char => tr_read_char
         !> @brief Reads a single line from an ASCII text file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! character(len = :) read_line(class(text_reader) this, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in] this The text_reader object.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_UNOPENED_ERROR: Occurs if the file hasn't been opened.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there isn't sufficient memory
+        !!      available.
+        !!
+        !! @return The string containing the line contents.
+        !!
+        !! @par Remarks
+        !! On output, the position indicator is incremented to account for the
+        !! length of the line, including any termination characters.
         procedure, public :: read_line => tr_read_line
         !> @brief Reads the entire contents of an ASCII text file into a string,
         !! and breaks the contents into lines.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! type(string)(:) read_lines(class(text_reader) this, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in] this The text_reader object.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_UNOPENED_ERROR: Occurs if the file hasn't been opened.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there isn't sufficient memory
+        !!      available.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+        !!
+        !! @return An array of strings
+        !!
+        !! @par Remarks
+        !! Notice, the position indicator is not referenced, or utilized, for this
+        !! read operation.  Regardless of its status, the entire file is read.
         procedure, public :: read_lines => tr_read_lines
     end type
 
@@ -121,21 +378,119 @@ module file_io
         !! file, and performs any necessary clean-up operations.
         final :: bw_clean_up
         !> @brief Gets the capacity of the buffer, in bytes.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_capacity(class(binary_writer) this)
+        !! @endcode
+        !!
+        !! @param[in] this The binary_writer object.
+        !!
+        !! @return The buffer capacity, in bytes.
         procedure, public :: get_capacity => bw_get_capacity
         !> @brief Sets the capacity of the buffer, in bytes.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine set_capacity(class(binary_writer) this, integer(int32) n, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_writer object.
+        !! @param[in] n The size, in bytes, to make the buffer.  This value must
+        !!  be greater than zero.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_INVALID_INPUT_ERROR: Occurs if @p n is less than or equal to
+        !!      zero.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
         procedure, public :: set_capacity => bw_set_capacity
         !> @brief Gets the number of bytes stored within the buffer.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int32) get_count(class(binary_writer) this)
+        !! @endcode
+        !!
+        !! @param[in] this The binary_writer object.
+        !! 
+        !! @return The number of bytes stored within the buffer.
         procedure, public :: get_count => bw_get_count
         !> @brief Clears the buffer.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine clear_buffer(class(binary_writer) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_writer object.
         procedure, public :: clear_buffer => bw_clear_buffer
         !> @brief Opens a binary file for writing.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine open(class(binary_writer) this, character(len = *) fname, logical append, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_writer object.
+        !! @param[in] fname The name of the file to open.
+        !! @param[in] append An optional argument that, if specified, determines
+        !!  if the file should be appended.  If not supplied, and a file exists,
+        !!  the file will be overwritten.  If no file exists, it simply will be
+        !!  created.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be opened.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
         procedure, public :: open => bw_open
         !> @brief Closes the file.  This will also force writing of all buffer
         !! contents.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine close(class(binary_writer) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_writer object.
+        !! @param[in] del An optional input, that if set, determines if the file
+        !!  should be deleted once closed.  The default is false such that the
+        !!  file remains.
         procedure, public :: close => bw_close
         !> @brief Flushes the buffer by writing the contents to file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine flush_buffer(class(binary_writer) this)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_writer object.
         procedure, public :: flush_buffer => bw_flush_buffer
         !> @brief Pushes an item onto the buffer for writing.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine push(class(binary_writer) this, generic x, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_writer object.
+        !! @param[in] x The data to push onto the buffer.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
         generic, public :: push => bw_append_byte, bw_append_byte_array, &
             bw_append_r64, bw_append_r64_array, bw_append_r64_matrix, &
             bw_append_r32, bw_append_r32_array, bw_append_r32_matrix, &
@@ -178,12 +533,89 @@ module file_io
     type, extends(file_reader) :: binary_reader
     contains
         !> @brief Opens a binary file for reading.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! subroutine open(class(binary_reader) this, character(len = *) fname, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_reader object.
+        !! @param[in] fname The name of the file to open.
+        !! @param[in] append An optional argument that, if specified, determines
+        !!  if the file should be appended.  If not supplied, and a file exists,
+        !!  the file will be overwritten.  If no file exists, it simply will be
+        !!  created.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be opened.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
         procedure, public :: open => br_open
         !> @brief Reads a specified number of bytes from the file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int8)(:) read_bytes(class(binary_reader) this, integer(int32) n, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_reader object.
+        !! @param[in] n The number of bytes to read.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!  - FCORE_INVALID_INPUT_ERROR: Occurs if the requested read size is
+        !!      less than or equal to zero.
+        !!
+        !! @result An array containing the results.
         procedure, public :: read_bytes => br_read_byte_count
         !> @brief Reads a single byte from the file.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int8) read_byte(class(binary_reader) this, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_reader object.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @result The results.
         procedure, public :: read_byte => br_read_byte
         !> @brief Reads the entire contents of the file into a buffer.
+        !!
+        !! @par Syntax
+        !! @code{.f90}
+        !! integer(int8)(:) read_all(class(binary_reader) this, class(errors) err)
+        !! @endcode
+        !!
+        !! @param[in,out] this The binary_reader object.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_FILE_IO_ERROR: Occurs if the file could not be read.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @result An array containing the results.
         procedure, public :: read_all => br_read_all
     end type
 
@@ -600,12 +1032,48 @@ module file_io
 ! ------------------------------------------------------------------------------
     interface
         !> @brief Splits the supplied path into components.
+        !!
+        !! @param[in] path The path to split.
+        !!
+        !! @return The split file path.
+        !!
+        !! @par Example
+        !! @code{.f90}
+        !! program example
+        !!     use file_io
+        !!     implicit none
+        !!
+        !!     ! The path to split
+        !!     character(len = *), parameter :: p = "D:\SomeFilePath\With Spaces\File Name X.ext"
+        !!
+        !!     ! Split the path
+        !!     type(file_path) :: parts
+        !!     parts = split_path(p)
+        !!
+        !!     ! Display the results
+        !!     print '(A)', "Drive: " // parts%drive
+        !!     print '(A)', "Directory: " // parts%directory
+        !!     print '(A)', "Filename: " // parts%filename
+        !!     print '(A)', "Extension: " // parts%extension
+        !! end program
+        !! @endcode
+        !! The above program produces the following output.
+        !! @code{.txt}
+        !! Drive: D:
+        !! Directory: \SomeFilePath\With Spaces\
+        !! Filename: File Name X
+        !! Extension: .ext
+        !! @endcode
         module function split_path(path) result(rst)
             character(len = *), intent(in) :: path
             type(file_path) :: rst
         end function
 
         !> @brief Gets a list of all contents of a folder.
+        !!
+        !! @param[in] folder The path to interogate.
+        !!
+        !! @return A list of the folder contents.
         module function get_folder_contents(folder) result(rst)
             character(len = *), intent(in) :: folder
             type(folder_contents) :: rst
@@ -613,6 +1081,25 @@ module file_io
 
         !> @brief Finds all files with the specified extension within a 
         !! directory.
+        !!
+        !! @param[in] folder The directory (folder) to search.
+        !! @param[in] ext The extension to match.  Notice, the extenion must 
+        !!  include a '.' character prior to the extension (e.g. ".txt"); 
+        !!  otherwise, the extension will not be found.
+        !! @param[in] subfolders An optional input used to determine if 
+        !!  subfolders should be searched.  The default is false, such that the 
+        !!  subfolders are not searched.  If set to true, all subfolders are 
+        !!  searched.
+        !! @param[in,out] err An optional errors-based object that if provided
+        !!  can be used to retrieve information relating to any errors 
+        !!  encountered during execution.  If not provided, a default 
+        !!  implementation of the errors class is used internally to provide 
+        !!  error handling.  Possible errors and warning messages that may be 
+        !!  encountered are as follows.
+        !!  - FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory
+        !!      available.
+        !!
+        !! @return A list of all located files matching the required criteria.
         recursive module function find_all_files(folder, ext, subfolders, err) &
                 result(rst)
             character(len = *), intent(in) :: folder, ext
@@ -624,6 +1111,10 @@ module file_io
 
 ! ------------------------------------------------------------------------------
     !> @brief Swaps the byte order.
+    !!
+    !! @param[in,out] x The value whose byte order is to be swapped.
+    !!
+    !! @return The resulting byte-swapped value.
     interface swap_bytes
         module procedure :: swap_bytes_r64
         module procedure :: swap_bytes_r32
@@ -635,6 +1126,11 @@ module file_io
     end interface
 
     interface
+        !> @brief Determines if the current machine is little-endian or 
+        !! big-endian.
+        !!
+        !! @return Returns true if the current machine is little-endian; else, 
+        !!  false if big-endian.
         pure module function is_little_endian() result(rst)
             logical :: rst
         end function
