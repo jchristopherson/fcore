@@ -124,16 +124,73 @@ Private Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Splits the supplied path into components. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>The path to split.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The split file path.</dd></dl>
+<dl class="section user"><dt>Example</dt><dd><div class="fragment"><div class="line"><span class="keyword">program</span> example</div>
+<div class="line">    <span class="keywordtype">use </span><a class="code" href="namespacefile__io.html">file_io</a></div>
+<div class="line">    <span class="keywordtype">implicit none</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">! The path to split</span></div>
+<div class="line">    <span class="keywordtype">character(len = *)</span>, <span class="keywordtype">parameter</span> :: p = <span class="stringliteral">&quot;D:\SomeFilePath\With Spaces\File Name X.ext&quot;</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">! Split the path</span></div>
+<div class="line">    <span class="keywordtype">type</span>(file_path) :: parts</div>
+<div class="line">    parts = split_path(p)</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">! Display the results</span></div>
+<div class="line">    print <span class="stringliteral">&#39;(A)&#39;</span>, <span class="stringliteral">&quot;Drive: &quot;</span> // parts%drive</div>
+<div class="line">    print <span class="stringliteral">&#39;(A)&#39;</span>, <span class="stringliteral">&quot;Directory: &quot;</span> // parts%directory</div>
+<div class="line">    print <span class="stringliteral">&#39;(A)&#39;</span>, <span class="stringliteral">&quot;Filename: &quot;</span> // parts%filename</div>
+<div class="line">    print <span class="stringliteral">&#39;(A)&#39;</span>, <span class="stringliteral">&quot;Extension: &quot;</span> // parts%extension</div>
+<div class="line"><span class="keyword">end program</span></div>
+</div><!-- fragment --> The above program produces the following output. <div class="fragment"><div class="line">Drive: D:</div>
+<div class="line">Directory: \SomeFilePath\With Spaces\</div>
+<div class="line">Filename: File Name X</div>
+<div class="line">Extension: .ext</div>
+</div><!-- fragment --></dd></dl>
 <p>Gets a list of all contents of a folder.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">folder</td><td>The path to interogate.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A list of the folder contents.</dd></dl>
 <p>Finds all files with the specified extension within a directory.</p>
-<p>Swaps the byte order. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">folder</td><td>The directory (folder) to search. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ext</td><td>The extension to match. Notice, the extenion must include a '.' character prior to the extension (e.g. ".txt"); otherwise, the extension will not be found. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">subfolders</td><td>An optional input used to determine if subfolders should be searched. The default is false, such that the subfolders are not searched. If set to true, all subfolders are searched. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">err</td><td>An optional errors-based object that if provided can be used to retrieve information relating to any errors encountered during execution. If not provided, a default implementation of the errors class is used internally to provide error handling. Possible errors and warning messages that may be encountered are as follows.<ul>
+<li>FCORE_OUT_OF_MEMORY_ERROR: Occurs if there is insufficient memory available.</li>
+</ul>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A list of all located files matching the required criteria.</dd></dl>
+<p>Swaps the byte order.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>The value whose byte order is to be swapped.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting byte-swapped value. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="file__io_8f90_source.html#l00627">627</a> of file <a class="el" href="file__io_8f90_source.html">file_io.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="file__io_8f90_source.html#l01118">1118</a> of file <a class="el" href="file__io_8f90_source.html">file_io.f90</a>.</p>
 </div><hr/>The documentation for this interface was generated from the following file:<ul>
 <li>C:/Users/jchri/Documents/github/fcore/src/<a class="el" href="file__io_8f90_source.html">file_io.f90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anamespacefile__io_html"><div class="ttname"><a href="namespacefile__io.html">file_io</a></div><div class="ttdoc">This module contains routines to support file I/O operations.</div><div class="ttdef"><b>Definition:</b> <a href="file__io_8f90_source.html#l00004">file_io.f90:4</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
