@@ -296,9 +296,6 @@ Selected Folder: C:\~\Documents\github\fcore\include
 ## Building FCORE
 This library can be built using CMake.  For instructions see [Running CMake](https://cmake.org/runningcmake/).
 
-## Documentation
-Documentation can be found [here](http://htmlpreview.github.io/?https://github.com/jchristopherson/fcore/blob/master/doc/html/index.html)
-
 ## External Libraries
 The FCORE library depends upon the following libraries.
 - [FERROR](https://github.com/jchristopherson/ferror)
