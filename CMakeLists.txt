@@ -91,23 +91,11 @@ set(CMAKE_CXX_FLAGS_RELEASE "-DUNICODE -D_UNICODE -D_WIN32_WINNT=_WIN32_WINNT_VI
 
 # Locate Dependencies
 find_package(ferror 1.3.0)
-# find_package(linalg 1.6.0)
-# find_package(nonlin 1.4.0)
 
 if (ferror_FOUND)
   message(STATUS "FERROR library found.")
   set(ferror_LIBRARIES ferror)
 endif()
-
-# if (linalg_FOUND)
-#     message(STATUS "LINALG library found.")
-#     set(linalg_LIBRARIES linalg)
-# endif()
-
-# if (nonlin_FOUND)
-#     message(STATUS "NONLIN library found.")
-#     set(nonlin_LIBRARIES nonlin)
-# endif()
 
 # Locate the include directory
 include_directories(${PROJECT_SOURCE_DIR}/include)
