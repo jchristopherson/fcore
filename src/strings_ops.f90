@@ -23,7 +23,7 @@ contains
         indices = index_of_all(txt, delim)
         ndelim = size(indices)
         if (ndelim == 0) then
-            allocate(rst(0))
+            rst = txt
             return
         else
             allocate(rst(ndelim + 1))

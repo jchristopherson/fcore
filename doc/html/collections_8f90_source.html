@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">fcore
-   &#160;<span id="projectnumber">1.1.0</span>
+   &#160;<span id="projectnumber">1.2.0</span>
    </div>
    <div id="projectbrief">A Fortran library containing string handling, i/o routines, etc.</div>
   </td>
@@ -96,292 +96,577 @@ $(document).ready(function(){initNavTree('collections_8f90_source.html','');});
 <div class="line"><a name="l00004"></a><span class="lineno"><a class="line" href="namespacecollections.html">    4</a></span>&#160;<span class="keyword">module</span> <a class="code" href="namespacecollections.html">collections</a></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;    <span class="keywordtype">use </span>iso_fortran_env</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    <span class="keywordtype">use </span>ferror</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keywordtype">implicit none</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keywordtype">private</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="structcollections_1_1list.html">list</a></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="interfacecollections_1_1items__equal.html">items_equal</a></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="interfacecollections_1_1compare__items.html">compare_items</a></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="structcollections_1_1dictionary.html">dictionary</a></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="structcollections_1_1hash__code.html">hash_code</a></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">! ******************************************************************************</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">! TYPES</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="structcollections_1_1container.html">   19</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1container.html">container</a></div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="structcollections_1_1container.html#a0f4b79867c125fd29e087ebf6fb227b7">   21</a></span>&#160;        <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: item =&gt; null()</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">end type</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html">   25</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1list.html">list</a></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">private</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a271e2cf228700643233b8ac4c1b189c3">   28</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1container.html">container</a>), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_list</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a799e935d60a60c5a4f49608d93ca4314">   30</a></span>&#160;        <span class="keywordtype">integer(int32)</span> :: m_count = 0</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">contains</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a7d418a5d5b1b3dcefb7339c5af522e72">   33</a></span>&#160;        final :: list_destroy</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a574e01c9638a6d1e6b81b0aa799103fe">   35</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_capacity =&gt; list_get_capacity</div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a81fb0c13dcc949e27112579685c572fa">   37</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set_capacity =&gt; list_set_capacity</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a3aee1d63a09b38fc1fc18148013bdaaf">   39</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_count =&gt; list_get_count</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a31a5b7d1b6428c63eff34287e5320cb3">   41</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get =&gt; list_get</div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#aa1fb7f18b07822bfa896e7cd4025c7f4">   43</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set =&gt; list_set</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a1b63d578944e7829af8d0d412a7ef725">   45</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: push =&gt; list_push</div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a46097ed50d05e6a710b57bde606faab6">   47</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: pop =&gt; list_pop</div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a8bc398d19b72c7e4257b949a2f617628">   49</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: clear =&gt; list_clear</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a1fe60e8d885c0c6a2f4e1cde85adaf34">   51</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: copy =&gt; list_copy</div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a57e836f6c14cbf112aa5632d4fadc118">   53</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: insert =&gt; list_insert</div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#ac4247c385d8bb9427e2612773673f8a5">   55</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: remove =&gt; list_remove</div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a9ea9ed47ed30b67eda0b68b00d3453ad">   57</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: reverse =&gt; list_reverse</div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#ad266a207f04920464085c54c4c915801">   59</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: contains =&gt; list_contains</div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a4a5d7a5817743be4e81e30e22698791f">   62</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: index_of =&gt; list_index_of</div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#acad9308a0823400255f06540a51e43f9">   65</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: indices_of_all =&gt; list_indices_of_all</div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#acda2105f4f9d0da8ad5256bb06f0d426">   67</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: swap_items =&gt; list_swap</div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a72c4cefc40525bc5a8b159c6ac80db8e">   69</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: sort =&gt; list_sort</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a63b951970a3e73c77f302e002359b872">   74</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">private</span> :: store =&gt; list_store</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">end type</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="structcollections_1_1key__value__pair.html">   78</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1key__value__pair.html">key_value_pair</a></div>
-<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="structcollections_1_1key__value__pair.html#a9daa151b100b91cbf84806795f3f1316">   80</a></span>&#160;        <span class="keywordtype">integer(int64)</span> :: key</div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="structcollections_1_1key__value__pair.html#a479a4e632826b853ebd27eac11117b35">   82</a></span>&#160;        <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: <span class="keywordtype">value</span> =&gt; null()</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">end type</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html">   86</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1dictionary.html">dictionary</a></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">private</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a2b6546744f3a6bfd9ead76c2d88462f2">   89</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1list.html">list</a>) :: m_list</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">contains</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#ad9e8f5c7a51e89846ebfa04244f966c4">   92</a></span>&#160;        final :: dict_final</div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a33c670ff2843e2f248f7a0793adff09e">   94</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_count =&gt; dict_get_count</div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#ad090162f60b1609096d1dda05d3879c7">   96</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: contains_key =&gt; dict_contains_key</div>
-<div class="line"><a name="l00098"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a4645bd06616c80e46a29f1eac6ae94aa">   98</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get =&gt; dict_get</div>
-<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#ad95c5937f237bb83cf0eeaf524410f42">  100</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set =&gt; dict_set</div>
-<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a7fb193426e58fad5b93e56b102130293">  102</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: add =&gt; dict_add</div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a3d63f19ed88baf7781bcf9c4e9bf3be6">  104</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: remove =&gt; dict_remove</div>
-<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#ad25de0e1abaf2491e65deadd5cb6804d">  106</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: clear =&gt; dict_clear</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a7a65a055bee2fb2e5b295f761ffa7b7d">  110</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">private</span> :: index_of_key =&gt; dict_index_of_key</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keyword">end type</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="structcollections_1_1hash__code.html">  118</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1hash__code.html">hash_code</a></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">private</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">dimension(256)</span> :: table</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="keywordtype">logical</span> :: have_table = .false.</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordtype">integer(int64)</span> :: crcpoly = int(z<span class="stringliteral">&#39;edb88320&#39;</span>, int64)</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordtype">integer(int64)</span> :: crcinv = int(z<span class="stringliteral">&#39;5b358fd3&#39;</span>, int64)</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordtype">integer(int64)</span> :: initxor = int(z<span class="stringliteral">&#39;ffffffff&#39;</span>, int64)</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordtype">integer(int64)</span> :: finalxor = int(z<span class="stringliteral">&#39;ffffffff&#39;</span>, int64)</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">contains</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="structcollections_1_1hash__code.html#a9933e82a19d3898016fc86dd9e27cbc6">  128</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: initialize =&gt; hc_init</div>
-<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="structcollections_1_1hash__code.html#a0023e9b5b01234a88374f4f4d44a4280">  130</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get =&gt; hc_get</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">end type</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="comment">! ******************************************************************************</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment">! FUNCTION PROTOTYPES</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keyword">interface</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="interfacecollections_1_1items__equal.html">  144</a></span>&#160;        <span class="keyword">function </span><a class="code" href="interfacecollections_1_1items__equal.html">items_equal</a>(item1, item2) <span class="keyword">result</span>(rst)</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item1, item2</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno"><a class="line" href="interfacecollections_1_1compare__items.html">  159</a></span>&#160;        <span class="keyword">function </span><a class="code" href="interfacecollections_1_1compare__items.html">compare_items</a>(item1, item2) <span class="keyword">result</span>(rst)</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            <span class="keywordtype">use </span>iso_fortran_env, <span class="keywordtype">only</span> : int32</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item1, item2</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keyword">end interface</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="comment">! ******************************************************************************</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="comment">! INTERFACES</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keyword">interface</span> <span class="comment">! collections_list.f90</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function list_get_capacity(this) result(rst)</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keyword">module</span> subroutine list_set_capacity(this, n, err)</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: n</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function list_get_count(this) result(rst)</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keyword">module</span> function list_get(this, i) result(x)</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: x</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keyword">module</span> subroutine list_set(this, i, x, err)</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keyword">module</span> subroutine list_store(this, i, x, err)</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160; </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keyword">module</span> subroutine list_push(this, x, err)</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keyword">module</span> subroutine list_pop(this)</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="keyword">module</span> subroutine list_clear(this)</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="keyword">module</span> function list_copy(this, err) result(rst)</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <span class="keywordtype">type</span>(list) :: rst</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keyword">module</span> subroutine list_insert(this, i, x, err)</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keyword">module</span> subroutine list_remove(this, i, err)</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keyword">module</span> subroutine list_destroy(this)</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            <span class="keywordtype">type</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keyword">module</span> subroutine list_reverse(this)</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keyword">module</span> function list_contains(this, item, fcn) result(rst)</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="keyword">module</span> function list_index_of(this, item, fcn) result(rst)</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        <span class="keyword">module</span> function list_indices_of_all(this, item, fcn, err) result(rst)</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: rst</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="keyword">module</span> subroutine list_swap(this, i1, i2, err)</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i1, i2</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keyword">module</span> subroutine list_sort(this, fcn)</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            <span class="keywordtype">procedure</span>(compare_items), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="keyword">end interface</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keyword">interface</span> <span class="comment">! collections_dictionary.f90</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function dict_get_count(this) result(rst)</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        <span class="keyword">module</span> function dict_index_of_key(this, key) result(rst)</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <span class="keyword">module</span> function dict_contains_key(this, key) result(rst)</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keywordtype">use </span><a class="code" href="namespacestrings.html">strings</a></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keywordtype">implicit none</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="structcollections_1_1list.html">list</a></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="interfacecollections_1_1items__equal.html">items_equal</a></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="interfacecollections_1_1compare__items.html">compare_items</a></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="structcollections_1_1dictionary.html">dictionary</a></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="structcollections_1_1hash__code.html">hash_code</a></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="structcollections_1_1linked__list.html">linked_list</a></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keywordtype">public</span> :: <a class="code" href="structcollections_1_1data__table.html">data_table</a></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">! TYPES</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="structcollections_1_1container.html">   22</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1container.html">container</a></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="structcollections_1_1container.html#a0f4b79867c125fd29e087ebf6fb227b7">   24</a></span>&#160;        <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: item =&gt; null()</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="structcollections_1_1node.html">   28</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1node.html">node</a></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="structcollections_1_1node.html#a374ec7c526eb2fde9b8274940bb42cbe">   30</a></span>&#160;        <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: item =&gt; null()</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="structcollections_1_1node.html#a99ba6babc057a04adf6a2aa817a394c4">   32</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1node.html">node</a>), <span class="keywordtype">pointer</span> :: next =&gt; null()</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="structcollections_1_1node.html#a01b1e1d2c6567a9a1c7b4bf7ccef00be">   34</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1node.html">node</a>), <span class="keywordtype">pointer</span> :: previous =&gt; null()</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html">   38</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1list.html">list</a></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a271e2cf228700643233b8ac4c1b189c3">   41</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1container.html">container</a>), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_list</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a799e935d60a60c5a4f49608d93ca4314">   43</a></span>&#160;        <span class="keywordtype">integer(int32)</span> :: m_count = 0</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a7d418a5d5b1b3dcefb7339c5af522e72">   46</a></span>&#160;        final :: list_destroy</div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a574e01c9638a6d1e6b81b0aa799103fe">   56</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_capacity =&gt; list_get_capacity</div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a81fb0c13dcc949e27112579685c572fa">   76</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set_capacity =&gt; list_set_capacity</div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a3aee1d63a09b38fc1fc18148013bdaaf">   86</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_count =&gt; list_get_count</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a31a5b7d1b6428c63eff34287e5320cb3">   97</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get =&gt; list_get</div>
+<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#aa1fb7f18b07822bfa896e7cd4025c7f4">  116</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set =&gt; list_set</div>
+<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a1b63d578944e7829af8d0d412a7ef725">  133</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: push =&gt; list_push</div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a46097ed50d05e6a710b57bde606faab6">  142</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: pop =&gt; list_pop</div>
+<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a8bc398d19b72c7e4257b949a2f617628">  151</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: clear =&gt; list_clear</div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a1fe60e8d885c0c6a2f4e1cde85adaf34">  167</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: copy =&gt; list_copy</div>
+<div class="line"><a name="l00187"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a57e836f6c14cbf112aa5632d4fadc118">  187</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: insert =&gt; list_insert</div>
+<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#ac4247c385d8bb9427e2612773673f8a5">  206</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: <a class="code" href="interfacestrings_1_1remove.html">remove</a> =&gt; list_remove</div>
+<div class="line"><a name="l00215"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a9ea9ed47ed30b67eda0b68b00d3453ad">  215</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: reverse =&gt; list_reverse</div>
+<div class="line"><a name="l00229"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#ad266a207f04920464085c54c4c915801">  229</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: contains =&gt; list_contains</div>
+<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a4a5d7a5817743be4e81e30e22698791f">  245</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: index_of =&gt; list_index_of</div>
+<div class="line"><a name="l00269"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#acad9308a0823400255f06540a51e43f9">  269</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: indices_of_all =&gt; list_indices_of_all</div>
+<div class="line"><a name="l00288"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#acda2105f4f9d0da8ad5256bb06f0d426">  288</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: swap_items =&gt; list_swap</div>
+<div class="line"><a name="l00298"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a72c4cefc40525bc5a8b159c6ac80db8e">  298</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: sort =&gt; list_sort</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keyword">module</span> function dict_get(this, key) result(rst)</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(in)</span> :: this</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: rst</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <span class="keyword">module</span> subroutine dict_set(this, key, item, err)</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keyword">module</span> subroutine dict_add(this, key, item, err)</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keyword">module</span> function dict_remove(this, key) result(rst)</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keyword">module</span> subroutine dict_clear(this)</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno"><a class="line" href="structcollections_1_1list.html#a63b951970a3e73c77f302e002359b872">  319</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">private</span> :: store =&gt; list_store</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno"><a class="line" href="structcollections_1_1key__value__pair.html">  323</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1key__value__pair.html">key_value_pair</a></div>
+<div class="line"><a name="l00325"></a><span class="lineno"><a class="line" href="structcollections_1_1key__value__pair.html#a9daa151b100b91cbf84806795f3f1316">  325</a></span>&#160;        <span class="keywordtype">integer(int64)</span> :: key</div>
+<div class="line"><a name="l00327"></a><span class="lineno"><a class="line" href="structcollections_1_1key__value__pair.html#a479a4e632826b853ebd27eac11117b35">  327</a></span>&#160;        <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: <span class="keywordtype">value</span> =&gt; null()</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="keyword">end type</span></div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160; </div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="keyword">module</span> subroutine dict_final(this)</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <span class="keywordtype">type</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <span class="keyword">end interface</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keyword">interface</span> <span class="comment">! collections_hash.f90</span></div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <span class="keyword">module</span> subroutine hc_init(this)</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            <span class="keywordtype">class</span>(hash_code), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keyword">end subroutine</span></div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <span class="keyword">module</span> function hc_get(this, str) result(rst)</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            <span class="keywordtype">class</span>(hash_code), <span class="keywordtype">intent(inout)</span> :: this</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            <span class="keywordtype">character(len = *)</span>, <span class="keywordtype">intent(in)</span> :: str</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            <span class="keywordtype">integer(int64)</span> :: rst</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        <span class="keyword">end function</span></div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <span class="keyword">end interface</span></div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="keyword">end module</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html">  331</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1dictionary.html">dictionary</a></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a2b6546744f3a6bfd9ead76c2d88462f2">  334</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1list.html">list</a>) :: m_list</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#ad9e8f5c7a51e89846ebfa04244f966c4">  337</a></span>&#160;        final :: dict_final</div>
+<div class="line"><a name="l00347"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a33c670ff2843e2f248f7a0793adff09e">  347</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_count =&gt; dict_get_count</div>
+<div class="line"><a name="l00360"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#ad090162f60b1609096d1dda05d3879c7">  360</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: contains_key =&gt; dict_contains_key</div>
+<div class="line"><a name="l00373"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a4645bd06616c80e46a29f1eac6ae94aa">  373</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get =&gt; dict_get</div>
+<div class="line"><a name="l00392"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#ad95c5937f237bb83cf0eeaf524410f42">  392</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set =&gt; dict_set</div>
+<div class="line"><a name="l00412"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a7fb193426e58fad5b93e56b102130293">  412</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: add =&gt; dict_add</div>
+<div class="line"><a name="l00425"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a3d63f19ed88baf7781bcf9c4e9bf3be6">  425</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: <a class="code" href="interfacestrings_1_1remove.html">remove</a> =&gt; dict_remove</div>
+<div class="line"><a name="l00434"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#ad25de0e1abaf2491e65deadd5cb6804d">  434</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: clear =&gt; dict_clear</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160; </div>
+<div class="line"><a name="l00450"></a><span class="lineno"><a class="line" href="structcollections_1_1dictionary.html#a7a65a055bee2fb2e5b295f761ffa7b7d">  450</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">private</span> :: index_of_key =&gt; dict_index_of_key</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160; </div>
+<div class="line"><a name="l00458"></a><span class="lineno"><a class="line" href="structcollections_1_1hash__code.html">  458</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1hash__code.html">hash_code</a></div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">dimension(256)</span> :: table</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;        <span class="keywordtype">logical</span> :: have_table = .false.</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        <span class="keywordtype">integer(int64)</span> :: crcpoly = int(z<span class="stringliteral">&#39;edb88320&#39;</span>, int64)</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        <span class="keywordtype">integer(int64)</span> :: crcinv = int(z<span class="stringliteral">&#39;5b358fd3&#39;</span>, int64)</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        <span class="keywordtype">integer(int64)</span> :: initxor = int(z<span class="stringliteral">&#39;ffffffff&#39;</span>, int64)</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        <span class="keywordtype">integer(int64)</span> :: finalxor = int(z<span class="stringliteral">&#39;ffffffff&#39;</span>, int64)</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00475"></a><span class="lineno"><a class="line" href="structcollections_1_1hash__code.html#a9933e82a19d3898016fc86dd9e27cbc6">  475</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: initialize =&gt; hc_init</div>
+<div class="line"><a name="l00487"></a><span class="lineno"><a class="line" href="structcollections_1_1hash__code.html#a0023e9b5b01234a88374f4f4d44a4280">  487</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get =&gt; hc_get</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160; </div>
+<div class="line"><a name="l00491"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html">  491</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1linked__list.html">linked_list</a></div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00494"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a2dba9cabca1fadbb009ac2d57c50086f">  494</a></span>&#160;        <span class="keywordtype">integer(int32)</span> :: m_nodecount = 0</div>
+<div class="line"><a name="l00496"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a7fcd4e93d0afc49d3dc74957f1e41dcd">  496</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1node.html">node</a>), <span class="keywordtype">pointer</span> :: m_first =&gt; null()</div>
+<div class="line"><a name="l00498"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#ae753c9f34517979b6e16016715fd80c1">  498</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1node.html">node</a>), <span class="keywordtype">pointer</span> :: m_last =&gt; null()</div>
+<div class="line"><a name="l00500"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#aa3456e26c8b6ada413fde9bf9803063f">  500</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1node.html">node</a>), <span class="keywordtype">pointer</span> :: m_current =&gt; null()</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00503"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a4ea1dd6a67cc8c14fa079f786aecb4f7">  503</a></span>&#160;        final :: ll_final</div>
+<div class="line"><a name="l00513"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a9d203a373f7a1f6a1de181456c9c1026">  513</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_count =&gt; ll_get_count</div>
+<div class="line"><a name="l00524"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a9e7ee5636586a1b444db85db35079e06">  524</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: move_to_first =&gt; ll_move_to_first</div>
+<div class="line"><a name="l00535"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a910be054f7bf67023acae76185e67f57">  535</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: move_to_last =&gt; ll_move_to_last</div>
+<div class="line"><a name="l00546"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#ade8ccfcf07259633a035cef26d4abd11">  546</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: move_to_next =&gt; ll_move_to_next</div>
+<div class="line"><a name="l00557"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a4b22f6201ed2a732e6b977cea7f482c6">  557</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: move_to_previous =&gt; ll_move_to_previous</div>
+<div class="line"><a name="l00566"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a7da19ba3c4ac06986e88832bc7fafbdd">  566</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: clear =&gt; ll_clear</div>
+<div class="line"><a name="l00583"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a394e7dba4af354176e9e96f468ad7cd0">  583</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: push =&gt; ll_push</div>
+<div class="line"><a name="l00592"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a80a12ed8c4dc23722924a05ec85c0dd0">  592</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: pop =&gt; ll_pop</div>
+<div class="line"><a name="l00602"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a87d82c296360ce954baadfc184c062e7">  602</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get =&gt; ll_get_item</div>
+<div class="line"><a name="l00619"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#aeecc7deb2c8579152379c221bc98839e">  619</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set =&gt; ll_set_item</div>
+<div class="line"><a name="l00631"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a2742821dc39e1e7fc3b663fc197d5864">  631</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: contains =&gt; ll_contains</div>
+<div class="line"><a name="l00646"></a><span class="lineno"><a class="line" href="structcollections_1_1linked__list.html#a409bb0ae2d3e794ccc5c365f41cb4fae">  646</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: move_to =&gt; ll_move_to_matching</div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160; </div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00651"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html">  651</a></span>&#160;    <span class="keyword">type</span> <a class="code" href="structcollections_1_1data__table.html">data_table</a></div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;    <span class="keywordtype">private</span></div>
+<div class="line"><a name="l00654"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a5be54baf3bb300df431458753b86c786">  654</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structcollections_1_1container.html">container</a>), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:,:)</span> :: m_table</div>
+<div class="line"><a name="l00656"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a094e05e98f3f27c0826afa7c77378360">  656</a></span>&#160;        <span class="keywordtype">type</span>(<a class="code" href="structstrings_1_1string.html">string</a>), <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: m_headers</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;    <span class="keyword">contains</span></div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;        final :: dt_final</div>
+<div class="line"><a name="l00667"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#abebc8c0c560acf5ae75a6c3ad6d23380">  667</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: clear =&gt; dt_clear</div>
+<div class="line"><a name="l00677"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a5795a3efedb02b9ee4a3f3f928df0a11">  677</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_row_count =&gt; dt_get_row_count</div>
+<div class="line"><a name="l00687"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a4cb5dcff5d042e103b29b71ca03c1599">  687</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_column_count =&gt; dt_get_column_count</div>
+<div class="line"><a name="l00709"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a0dc07d8df29800831a1487372980a187">  709</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: initialize =&gt; dt_initialize</div>
+<div class="line"><a name="l00730"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#afbd1b6cd98c9b952cab35307a4ba7547">  730</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get =&gt; dt_get</div>
+<div class="line"><a name="l00755"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a0139c92384b65eeee5d877b49c14a058">  755</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set =&gt; dt_set</div>
+<div class="line"><a name="l00780"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a3bb26c70da37740b1996cc98ea194f41">  780</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: insert_rows =&gt; dt_insert_rows</div>
+<div class="line"><a name="l00805"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a7d199bba6c3832222eddce472f441f41">  805</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: insert_row =&gt; dt_insert_row</div>
+<div class="line"><a name="l00831"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#ad77a0269159a61c7fcb37ff3e7fa24b2">  831</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: insert_columns =&gt; dt_insert_columns</div>
+<div class="line"><a name="l00857"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a503e22ea1764809a319c803dd10c42e5">  857</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: insert_column =&gt; dt_insert_column</div>
+<div class="line"><a name="l00879"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#ad395e914fe83bf4a4f48edf041d594d9">  879</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: append_rows =&gt; dt_append_rows</div>
+<div class="line"><a name="l00901"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a4a7a6a2ad454dff719967174b42256db">  901</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: append_row =&gt; dt_append_row</div>
+<div class="line"><a name="l00923"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#abf06f71126e6310fc6daa8bbb4248257">  923</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: append_columns =&gt; dt_append_columns</div>
+<div class="line"><a name="l00945"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#adc8f7d91a557bb3cea97963a015a4960">  945</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: append_column =&gt; dt_append_column</div>
+<div class="line"><a name="l00971"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#af6de2d19b11de8b55e750bfccd5b24aa">  971</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: remove_rows =&gt; dt_remove_rows</div>
+<div class="line"><a name="l00998"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#ab18af4890bf57a37567c7775d2f5f3f2">  998</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: remove_columns =&gt; dt_remove_columns</div>
+<div class="line"><a name="l01011"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a027a2dcf302bcda0b97b1f51313c21bf"> 1011</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: contains =&gt; dt_contains</div>
+<div class="line"><a name="l01027"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#aa4e51497bd1af1001ca932fc900fa978"> 1027</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: index_of =&gt; dt_index_of</div>
+<div class="line"><a name="l01047"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#ad77f4ba2bb1b778d4da57895d551f008"> 1047</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_header =&gt; dt_get_header</div>
+<div class="line"><a name="l01068"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a2f8272079686653bf97cc96521a36b92"> 1068</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: set_header =&gt; dt_set_header</div>
+<div class="line"><a name="l01080"></a><span class="lineno"><a class="line" href="structcollections_1_1data__table.html#a2051249d6da12e78df2b6f4123a22fe2"> 1080</a></span>&#160;        <span class="keywordtype">procedure</span>, <span class="keywordtype">public</span> :: get_column_index =&gt; dt_get_column_index</div>
+<div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160;    <span class="keyword">end type</span></div>
+<div class="line"><a name="l01082"></a><span class="lineno"> 1082</span>&#160; </div>
+<div class="line"><a name="l01083"></a><span class="lineno"> 1083</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l01084"></a><span class="lineno"> 1084</span>&#160;<span class="comment">! FUNCTION PROTOTYPES</span></div>
+<div class="line"><a name="l01085"></a><span class="lineno"> 1085</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01086"></a><span class="lineno"> 1086</span>&#160;    <span class="keyword">interface</span></div>
+<div class="line"><a name="l01087"></a><span class="lineno"> 1087</span>&#160; </div>
+<div class="line"><a name="l01094"></a><span class="lineno"><a class="line" href="interfacecollections_1_1items__equal.html"> 1094</a></span>&#160;        <span class="keyword">function </span><a class="code" href="interfacecollections_1_1items__equal.html">items_equal</a>(item1, item2) <span class="keyword">result</span>(rst)</div>
+<div class="line"><a name="l01095"></a><span class="lineno"> 1095</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item1, item2</div>
+<div class="line"><a name="l01096"></a><span class="lineno"> 1096</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01097"></a><span class="lineno"> 1097</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160; </div>
+<div class="line"><a name="l01109"></a><span class="lineno"><a class="line" href="interfacecollections_1_1compare__items.html"> 1109</a></span>&#160;        <span class="keyword">function </span><a class="code" href="interfacecollections_1_1compare__items.html">compare_items</a>(item1, item2) <span class="keyword">result</span>(rst)</div>
+<div class="line"><a name="l01110"></a><span class="lineno"> 1110</span>&#160;            <span class="keywordtype">use </span>iso_fortran_env, <span class="keywordtype">only</span> : int32</div>
+<div class="line"><a name="l01111"></a><span class="lineno"> 1111</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item1, item2</div>
+<div class="line"><a name="l01112"></a><span class="lineno"> 1112</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01113"></a><span class="lineno"> 1113</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01114"></a><span class="lineno"> 1114</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01115"></a><span class="lineno"> 1115</span>&#160; </div>
+<div class="line"><a name="l01116"></a><span class="lineno"> 1116</span>&#160;<span class="comment">! ******************************************************************************</span></div>
+<div class="line"><a name="l01117"></a><span class="lineno"> 1117</span>&#160;<span class="comment">! INTERFACES</span></div>
+<div class="line"><a name="l01118"></a><span class="lineno"> 1118</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01119"></a><span class="lineno"> 1119</span>&#160;    <span class="keyword">interface</span> <span class="comment">! collections_list.f90</span></div>
+<div class="line"><a name="l01120"></a><span class="lineno"> 1120</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function list_get_capacity(this) result(rst)</div>
+<div class="line"><a name="l01121"></a><span class="lineno"> 1121</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01122"></a><span class="lineno"> 1122</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01123"></a><span class="lineno"> 1123</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01124"></a><span class="lineno"> 1124</span>&#160; </div>
+<div class="line"><a name="l01125"></a><span class="lineno"> 1125</span>&#160;        <span class="keyword">module</span> subroutine list_set_capacity(this, n, err)</div>
+<div class="line"><a name="l01126"></a><span class="lineno"> 1126</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01127"></a><span class="lineno"> 1127</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: n</div>
+<div class="line"><a name="l01128"></a><span class="lineno"> 1128</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01129"></a><span class="lineno"> 1129</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01130"></a><span class="lineno"> 1130</span>&#160; </div>
+<div class="line"><a name="l01131"></a><span class="lineno"> 1131</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function list_get_count(this) result(rst)</div>
+<div class="line"><a name="l01132"></a><span class="lineno"> 1132</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01133"></a><span class="lineno"> 1133</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01134"></a><span class="lineno"> 1134</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01135"></a><span class="lineno"> 1135</span>&#160; </div>
+<div class="line"><a name="l01136"></a><span class="lineno"> 1136</span>&#160;        <span class="keyword">module</span> function list_get(this, i) result(x)</div>
+<div class="line"><a name="l01137"></a><span class="lineno"> 1137</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01138"></a><span class="lineno"> 1138</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01139"></a><span class="lineno"> 1139</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: x</div>
+<div class="line"><a name="l01140"></a><span class="lineno"> 1140</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01141"></a><span class="lineno"> 1141</span>&#160; </div>
+<div class="line"><a name="l01142"></a><span class="lineno"> 1142</span>&#160;        <span class="keyword">module</span> subroutine list_set(this, i, x, err)</div>
+<div class="line"><a name="l01143"></a><span class="lineno"> 1143</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01144"></a><span class="lineno"> 1144</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01145"></a><span class="lineno"> 1145</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01146"></a><span class="lineno"> 1146</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01147"></a><span class="lineno"> 1147</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01148"></a><span class="lineno"> 1148</span>&#160; </div>
+<div class="line"><a name="l01149"></a><span class="lineno"> 1149</span>&#160;        <span class="keyword">module</span> subroutine list_store(this, i, x, err)</div>
+<div class="line"><a name="l01150"></a><span class="lineno"> 1150</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01151"></a><span class="lineno"> 1151</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01152"></a><span class="lineno"> 1152</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01153"></a><span class="lineno"> 1153</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01154"></a><span class="lineno"> 1154</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01155"></a><span class="lineno"> 1155</span>&#160; </div>
+<div class="line"><a name="l01156"></a><span class="lineno"> 1156</span>&#160;        <span class="keyword">module</span> subroutine list_push(this, x, err)</div>
+<div class="line"><a name="l01157"></a><span class="lineno"> 1157</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01158"></a><span class="lineno"> 1158</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01159"></a><span class="lineno"> 1159</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01160"></a><span class="lineno"> 1160</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01161"></a><span class="lineno"> 1161</span>&#160; </div>
+<div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160;        <span class="keyword">module</span> subroutine list_pop(this)</div>
+<div class="line"><a name="l01163"></a><span class="lineno"> 1163</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160; </div>
+<div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;        <span class="keyword">module</span> subroutine list_clear(this)</div>
+<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160; </div>
+<div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;        <span class="keyword">module</span> function list_copy(this, err) result(rst)</div>
+<div class="line"><a name="l01171"></a><span class="lineno"> 1171</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01172"></a><span class="lineno"> 1172</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01173"></a><span class="lineno"> 1173</span>&#160;            <span class="keywordtype">type</span>(list) :: rst</div>
+<div class="line"><a name="l01174"></a><span class="lineno"> 1174</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01175"></a><span class="lineno"> 1175</span>&#160; </div>
+<div class="line"><a name="l01176"></a><span class="lineno"> 1176</span>&#160;        <span class="keyword">module</span> subroutine list_insert(this, i, x, err)</div>
+<div class="line"><a name="l01177"></a><span class="lineno"> 1177</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01178"></a><span class="lineno"> 1178</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01179"></a><span class="lineno"> 1179</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01180"></a><span class="lineno"> 1180</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01181"></a><span class="lineno"> 1181</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01182"></a><span class="lineno"> 1182</span>&#160; </div>
+<div class="line"><a name="l01183"></a><span class="lineno"> 1183</span>&#160;        <span class="keyword">module</span> subroutine list_remove(this, i, err)</div>
+<div class="line"><a name="l01184"></a><span class="lineno"> 1184</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01186"></a><span class="lineno"> 1186</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160; </div>
+<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;        <span class="keyword">module</span> subroutine list_destroy(this)</div>
+<div class="line"><a name="l01190"></a><span class="lineno"> 1190</span>&#160;            <span class="keywordtype">type</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160; </div>
+<div class="line"><a name="l01193"></a><span class="lineno"> 1193</span>&#160;        <span class="keyword">module</span> subroutine list_reverse(this)</div>
+<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01195"></a><span class="lineno"> 1195</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01196"></a><span class="lineno"> 1196</span>&#160; </div>
+<div class="line"><a name="l01197"></a><span class="lineno"> 1197</span>&#160;        <span class="keyword">module</span> function list_contains(this, item, fcn) result(rst)</div>
+<div class="line"><a name="l01198"></a><span class="lineno"> 1198</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01199"></a><span class="lineno"> 1199</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01200"></a><span class="lineno"> 1200</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
+<div class="line"><a name="l01201"></a><span class="lineno"> 1201</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01202"></a><span class="lineno"> 1202</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160; </div>
+<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;        <span class="keyword">module</span> function list_index_of(this, item, fcn) result(rst)</div>
+<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
+<div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01209"></a><span class="lineno"> 1209</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01210"></a><span class="lineno"> 1210</span>&#160; </div>
+<div class="line"><a name="l01211"></a><span class="lineno"> 1211</span>&#160;        <span class="keyword">module</span> function list_indices_of_all(this, item, fcn, err) result(rst)</div>
+<div class="line"><a name="l01212"></a><span class="lineno"> 1212</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01213"></a><span class="lineno"> 1213</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01214"></a><span class="lineno"> 1214</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
+<div class="line"><a name="l01215"></a><span class="lineno"> 1215</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">allocatable</span>, <span class="keywordtype">dimension(:)</span> :: rst</div>
+<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160; </div>
+<div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160;        <span class="keyword">module</span> subroutine list_swap(this, i1, i2, err)</div>
+<div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01221"></a><span class="lineno"> 1221</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i1, i2</div>
+<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160; </div>
+<div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;        <span class="keyword">module</span> subroutine list_sort(this, fcn)</div>
+<div class="line"><a name="l01226"></a><span class="lineno"> 1226</span>&#160;            <span class="keywordtype">class</span>(list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;            <span class="keywordtype">procedure</span>(compare_items), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
+<div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01229"></a><span class="lineno"> 1229</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01230"></a><span class="lineno"> 1230</span>&#160; </div>
+<div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160;    <span class="keyword">interface</span> <span class="comment">! collections_dictionary.f90</span></div>
+<div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function dict_get_count(this) result(rst)</div>
+<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01235"></a><span class="lineno"> 1235</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01236"></a><span class="lineno"> 1236</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01237"></a><span class="lineno"> 1237</span>&#160; </div>
+<div class="line"><a name="l01238"></a><span class="lineno"> 1238</span>&#160;        <span class="keyword">module</span> function dict_index_of_key(this, key) result(rst)</div>
+<div class="line"><a name="l01239"></a><span class="lineno"> 1239</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01240"></a><span class="lineno"> 1240</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
+<div class="line"><a name="l01241"></a><span class="lineno"> 1241</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160; </div>
+<div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160;        <span class="keyword">module</span> function dict_contains_key(this, key) result(rst)</div>
+<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
+<div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01249"></a><span class="lineno"> 1249</span>&#160; </div>
+<div class="line"><a name="l01250"></a><span class="lineno"> 1250</span>&#160;        <span class="keyword">module</span> function dict_get(this, key) result(rst)</div>
+<div class="line"><a name="l01251"></a><span class="lineno"> 1251</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01252"></a><span class="lineno"> 1252</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
+<div class="line"><a name="l01253"></a><span class="lineno"> 1253</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: rst</div>
+<div class="line"><a name="l01254"></a><span class="lineno"> 1254</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01255"></a><span class="lineno"> 1255</span>&#160; </div>
+<div class="line"><a name="l01256"></a><span class="lineno"> 1256</span>&#160;        <span class="keyword">module</span> subroutine dict_set(this, key, item, err)</div>
+<div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01258"></a><span class="lineno"> 1258</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
+<div class="line"><a name="l01259"></a><span class="lineno"> 1259</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01260"></a><span class="lineno"> 1260</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01261"></a><span class="lineno"> 1261</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01262"></a><span class="lineno"> 1262</span>&#160; </div>
+<div class="line"><a name="l01263"></a><span class="lineno"> 1263</span>&#160;        <span class="keyword">module</span> subroutine dict_add(this, key, item, err)</div>
+<div class="line"><a name="l01264"></a><span class="lineno"> 1264</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01265"></a><span class="lineno"> 1265</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
+<div class="line"><a name="l01266"></a><span class="lineno"> 1266</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01267"></a><span class="lineno"> 1267</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01268"></a><span class="lineno"> 1268</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01269"></a><span class="lineno"> 1269</span>&#160; </div>
+<div class="line"><a name="l01270"></a><span class="lineno"> 1270</span>&#160;        <span class="keyword">module</span> function dict_remove(this, key) result(rst)</div>
+<div class="line"><a name="l01271"></a><span class="lineno"> 1271</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01272"></a><span class="lineno"> 1272</span>&#160;            <span class="keywordtype">integer(int64)</span>, <span class="keywordtype">intent(in)</span> :: key</div>
+<div class="line"><a name="l01273"></a><span class="lineno"> 1273</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01274"></a><span class="lineno"> 1274</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01275"></a><span class="lineno"> 1275</span>&#160; </div>
+<div class="line"><a name="l01276"></a><span class="lineno"> 1276</span>&#160;        <span class="keyword">module</span> subroutine dict_clear(this)</div>
+<div class="line"><a name="l01277"></a><span class="lineno"> 1277</span>&#160;            <span class="keywordtype">class</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01278"></a><span class="lineno"> 1278</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01279"></a><span class="lineno"> 1279</span>&#160; </div>
+<div class="line"><a name="l01280"></a><span class="lineno"> 1280</span>&#160;        <span class="keyword">module</span> subroutine dict_final(this)</div>
+<div class="line"><a name="l01281"></a><span class="lineno"> 1281</span>&#160;            <span class="keywordtype">type</span>(dictionary), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01282"></a><span class="lineno"> 1282</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01283"></a><span class="lineno"> 1283</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01284"></a><span class="lineno"> 1284</span>&#160; </div>
+<div class="line"><a name="l01285"></a><span class="lineno"> 1285</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01286"></a><span class="lineno"> 1286</span>&#160;    <span class="keyword">interface</span> <span class="comment">! collections_hash.f90</span></div>
+<div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160;        <span class="keyword">module</span> subroutine hc_init(this)</div>
+<div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160;            <span class="keywordtype">class</span>(hash_code), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01289"></a><span class="lineno"> 1289</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160; </div>
+<div class="line"><a name="l01291"></a><span class="lineno"> 1291</span>&#160;        <span class="keyword">module</span> function hc_get(this, str) result(rst)</div>
+<div class="line"><a name="l01292"></a><span class="lineno"> 1292</span>&#160;            <span class="keywordtype">class</span>(hash_code), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01293"></a><span class="lineno"> 1293</span>&#160;            <span class="keywordtype">character(len = *)</span>, <span class="keywordtype">intent(in)</span> :: str</div>
+<div class="line"><a name="l01294"></a><span class="lineno"> 1294</span>&#160;            <span class="keywordtype">integer(int64)</span> :: rst</div>
+<div class="line"><a name="l01295"></a><span class="lineno"> 1295</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01296"></a><span class="lineno"> 1296</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01297"></a><span class="lineno"> 1297</span>&#160; </div>
+<div class="line"><a name="l01298"></a><span class="lineno"> 1298</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01299"></a><span class="lineno"> 1299</span>&#160;    <span class="keyword">interface</span> <span class="comment">! collections_linked_list.f90</span></div>
+<div class="line"><a name="l01300"></a><span class="lineno"> 1300</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function ll_get_count(this) result(rst)</div>
+<div class="line"><a name="l01301"></a><span class="lineno"> 1301</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01302"></a><span class="lineno"> 1302</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01303"></a><span class="lineno"> 1303</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01304"></a><span class="lineno"> 1304</span>&#160;        </div>
+<div class="line"><a name="l01305"></a><span class="lineno"> 1305</span>&#160;        <span class="keyword">module</span> function ll_move_to_first(this) result(rst)</div>
+<div class="line"><a name="l01306"></a><span class="lineno"> 1306</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01307"></a><span class="lineno"> 1307</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01308"></a><span class="lineno"> 1308</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01309"></a><span class="lineno"> 1309</span>&#160; </div>
+<div class="line"><a name="l01310"></a><span class="lineno"> 1310</span>&#160;        <span class="keyword">module</span> function ll_move_to_last(this) result(rst)</div>
+<div class="line"><a name="l01311"></a><span class="lineno"> 1311</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01312"></a><span class="lineno"> 1312</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01313"></a><span class="lineno"> 1313</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01314"></a><span class="lineno"> 1314</span>&#160; </div>
+<div class="line"><a name="l01315"></a><span class="lineno"> 1315</span>&#160;        <span class="keyword">module</span> function ll_move_to_next(this) result(rst)</div>
+<div class="line"><a name="l01316"></a><span class="lineno"> 1316</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01317"></a><span class="lineno"> 1317</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160; </div>
+<div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160;        <span class="keyword">module</span> function ll_move_to_previous(this) result(rst)</div>
+<div class="line"><a name="l01321"></a><span class="lineno"> 1321</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01322"></a><span class="lineno"> 1322</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01323"></a><span class="lineno"> 1323</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01324"></a><span class="lineno"> 1324</span>&#160; </div>
+<div class="line"><a name="l01325"></a><span class="lineno"> 1325</span>&#160;        <span class="keyword">module</span> subroutine ll_clear(this)</div>
+<div class="line"><a name="l01326"></a><span class="lineno"> 1326</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01327"></a><span class="lineno"> 1327</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01328"></a><span class="lineno"> 1328</span>&#160; </div>
+<div class="line"><a name="l01329"></a><span class="lineno"> 1329</span>&#160;        <span class="keyword">module</span> subroutine ll_final(this)</div>
+<div class="line"><a name="l01330"></a><span class="lineno"> 1330</span>&#160;            <span class="keywordtype">type</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160; </div>
+<div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160;        <span class="keyword">module</span> subroutine ll_push(this, x, err)</div>
+<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01337"></a><span class="lineno"> 1337</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01338"></a><span class="lineno"> 1338</span>&#160; </div>
+<div class="line"><a name="l01339"></a><span class="lineno"> 1339</span>&#160;        <span class="keyword">module</span> subroutine ll_pop(this)</div>
+<div class="line"><a name="l01340"></a><span class="lineno"> 1340</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01341"></a><span class="lineno"> 1341</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01342"></a><span class="lineno"> 1342</span>&#160; </div>
+<div class="line"><a name="l01343"></a><span class="lineno"> 1343</span>&#160;        <span class="keyword">module</span> function ll_get_item(this) result(rst)</div>
+<div class="line"><a name="l01344"></a><span class="lineno"> 1344</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01345"></a><span class="lineno"> 1345</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: rst</div>
+<div class="line"><a name="l01346"></a><span class="lineno"> 1346</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01347"></a><span class="lineno"> 1347</span>&#160; </div>
+<div class="line"><a name="l01348"></a><span class="lineno"> 1348</span>&#160;        <span class="keyword">module</span> subroutine ll_set_item(this, x, err)</div>
+<div class="line"><a name="l01349"></a><span class="lineno"> 1349</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01350"></a><span class="lineno"> 1350</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01351"></a><span class="lineno"> 1351</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01352"></a><span class="lineno"> 1352</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01353"></a><span class="lineno"> 1353</span>&#160; </div>
+<div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160;        <span class="keyword">module</span> function ll_contains(this, item, fcn) result(rst)</div>
+<div class="line"><a name="l01355"></a><span class="lineno"> 1355</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01357"></a><span class="lineno"> 1357</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
+<div class="line"><a name="l01358"></a><span class="lineno"> 1358</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01359"></a><span class="lineno"> 1359</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01360"></a><span class="lineno"> 1360</span>&#160; </div>
+<div class="line"><a name="l01361"></a><span class="lineno"> 1361</span>&#160;        <span class="keyword">module</span> function ll_move_to_matching(this, item, fcn) result(rst)</div>
+<div class="line"><a name="l01362"></a><span class="lineno"> 1362</span>&#160;            <span class="keywordtype">class</span>(linked_list), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01363"></a><span class="lineno"> 1363</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01364"></a><span class="lineno"> 1364</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
+<div class="line"><a name="l01365"></a><span class="lineno"> 1365</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01366"></a><span class="lineno"> 1366</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01367"></a><span class="lineno"> 1367</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01368"></a><span class="lineno"> 1368</span>&#160; </div>
+<div class="line"><a name="l01369"></a><span class="lineno"> 1369</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01370"></a><span class="lineno"> 1370</span>&#160;    <span class="keyword">interface</span> <span class="comment">! collections_data.f90</span></div>
+<div class="line"><a name="l01371"></a><span class="lineno"> 1371</span>&#160;        <span class="keyword">module</span> subroutine dt_clear(this)</div>
+<div class="line"><a name="l01372"></a><span class="lineno"> 1372</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01373"></a><span class="lineno"> 1373</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01374"></a><span class="lineno"> 1374</span>&#160; </div>
+<div class="line"><a name="l01375"></a><span class="lineno"> 1375</span>&#160;        <span class="keyword">module</span> subroutine dt_final(this)</div>
+<div class="line"><a name="l01376"></a><span class="lineno"> 1376</span>&#160;            <span class="keywordtype">type</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01377"></a><span class="lineno"> 1377</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01378"></a><span class="lineno"> 1378</span>&#160; </div>
+<div class="line"><a name="l01379"></a><span class="lineno"> 1379</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function dt_get_row_count(this) result(rst)</div>
+<div class="line"><a name="l01380"></a><span class="lineno"> 1380</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01381"></a><span class="lineno"> 1381</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01382"></a><span class="lineno"> 1382</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01383"></a><span class="lineno"> 1383</span>&#160; </div>
+<div class="line"><a name="l01384"></a><span class="lineno"> 1384</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function dt_get_column_count(this) result(rst)</div>
+<div class="line"><a name="l01385"></a><span class="lineno"> 1385</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01386"></a><span class="lineno"> 1386</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01387"></a><span class="lineno"> 1387</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01388"></a><span class="lineno"> 1388</span>&#160; </div>
+<div class="line"><a name="l01389"></a><span class="lineno"> 1389</span>&#160;        <span class="keyword">module</span> subroutine dt_initialize(this, m, n, err)</div>
+<div class="line"><a name="l01390"></a><span class="lineno"> 1390</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01391"></a><span class="lineno"> 1391</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: m, n</div>
+<div class="line"><a name="l01392"></a><span class="lineno"> 1392</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01393"></a><span class="lineno"> 1393</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01394"></a><span class="lineno"> 1394</span>&#160; </div>
+<div class="line"><a name="l01395"></a><span class="lineno"> 1395</span>&#160;        <span class="keyword">module</span> function dt_get(this, i, j, err) result(rst)</div>
+<div class="line"><a name="l01396"></a><span class="lineno"> 1396</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01397"></a><span class="lineno"> 1397</span>&#160;            <span class="keywordtype">integer(int32)</span> :: i, j</div>
+<div class="line"><a name="l01398"></a><span class="lineno"> 1398</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01399"></a><span class="lineno"> 1399</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">pointer</span> :: rst</div>
+<div class="line"><a name="l01400"></a><span class="lineno"> 1400</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01401"></a><span class="lineno"> 1401</span>&#160; </div>
+<div class="line"><a name="l01402"></a><span class="lineno"> 1402</span>&#160;        <span class="keyword">module</span> subroutine dt_set(this, i, j, x, err)</div>
+<div class="line"><a name="l01403"></a><span class="lineno"> 1403</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01404"></a><span class="lineno"> 1404</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i, j</div>
+<div class="line"><a name="l01405"></a><span class="lineno"> 1405</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01406"></a><span class="lineno"> 1406</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01407"></a><span class="lineno"> 1407</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01408"></a><span class="lineno"> 1408</span>&#160; </div>
+<div class="line"><a name="l01409"></a><span class="lineno"> 1409</span>&#160;        <span class="keyword">module</span> subroutine dt_insert_rows(this, rstart, x, err)</div>
+<div class="line"><a name="l01410"></a><span class="lineno"> 1410</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01411"></a><span class="lineno"> 1411</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: rstart</div>
+<div class="line"><a name="l01412"></a><span class="lineno"> 1412</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:)</span> :: x</div>
+<div class="line"><a name="l01413"></a><span class="lineno"> 1413</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01414"></a><span class="lineno"> 1414</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01415"></a><span class="lineno"> 1415</span>&#160; </div>
+<div class="line"><a name="l01416"></a><span class="lineno"> 1416</span>&#160;        <span class="keyword">module</span> subroutine dt_insert_row(this, i, x, err)</div>
+<div class="line"><a name="l01417"></a><span class="lineno"> 1417</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01418"></a><span class="lineno"> 1418</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01419"></a><span class="lineno"> 1419</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01420"></a><span class="lineno"> 1420</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01421"></a><span class="lineno"> 1421</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01422"></a><span class="lineno"> 1422</span>&#160; </div>
+<div class="line"><a name="l01423"></a><span class="lineno"> 1423</span>&#160;        <span class="keyword">module</span> subroutine dt_insert_columns(this, cstart, x, err)</div>
+<div class="line"><a name="l01424"></a><span class="lineno"> 1424</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01425"></a><span class="lineno"> 1425</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: cstart</div>
+<div class="line"><a name="l01426"></a><span class="lineno"> 1426</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:)</span> :: x</div>
+<div class="line"><a name="l01427"></a><span class="lineno"> 1427</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01428"></a><span class="lineno"> 1428</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01429"></a><span class="lineno"> 1429</span>&#160; </div>
+<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160;        <span class="keyword">module</span> subroutine dt_insert_column(this, i, x, err)</div>
+<div class="line"><a name="l01431"></a><span class="lineno"> 1431</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01432"></a><span class="lineno"> 1432</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01433"></a><span class="lineno"> 1433</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01434"></a><span class="lineno"> 1434</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01435"></a><span class="lineno"> 1435</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01436"></a><span class="lineno"> 1436</span>&#160; </div>
+<div class="line"><a name="l01437"></a><span class="lineno"> 1437</span>&#160;        <span class="keyword">module</span> subroutine dt_append_rows(this, x, err)</div>
+<div class="line"><a name="l01438"></a><span class="lineno"> 1438</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01439"></a><span class="lineno"> 1439</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:)</span> :: x</div>
+<div class="line"><a name="l01440"></a><span class="lineno"> 1440</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01441"></a><span class="lineno"> 1441</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01442"></a><span class="lineno"> 1442</span>&#160; </div>
+<div class="line"><a name="l01443"></a><span class="lineno"> 1443</span>&#160;        <span class="keyword">module</span> subroutine dt_append_row(this, x, err)</div>
+<div class="line"><a name="l01444"></a><span class="lineno"> 1444</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01445"></a><span class="lineno"> 1445</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01446"></a><span class="lineno"> 1446</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01447"></a><span class="lineno"> 1447</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01448"></a><span class="lineno"> 1448</span>&#160; </div>
+<div class="line"><a name="l01449"></a><span class="lineno"> 1449</span>&#160;        <span class="keyword">module</span> subroutine dt_append_columns(this, x, err)</div>
+<div class="line"><a name="l01450"></a><span class="lineno"> 1450</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01451"></a><span class="lineno"> 1451</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:,:)</span> :: x</div>
+<div class="line"><a name="l01452"></a><span class="lineno"> 1452</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01453"></a><span class="lineno"> 1453</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01454"></a><span class="lineno"> 1454</span>&#160; </div>
+<div class="line"><a name="l01455"></a><span class="lineno"> 1455</span>&#160;        <span class="keyword">module</span> subroutine dt_append_column(this, x, err)</div>
+<div class="line"><a name="l01456"></a><span class="lineno"> 1456</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01457"></a><span class="lineno"> 1457</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(:)</span> :: x</div>
+<div class="line"><a name="l01458"></a><span class="lineno"> 1458</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01459"></a><span class="lineno"> 1459</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01460"></a><span class="lineno"> 1460</span>&#160; </div>
+<div class="line"><a name="l01461"></a><span class="lineno"> 1461</span>&#160;        <span class="keyword">module</span> subroutine dt_remove_rows(this, rstart, nrows, err)</div>
+<div class="line"><a name="l01462"></a><span class="lineno"> 1462</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01463"></a><span class="lineno"> 1463</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: rstart, nrows</div>
+<div class="line"><a name="l01464"></a><span class="lineno"> 1464</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01465"></a><span class="lineno"> 1465</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01466"></a><span class="lineno"> 1466</span>&#160; </div>
+<div class="line"><a name="l01467"></a><span class="lineno"> 1467</span>&#160;        <span class="keyword">module</span> subroutine dt_remove_columns(this, cstart, ncols, err)</div>
+<div class="line"><a name="l01468"></a><span class="lineno"> 1468</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01469"></a><span class="lineno"> 1469</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: cstart, ncols</div>
+<div class="line"><a name="l01470"></a><span class="lineno"> 1470</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01471"></a><span class="lineno"> 1471</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01472"></a><span class="lineno"> 1472</span>&#160; </div>
+<div class="line"><a name="l01473"></a><span class="lineno"> 1473</span>&#160;        <span class="keyword">module</span> function dt_contains(this, item, fcn) result(rst)</div>
+<div class="line"><a name="l01474"></a><span class="lineno"> 1474</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01475"></a><span class="lineno"> 1475</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01476"></a><span class="lineno"> 1476</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
+<div class="line"><a name="l01477"></a><span class="lineno"> 1477</span>&#160;            <span class="keywordtype">logical</span> :: rst</div>
+<div class="line"><a name="l01478"></a><span class="lineno"> 1478</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01479"></a><span class="lineno"> 1479</span>&#160; </div>
+<div class="line"><a name="l01480"></a><span class="lineno"> 1480</span>&#160;        <span class="keyword">module</span> subroutine dt_index_of(this, item, fcn, row, col)</div>
+<div class="line"><a name="l01481"></a><span class="lineno"> 1481</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01482"></a><span class="lineno"> 1482</span>&#160;            <span class="keywordtype">class</span>(*), <span class="keywordtype">intent(in)</span> :: item</div>
+<div class="line"><a name="l01483"></a><span class="lineno"> 1483</span>&#160;            <span class="keywordtype">procedure</span>(items_equal), <span class="keywordtype">pointer</span>, <span class="keywordtype">intent(in)</span> :: fcn</div>
+<div class="line"><a name="l01484"></a><span class="lineno"> 1484</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(out)</span> :: row, col</div>
+<div class="line"><a name="l01485"></a><span class="lineno"> 1485</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01486"></a><span class="lineno"> 1486</span>&#160; </div>
+<div class="line"><a name="l01487"></a><span class="lineno"> 1487</span>&#160;        <span class="keyword">module</span> function dt_get_header(this, i, err) result(rst)</div>
+<div class="line"><a name="l01488"></a><span class="lineno"> 1488</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01489"></a><span class="lineno"> 1489</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01490"></a><span class="lineno"> 1490</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01491"></a><span class="lineno"> 1491</span>&#160;            <span class="keywordtype">character(len = :)</span>, <span class="keywordtype">allocatable</span> :: rst</div>
+<div class="line"><a name="l01492"></a><span class="lineno"> 1492</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01493"></a><span class="lineno"> 1493</span>&#160;        </div>
+<div class="line"><a name="l01494"></a><span class="lineno"> 1494</span>&#160;        <span class="keyword">module</span> subroutine dt_set_header(this, i, x, err)</div>
+<div class="line"><a name="l01495"></a><span class="lineno"> 1495</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(inout)</span> :: this</div>
+<div class="line"><a name="l01496"></a><span class="lineno"> 1496</span>&#160;            <span class="keywordtype">integer(int32)</span>, <span class="keywordtype">intent(in)</span> :: i</div>
+<div class="line"><a name="l01497"></a><span class="lineno"> 1497</span>&#160;            <span class="keywordtype">character(len = *)</span>, <span class="keywordtype">intent(in)</span> :: x</div>
+<div class="line"><a name="l01498"></a><span class="lineno"> 1498</span>&#160;            <span class="keywordtype">class</span>(errors), <span class="keywordtype">intent(inout)</span>, <span class="keywordtype">optional</span>, <span class="keywordtype">target</span> :: err</div>
+<div class="line"><a name="l01499"></a><span class="lineno"> 1499</span>&#160;        <span class="keyword">end subroutine</span></div>
+<div class="line"><a name="l01500"></a><span class="lineno"> 1500</span>&#160; </div>
+<div class="line"><a name="l01501"></a><span class="lineno"> 1501</span>&#160;        <span class="keywordtype">pure</span> <span class="keyword">module</span> function dt_get_column_index(this, hdr) result(rst)</div>
+<div class="line"><a name="l01502"></a><span class="lineno"> 1502</span>&#160;            <span class="keywordtype">class</span>(data_table), <span class="keywordtype">intent(in)</span> :: this</div>
+<div class="line"><a name="l01503"></a><span class="lineno"> 1503</span>&#160;            <span class="keywordtype">character(len = *)</span>, <span class="keywordtype">intent(in)</span> :: hdr</div>
+<div class="line"><a name="l01504"></a><span class="lineno"> 1504</span>&#160;            <span class="keywordtype">integer(int32)</span> :: rst</div>
+<div class="line"><a name="l01505"></a><span class="lineno"> 1505</span>&#160;        <span class="keyword">end function</span></div>
+<div class="line"><a name="l01506"></a><span class="lineno"> 1506</span>&#160; </div>
+<div class="line"><a name="l01507"></a><span class="lineno"> 1507</span>&#160;        <span class="comment">! TO DO:</span></div>
+<div class="line"><a name="l01508"></a><span class="lineno"> 1508</span>&#160;        <span class="comment">! - get row</span></div>
+<div class="line"><a name="l01509"></a><span class="lineno"> 1509</span>&#160;        <span class="comment">! - get column</span></div>
+<div class="line"><a name="l01510"></a><span class="lineno"> 1510</span>&#160;        <span class="comment">! - get sub-table</span></div>
+<div class="line"><a name="l01511"></a><span class="lineno"> 1511</span>&#160;        <span class="comment">! - get/set column headers</span></div>
+<div class="line"><a name="l01512"></a><span class="lineno"> 1512</span>&#160;        <span class="comment">! - sort by column</span></div>
+<div class="line"><a name="l01513"></a><span class="lineno"> 1513</span>&#160;        <span class="comment">! - get column index by header string</span></div>
+<div class="line"><a name="l01514"></a><span class="lineno"> 1514</span>&#160;    <span class="keyword">end interface</span></div>
+<div class="line"><a name="l01515"></a><span class="lineno"> 1515</span>&#160; </div>
+<div class="line"><a name="l01516"></a><span class="lineno"> 1516</span>&#160;<span class="comment">! ------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l01517"></a><span class="lineno"> 1517</span>&#160;<span class="keyword">end module</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astructcollections_1_1dictionary_html"><div class="ttname"><a href="structcollections_1_1dictionary.html">collections::dictionary</a></div><div class="ttdoc">Defines a generic dictionary.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00086">collections.f90:86</a></div></div>
-<div class="ttc" id="ainterfacecollections_1_1compare__items_html"><div class="ttname"><a href="interfacecollections_1_1compare__items.html">collections::compare_items</a></div><div class="ttdoc">Compares two items, and returns 1 if item1 is greater than item2, 0 if item1 is equal to item2,...</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00159">collections.f90:159</a></div></div>
-<div class="ttc" id="ainterfacecollections_1_1items__equal_html"><div class="ttname"><a href="interfacecollections_1_1items__equal.html">collections::items_equal</a></div><div class="ttdoc">Compares two items, and returns a logical value signifying the comparison results.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00144">collections.f90:144</a></div></div>
-<div class="ttc" id="astructcollections_1_1list_html"><div class="ttname"><a href="structcollections_1_1list.html">collections::list</a></div><div class="ttdoc">Defines a generic list.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00025">collections.f90:25</a></div></div>
-<div class="ttc" id="astructcollections_1_1key__value__pair_html"><div class="ttname"><a href="structcollections_1_1key__value__pair.html">collections::key_value_pair</a></div><div class="ttdoc">Defines a key-value pair.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00078">collections.f90:78</a></div></div>
-<div class="ttc" id="astructcollections_1_1hash__code_html"><div class="ttname"><a href="structcollections_1_1hash__code.html">collections::hash_code</a></div><div class="ttdoc">A hash code generation object.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00118">collections.f90:118</a></div></div>
-<div class="ttc" id="astructcollections_1_1container_html"><div class="ttname"><a href="structcollections_1_1container.html">collections::container</a></div><div class="ttdoc">A container type allowing storage of any Fortran type.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00019">collections.f90:19</a></div></div>
+<div class="ttc" id="astructcollections_1_1dictionary_html"><div class="ttname"><a href="structcollections_1_1dictionary.html">collections::dictionary</a></div><div class="ttdoc">Defines a generic dictionary.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00331">collections.f90:331</a></div></div>
+<div class="ttc" id="astructcollections_1_1data__table_html"><div class="ttname"><a href="structcollections_1_1data__table.html">collections::data_table</a></div><div class="ttdoc">Defines a table convenient for storing mixed-type data.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00651">collections.f90:651</a></div></div>
+<div class="ttc" id="ainterfacecollections_1_1compare__items_html"><div class="ttname"><a href="interfacecollections_1_1compare__items.html">collections::compare_items</a></div><div class="ttdoc">Compares two items, and returns 1 if item1 is greater than item2, 0 if item1 is equal to item2,...</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l01109">collections.f90:1109</a></div></div>
+<div class="ttc" id="astructstrings_1_1string_html"><div class="ttname"><a href="structstrings_1_1string.html">strings::string</a></div><div class="ttdoc">Defines a string type.</div><div class="ttdef"><b>Definition:</b> <a href="strings_8f90_source.html#l00038">strings.f90:38</a></div></div>
+<div class="ttc" id="anamespacestrings_html"><div class="ttname"><a href="namespacestrings.html">strings</a></div><div class="ttdoc">Defines string handling routines.</div><div class="ttdef"><b>Definition:</b> <a href="strings_8f90_source.html#l00004">strings.f90:4</a></div></div>
+<div class="ttc" id="ainterfacecollections_1_1items__equal_html"><div class="ttname"><a href="interfacecollections_1_1items__equal.html">collections::items_equal</a></div><div class="ttdoc">Compares two items, and returns a logical value signifying the comparison results.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l01094">collections.f90:1094</a></div></div>
+<div class="ttc" id="astructcollections_1_1list_html"><div class="ttname"><a href="structcollections_1_1list.html">collections::list</a></div><div class="ttdoc">Defines a generic list.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00038">collections.f90:38</a></div></div>
+<div class="ttc" id="astructcollections_1_1key__value__pair_html"><div class="ttname"><a href="structcollections_1_1key__value__pair.html">collections::key_value_pair</a></div><div class="ttdoc">Defines a key-value pair.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00323">collections.f90:323</a></div></div>
+<div class="ttc" id="astructcollections_1_1hash__code_html"><div class="ttname"><a href="structcollections_1_1hash__code.html">collections::hash_code</a></div><div class="ttdoc">A hash code generation object.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00458">collections.f90:458</a></div></div>
+<div class="ttc" id="astructcollections_1_1container_html"><div class="ttname"><a href="structcollections_1_1container.html">collections::container</a></div><div class="ttdoc">A container type allowing storage of any Fortran type.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00022">collections.f90:22</a></div></div>
+<div class="ttc" id="astructcollections_1_1linked__list_html"><div class="ttname"><a href="structcollections_1_1linked__list.html">collections::linked_list</a></div><div class="ttdoc">Defines a generic linked-list container.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00491">collections.f90:491</a></div></div>
+<div class="ttc" id="ainterfacestrings_1_1remove_html"><div class="ttname"><a href="interfacestrings_1_1remove.html">strings::remove</a></div><div class="ttdoc">Removes all occurrences of a substring within the original string.</div><div class="ttdef"><b>Definition:</b> <a href="strings_8f90_source.html#l00466">strings.f90:466</a></div></div>
+<div class="ttc" id="astructcollections_1_1node_html"><div class="ttname"><a href="structcollections_1_1node.html">collections::node</a></div><div class="ttdoc">A node in a linked list container.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00028">collections.f90:28</a></div></div>
 <div class="ttc" id="anamespacecollections_html"><div class="ttname"><a href="namespacecollections.html">collections</a></div><div class="ttdoc">Provides types supporting various collections of objects.</div><div class="ttdef"><b>Definition:</b> <a href="collections_8f90_source.html#l00004">collections.f90:4</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

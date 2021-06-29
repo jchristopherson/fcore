@@ -8,6 +8,7 @@ var hierarchy =
     [ "collections::compare_items", "interfacecollections_1_1compare__items.html", null ],
     [ "collections::container", "structcollections_1_1container.html", null ],
     [ "strings::contains_string", "interfacestrings_1_1contains__string.html", null ],
+    [ "collections::data_table", "structcollections_1_1data__table.html", null ],
     [ "ui_dialogs::dialog_result", "structui__dialogs_1_1dialog__result.html", [
       [ "ui_dialogs::text_output_dialog_result", "structui__dialogs_1_1text__output__dialog__result.html", null ]
     ] ],
@@ -29,7 +30,9 @@ var hierarchy =
     [ "ui_dialogs::init_ui_env_c", "interfaceui__dialogs_1_1init__ui__env__c.html", null ],
     [ "collections::items_equal", "interfacecollections_1_1items__equal.html", null ],
     [ "collections::key_value_pair", "structcollections_1_1key__value__pair.html", null ],
+    [ "collections::linked_list", "structcollections_1_1linked__list.html", null ],
     [ "collections::list", "structcollections_1_1list.html", null ],
+    [ "collections::node", "structcollections_1_1node.html", null ],
     [ "strings::operator(+)", "interfacestrings_1_1operator_07_09_08.html", null ],
     [ "strings::operator(/=)", "interfacestrings_1_1operator_07_2_0a_08.html", null ],
     [ "strings::operator(==)", "interfacestrings_1_1operator_07_0a_0a_08.html", null ],

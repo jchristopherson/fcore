@@ -27,4 +27,11 @@ module fcore_constants
     !> @brief Occurs if an attempt is made to overwrite an existing key 
     !! inadvertently.
     integer(int32), parameter :: FCORE_EXISTING_KEY_ERROR = 10008
+    !> @brief Occurs if a data type error is encountered.
+    integer(int32), parameter :: FCORE_DATA_TYPE_ERROR = 10009
+    !> @brief Occurs if an attempt to write to a null reference is made.
+    integer(int32), parameter :: FCORE_NULL_REFERENCE_ERROR = 10010
+    !> @brief Occurs if an attempt to perform an operation on an uninitialized
+    !! object is made.
+    integer(int32), parameter :: FCORE_UNINITIALIZED_OBJECT_ERROR = 10011
 end module
