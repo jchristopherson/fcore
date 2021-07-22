@@ -653,8 +653,8 @@ contains
 
             k = rstart
             do i = 1, nrows
-                if (associated(this%m_table(k, j)%item)) then
-                    deallocate(this%m_table(k, j)%item)
+                if (associated(copy(k, j)%item)) then
+                    deallocate(copy(k, j)%item)
                 end if
                 k = k + 1
             end do
@@ -783,8 +783,8 @@ contains
         k = cstart
         do j = 1, ncols
             do i = 1, m
-                if (associated(this%m_table(i, k)%item)) then
-                    deallocate(this%m_table(i, k)%item)
+                if (associated(copy(i, k)%item)) then
+                    deallocate(copy(i, k)%item)
                 end if
             end do
             k = k + 1
